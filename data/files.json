@@ -1,8 +1,9 @@
 {
   "about.md": {
-    "type": "markdown",
-    "content": "# 👋 Diego\n\nAspirante a Data Engineer.\n\nSQL • Python • Datos"
-  },
+  "type": "markdown",
+  "content": "# 👋 Diego\n\nAspirante a Data Engineer.\n\nSQL • Python • Datos\n\n## Sobre este portfolio\n\nEste sitio simula la interfaz de VS Code usando HTML, CSS y JavaScript puro.\nNo utiliza frameworks ni librerías externas."
+}
+,
   "projects.js": {
     "type": "javascript",
     "content": "// ETL con Python + SQL\n// Queries avanzadas\n// IoT + Datos"
