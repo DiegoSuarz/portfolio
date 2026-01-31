@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Diego | VS Code Portfolio</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="window">
+
+  <!-- Activity Bar -->
+  <nav class="activity-bar">
+    <div class="activity active">📁</div>
+    <div class="activity">🔍</div>
+    <div class="activity">🌿</div>
+  </nav>
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-title">EXPLORER</div>
+    <ul id="file-tree"></ul>
+  </aside>
+
+  <!-- Main -->
+  <main class="main">
+    <div class="tabs" id="tabs"></div>
+
+    <div class="editor">
+      <div class="lines" id="lines"></div>
+      <pre class="code" id="editor" tabindex="0"></pre>
+    </div>
+  </main>
+
+</div>
+
+<footer class="status-bar">
+  <span>Ln 1, Col 1</span>
+  <span>UTF-8</span>
+  <span id="lang">Plain Text</span>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
+
+<div class="terminal">
+  <div class="terminal-header">TERMINAL</div>
+  <div class="terminal-body" id="terminal">
+    > npm run dev<br>
+    servidor iniciado...
+  </div>
+</div>

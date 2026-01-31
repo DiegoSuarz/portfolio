@@ -1,0 +1,18 @@
+{
+  "about.md": {
+    "type": "markdown",
+    "content": "# 👋 Diego\n\nAspirante a Data Engineer.\n\nSQL • Python • Datos"
+  },
+  "projects.js": {
+    "type": "javascript",
+    "content": "// ETL con Python + SQL\n// Queries avanzadas\n// IoT + Datos"
+  },
+  "skills.json": {
+    "type": "json",
+    "content": "{\n  \"SQL\": \"Intermedio\",\n  \"Python\": \"Intermedio\",\n  \"Git\": \"Básico\"\n}"
+  },
+  "contact.txt": {
+    "type": "text",
+    "content": "Email: tuemail@gmail.com\nGitHub: github.com/tusuario"
+  }
+}
