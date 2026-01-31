@@ -38,6 +38,7 @@ El objetivo es presentar mi perfil profesional de una manera técnica, creativa 
 
 ## 📂 Estructura del proyecto
 
+```
 📦 vscode-portfolio
 ┣ 📜 index.html
 ┣ 📂 styles
@@ -49,7 +50,7 @@ El objetivo es presentar mi perfil profesional de una manera técnica, creativa 
 ┃ ┣ 📜 projects.md
 ┃ ┗ 📜 skills.md
 ┗ 📜 README.md
-
+```
 
 ---
 
