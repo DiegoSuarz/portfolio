@@ -1,38 +1,41 @@
-# 🧠 VS Code Portfolio — Diego
+# 🧠 VS Code–Inspired Portfolio — Diego
 
-Este proyecto es un **portfolio web interactivo** que **simula de forma fiel la interfaz de Visual Studio Code**, construido únicamente con **HTML, CSS y JavaScript puro**, sin frameworks ni librerías externas.
+Portfolio web interactivo que **recrea de forma fiel la interfaz de Visual Studio Code**, desarrollado con **HTML, CSS y JavaScript puro**, sin frameworks ni librerías externas.
 
-El objetivo es presentar mi perfil profesional de una manera técnica, creativa y diferenciadora, demostrando dominio de la web desde sus fundamentos.
-
----
-
-## 🚀 Demo en vivo
-
-🔗 https://TU_USUARIO.github.io/TU_REPOSITORIO/
+Este proyecto está orientado a demostrar **criterio de ingeniería**, atención al detalle y capacidad para diseñar interfaces modulares, mantenibles y escalables, habilidades clave en **Data Engineering**.
 
 ---
 
-## 🖥️ Características principales
+## 🚀 Live Demo
 
-- 🎨 Interfaz inspirada en **Visual Studio Code**
-- 📁 Explorador de archivos funcional
-- 📝 Apertura de archivos `.md`, `.js`, `.json`
-- 🧭 Navegación por pestañas
-- 🌙 Tema oscuro estilo VS Code
-- ⚡ Renderizado rápido (sin frameworks)
-- 📱 Diseño responsive
+🔗 https://github.com/DiegoSuarz/portfolio
 
 ---
 
-## 🛠️ Tecnologías utilizadas
+## 🏗️ Engineering Highlights
+
+- Arquitectura modular (separación clara de responsabilidades)
+- Simulación de entorno de trabajo técnico (IDE-like)
+- Manejo dinámico del DOM y estado de la aplicación
+- Contenido desacoplado mediante archivos `.md`
+- Enfoque en mantenibilidad y legibilidad del código
+- Cero dependencias externas
+
+---
+
+## 🛠️ Tech Stack
 
 - **HTML5** — estructura semántica
-- **CSS3** — diseño, layout y tematización
-- **JavaScript (Vanilla)** — lógica e interacción
+- **CSS3** — layout, tematización y diseño responsivo
+- **JavaScript (Vanilla)** — lógica, eventos y estado
+- **Markdown** — contenido desacoplado
+- **Git / GitHub** — control de versiones
 - **GitHub Pages** — despliegue
 
-> ❌ No se usan frameworks  
-> ❌ No se usan librerías externas  
+---
+
+## 📂 Project Structure
+
 
 ---
 
@@ -54,27 +57,42 @@ El objetivo es presentar mi perfil profesional de una manera técnica, creativa 
 
 ---
 
-## 🎯 Objetivo del proyecto
+--
 
-Este portfolio fue creado para:
+## 🧩 Design Philosophy (Data Engineering Mindset)
 
-- Mostrar habilidades técnicas de forma práctica
-- Demostrar atención al detalle en UI/UX
-- Evidenciar comprensión profunda de JavaScript y DOM
-- Diferenciarme de portfolios tradicionales
+Este proyecto sigue principios aplicables a sistemas de datos:
+
+- **Separación de capas** (UI, lógica, contenido)
+- **Bajo acoplamiento**
+- **Alta cohesión**
+- **Facilidad de extensión**
+- **Pensamiento orientado a sistemas**
+
+El mismo enfoque utilizado en pipelines de datos, ETL y arquitecturas distribuidas.
+
+---
+
+## 📌 Use Case
+
+Este portfolio está diseñado para:
+- Mostrar habilidades técnicas de forma no convencional
+- Simular un entorno real de trabajo para ingenieros
+- Demostrar pensamiento estructural y criterio técnico
+- Diferenciarse de portfolios tradicionales
 
 ---
 
-## 📌 Estado del proyecto
+## 🔮 Roadmap
 
-🟢 **Activo** — en mejora continua  
-Se planean nuevas funcionalidades como:
-- Terminal interactiva
-- Simulación de extensiones
-- Cambio de temas (Dark / Light)
-- Comandos personalizados
+- Terminal interactiva (comandos tipo CLI)
+- Visualización de datasets simulados
+- Theme switching (Dark / Light)
+- Extensión de comandos personalizados
+- Integración futura con APIs
 
 ---
+
 
 ## 📬 Contacto
 
@@ -88,3 +106,7 @@ Se planean nuevas funcionalidades como:
 
 Este proyecto es de uso personal.  
 Si deseas reutilizar partes del código, menciona la fuente 🙌
+
+---
+
+**Developed by Diego — Data Engineering Focus**
