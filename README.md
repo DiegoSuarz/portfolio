@@ -14,7 +14,7 @@ https://diegosuarz.github.io/portfolio/
 
 The project is being rebuilt incrementally from an earlier prototype using a documented architecture, structured content models, short-lived branches, Pull Requests, and milestone-based releases.
 
-Current milestone: **Project Showcase**.
+Current milestone: **Interactive Terminal**.
 
 ## Goals
 
@@ -83,7 +83,8 @@ portfolio/
 |   |   `-- style.css
 |   `-- js/
 |       |-- app.js
-|       `-- content-loader.js
+|       |-- content-loader.js
+|       `-- terminal.js
 |
 |-- CONTRIBUTING.md
 |-- index.html
