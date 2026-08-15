@@ -172,6 +172,8 @@ Markdown links are converted to anchors only after the source content is HTML-es
 
 Explorer, Editor, Tabs and Terminal may become separate modules when their behavior grows enough to justify independent ownership. They remain in `app.js` today to avoid premature abstraction.
 
+The Interactive Terminal contract is documented in [`terminal.md`](terminal.md). Its command dispatcher is a closed application interface over existing portfolio actions, not a browser shell or an arbitrary code-execution surface.
+
 ### Content renderer
 
 Content rendering and syntax presentation currently remain in `app.js`. They should become a separate module only if the rendering logic becomes sufficiently complex.
