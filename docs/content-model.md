@@ -26,6 +26,7 @@ File: `data/profile.json`
   "headline": "string",
   "location": "string",
   "summary": "string",
+  "focusAreas": ["string"],
   "email": "string",
   "links": {
     "github": "string",
@@ -37,6 +38,8 @@ File: `data/profile.json`
 ### Responsibilities
 
 The profile model stores identity and professional positioning information that may be reused by About, Contact, terminal commands, metadata, and other UI surfaces.
+
+`focusAreas` contains concise professional domains that reinforce positioning without duplicating the detailed technology inventory owned by `skills.json`.
 
 ## 4. Skills Model
 
