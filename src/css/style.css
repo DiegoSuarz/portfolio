@@ -289,6 +289,9 @@ body {
 
 .tree-item,
 .tree-folder-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
   width: 100%;
   border: 0;
   padding: 6px 10px;
@@ -350,6 +353,12 @@ body {
   color: inherit;
   font: inherit;
   cursor: pointer;
+}
+
+.tab-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .tab-title:focus-visible,
@@ -491,6 +500,89 @@ body {
   border-top: 1px solid #333;
   font-size: 14px;
   line-height: 1.45;
+}
+
+.tree-item-label {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tree-chevron {
+  flex: 0 0 10px;
+  color: #c5c5c5;
+  text-align: center;
+}
+
+.file-icon,
+.folder-icon {
+  position: relative;
+  display: inline-block;
+  flex: 0 0 16px;
+  width: 16px;
+  height: 16px;
+  line-height: 16px;
+  text-align: center;
+}
+
+.file-icon[data-file-type="markdown"]::before {
+  content: "M↓";
+  color: #519aba;
+  font-family: Arial, sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.file-icon[data-file-type="json"]::before {
+  content: "{}";
+  color: #dcdcaa;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.file-icon[data-file-type="text"] {
+  width: 13px;
+  height: 12px;
+  margin-inline: 1px 2px;
+  background: repeating-linear-gradient(to bottom, #c5c5c5 0 1px, transparent 1px 4px);
+}
+
+.file-icon[data-file-type="word"]::before {
+  content: "W";
+  display: block;
+  border-radius: 2px;
+  background: #2b579a;
+  color: #ffffff;
+  font-family: Arial, sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 16px;
+}
+
+.file-icon[data-file-type="file"]::before {
+  content: "·";
+  color: #c5c5c5;
+  font-size: 18px;
+}
+
+.folder-icon {
+  width: 15px;
+  height: 11px;
+  margin-right: 1px;
+  border: 1.5px solid #dcb67a;
+  border-radius: 1px;
+}
+
+.folder-icon::before {
+  content: "";
+  position: absolute;
+  top: -4px;
+  left: -1.5px;
+  width: 7px;
+  height: 4px;
+  border: 1.5px solid #dcb67a;
+  border-bottom: 0;
+  border-radius: 1px 1px 0 0;
 }
 
 .terminal.is-hidden {

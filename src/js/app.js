@@ -122,6 +122,20 @@ document.addEventListener("DOMContentLoaded", async () => {
     explorerToggle.setAttribute("aria-expanded", String(desktopExplorerOpen));
   }
 
+  function getFileType(path) {
+    const extension = path.split(".").pop()?.toLowerCase();
+    const types = { md: "markdown", json: "json", txt: "text", docx: "word" };
+    return types[extension] ?? "file";
+  }
+
+  function createFileIcon(path) {
+    const icon = document.createElement("span");
+    icon.className = "file-icon";
+    icon.dataset.fileType = getFileType(path);
+    icon.setAttribute("aria-hidden", "true");
+    return icon;
+  }
+
   function toggleTerminal() {
     const terminal = document.querySelector(".terminal");
     const shouldShow = terminal.classList.contains("is-hidden");
@@ -187,27 +201,40 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       if (node.path) {
         const button = document.createElement("button");
+        const label = document.createElement("span");
         button.type = "button";
         button.className = "tree-item";
         button.dataset.file = node.path;
-        button.textContent = name;
+        label.className = "tree-item-label";
+        label.textContent = name;
         button.setAttribute("aria-label", `Open ${node.path}`);
         button.addEventListener("click", () => openFile(node.path));
+        button.append(createFileIcon(node.path), label);
         item.appendChild(button);
       } else {
         const folderButton = document.createElement("button");
         const children = document.createElement("ul");
+        const chevron = document.createElement("span");
+        const folderIcon = document.createElement("span");
+        const folderLabel = document.createElement("span");
         folderButton.type = "button";
         folderButton.className = "tree-folder-label";
-        folderButton.textContent = `▾ ${name}`;
+        chevron.className = "tree-chevron";
+        chevron.textContent = "▾";
+        chevron.setAttribute("aria-hidden", "true");
+        folderIcon.className = "folder-icon";
+        folderIcon.setAttribute("aria-hidden", "true");
+        folderLabel.className = "tree-item-label";
+        folderLabel.textContent = name;
         folderButton.setAttribute("aria-expanded", "true");
         folderButton.addEventListener("click", () => {
           const expanded = folderButton.getAttribute("aria-expanded") === "true";
           folderButton.setAttribute("aria-expanded", String(!expanded));
-          folderButton.textContent = `${expanded ? "▸" : "▾"} ${name}`;
+          chevron.textContent = expanded ? "▸" : "▾";
           children.hidden = expanded;
         });
         renderExplorerNodes(node.children, children);
+        folderButton.append(chevron, folderIcon, folderLabel);
         item.append(folderButton, children);
       }
 
@@ -266,13 +293,15 @@ document.addEventListener("DOMContentLoaded", async () => {
       tab.setAttribute("role", "presentation");
 
       const title = document.createElement("button");
+      const titleLabel = document.createElement("span");
       title.type = "button";
       title.className = "tab-title";
-      title.textContent = name.split("/").pop();
+      titleLabel.textContent = name.split("/").pop();
       title.setAttribute("role", "tab");
       title.setAttribute("aria-controls", "editor");
       title.setAttribute("aria-label", `Open ${name}`);
       title.addEventListener("click", () => openFile(name));
+      title.append(createFileIcon(name), titleLabel);
 
       const close = document.createElement("button");
       close.type = "button";
