@@ -154,9 +154,13 @@ New directories and modules should continue to be introduced only when they have
 
 Application entry point. Initializes the interface, coordinates application state, and manages Explorer, Editor and Tabs interactions.
 
+The Explorer derives its hierarchy from slash-delimited virtual file paths. Folders are presentation state rather than content domains: they can be expanded or collapsed, while leaf nodes retain the complete virtual path used to open a file.
+
 ### content-loader.js
 
 Loads the structured content domains and maps them to the virtual files displayed by the VS Code-inspired interface. It owns content formatting but does not manipulate the DOM.
+
+Project content is exposed as a virtual `projects/` directory with an overview and one source-backed file per project. The loader remains responsible for deciding the virtual path; the Explorer only renders that path as a hierarchy.
 
 ### Future UI modules
 
