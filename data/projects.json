@@ -6,8 +6,8 @@
       "shortName": "AdventureWorks EDW",
       "status": "in-progress",
       "featured": true,
-      "summary": "Enterprise-style data warehouse project built around AdventureWorks with dimensional modeling, ETL and data engineering practices.",
-      "problem": null,
+      "summary": "In-progress enterprise data warehouse project that transforms AdventureWorks transactional data into an analytics-ready dimensional model with controlled and observable data loads.",
+      "problem": "Operational data is distributed across normalized transactional structures that are not optimized for historical analysis, consistent business metrics or repeatable analytical workloads.",
       "technologies": [
         "SQL Server",
         "T-SQL",
@@ -15,10 +15,10 @@
         "Apache Airflow"
       ],
       "highlights": [
-        "Dimensional data modeling",
-        "ETL and incremental loading",
-        "Slowly Changing Dimensions",
-        "Audit and execution logging"
+        "Designing fact and dimension tables around analytical business processes",
+        "Developing ETL workflows with incremental loading strategies",
+        "Modeling Slowly Changing Dimensions for historical traceability",
+        "Adding audit and execution logging for observable pipeline runs"
       ],
       "links": {
         "repository": null,
@@ -32,17 +32,18 @@
       "shortName": "E-Commerce Data Platform",
       "status": "in-progress",
       "featured": true,
-      "summary": "End-to-end data engineering platform designed to reproduce a realistic e-commerce data ecosystem and its data pipelines.",
-      "problem": null,
+      "summary": "In-progress data engineering platform that simulates an e-commerce operational source and establishes a reproducible foundation for incremental ingestion and downstream data pipelines.",
+      "problem": "E-commerce data originates from interdependent operational entities and changes continuously, requiring a reliable source model and repeatable environment before analytical pipelines can be developed safely.",
       "technologies": [
         "MySQL",
         "Python",
         "Docker"
       ],
       "highlights": [
-        "OLTP source database",
-        "Reproducible development environment",
-        "Incremental platform development"
+        "Modeling an OLTP source for customers, products, orders and related transactions",
+        "Containerizing the local environment for reproducible development",
+        "Generating and processing source data with Python",
+        "Building the platform incrementally to keep components testable and documented"
       ],
       "links": {
         "repository": null,
