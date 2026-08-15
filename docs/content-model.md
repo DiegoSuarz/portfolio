@@ -41,6 +41,8 @@ The profile model stores identity and professional positioning information that 
 
 `focusAreas` contains concise professional domains that reinforce positioning without duplicating the detailed technology inventory owned by `skills.json`.
 
+The profile model is also the single source of truth for public contact information. Contact views should reuse `email` and `links` instead of copying those values into a separate content file. Phone numbers and other personal details should not be published unless they are deliberately added to this contract.
+
 ## 4. Skills Model
 
 File: `data/skills.json`
@@ -207,13 +209,33 @@ The certifications model stores a curated selection of completed credentials tha
 
 Exam preparation programs must not be presented as official vendor certifications. Overlapping introductory credentials may be omitted when a broader professional certificate already provides stronger evidence of the same capabilities.
 
-## 9. Future Domains
+## 9. CV Model
+
+File: `data/cv.json`
+
+```json
+{
+  "cv": {
+    "title": "string",
+    "language": "string",
+    "format": "docx|pdf",
+    "downloadPath": "string",
+    "updatedDate": "YYYY-MM"
+  }
+}
+```
+
+The CV model describes the public résumé asset without duplicating its professional content. `downloadPath` is a repository-relative path owned by the static application, while `updatedDate` helps the UI communicate document freshness.
+
+Only a reviewed and intentionally public copy should be referenced. The public asset may omit private contact details that remain present in a personal source document. Course completion and exam preparation must not be labeled as official vendor certification unless the corresponding certification was actually obtained.
+
+## 10. Future Domains
 
 Additional domains should be introduced only when their corresponding features are implemented.
 
 This avoids speculative schema design and unnecessary files.
 
-## 10. Data Ownership
+## 11. Data Ownership
 
 Each content file owns one professional domain:
 
@@ -224,11 +246,12 @@ experience.json  -> employment history and transferable skills
 projects.json    -> project portfolio
 education.json   -> formal academic education
 certifications.json -> curated professional credentials
+cv.json          -> public résumé asset metadata
 ```
 
 Application code may read these files but should not redefine their content internally.
 
-## 11. Evolution Rules
+## 12. Evolution Rules
 
 When changing a content model:
 
