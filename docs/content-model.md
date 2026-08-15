@@ -128,6 +128,10 @@ File: `data/projects.json`
       "featured": true,
       "summary": "string",
       "problem": "string|null",
+      "architecture": {
+        "current": ["string"],
+        "planned": ["string"]
+      },
       "technologies": ["string"],
       "highlights": ["string"],
       "links": {
@@ -157,6 +161,8 @@ The projects model presents technical work as professional case studies rather t
 `summary` states what the project is and its current scope. For work in progress, it must make that status clear instead of implying completion.
 
 `problem` explains the engineering need addressed by the project. It describes the technical or business context without inventing measured impact.
+
+`architecture.current` describes components that are implemented and verifiable in the public repository. `architecture.planned` describes the documented target direction. Keeping them separate prevents the showcase from presenting roadmap items as delivered capabilities.
 
 `highlights` communicates the most relevant implementation areas. Entries for an in-progress project should use language that reflects ongoing work and must not present planned features as completed outcomes.
 

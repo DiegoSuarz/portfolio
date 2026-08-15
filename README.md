@@ -14,7 +14,7 @@ https://diegosuarz.github.io/portfolio/
 
 The project is being rebuilt incrementally from an earlier prototype using a documented architecture, structured content models, short-lived branches, Pull Requests, and milestone-based releases.
 
-Current milestone: **Professional Content**.
+Current milestone: **Project Showcase**.
 
 ## Goals
 
@@ -108,14 +108,16 @@ certifications.json -> curated professional credentials
 cv.json             -> public CV asset metadata
 ```
 
-## Featured Project Direction
+## Project Showcase
 
-The portfolio is being prepared to highlight Data Engineering work through project-oriented case studies. Initial featured projects include:
+The Explorer exposes a dedicated `projects/` directory with an overview and one Markdown case study per featured project. Each case study separates current implementation from planned evolution and provides verified public links.
+
+Current featured projects:
 
 - **AdventureWorks Enterprise Data Warehouse**
 - **E-Commerce Data Engineering Platform**
 
-Projects under active development are explicitly represented as such rather than presented as completed work.
+Projects under active development are explicitly represented as such rather than presented as completed work. Case-study content is generated from `data/projects.json`, keeping presentation separate from factual project data.
 
 ## Development Workflow
 

@@ -33,6 +33,7 @@ body {
   flex: 0 0 240px;
   width: 240px;
   background: #252526;
+  overflow: auto;
 }
 
 .sidebar-title {
@@ -43,16 +44,40 @@ body {
 
 .sidebar ul {
   list-style: none;
+  margin: 0;
   padding: 0;
 }
 
 .sidebar li {
+  padding: 0;
+}
+
+#file-tree ul {
+  padding-left: 14px;
+}
+
+.tree-item,
+.tree-folder-label {
+  width: 100%;
+  border: 0;
   padding: 6px 10px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  white-space: nowrap;
   cursor: pointer;
 }
 
-.sidebar li.active {
-  background: #373737;
+.tree-item:hover,
+.tree-folder-label:hover {
+  background: #2a2d2e;
+}
+
+.tree-item:focus-visible,
+.tree-folder-label:focus-visible {
+  outline: 1px solid #007acc;
+  outline-offset: -1px;
 }
 
 /* Main */
@@ -84,6 +109,22 @@ body {
   background: #1e1e1e;
 }
 
+.tab-title,
+.close {
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.tab-title:focus-visible,
+.close:focus-visible {
+  outline: 1px solid #007acc;
+  outline-offset: 2px;
+}
+
 /* Editor */
 .editor {
   flex: 1;
@@ -107,6 +148,11 @@ body {
   padding: 10px;
   white-space: pre;
   overflow: auto;
+}
+
+.code.is-markdown {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
 }
 
 /* Status Bar */
@@ -139,7 +185,13 @@ body {
   50% { opacity: 0; }
 }
 
-.sidebar li.active {
+@media (prefers-reduced-motion: reduce) {
+  .code::after {
+    animation: none;
+  }
+}
+
+.tree-item.active {
   background: #094771;
   color: white;
 }
@@ -150,6 +202,22 @@ body {
 .key { color: #9cdcfe; }
 .md-title { color: #4ec9b0; font-weight: bold; }
 
+.editor-link {
+  color: #4fc1ff;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.editor-link:hover,
+.editor-link:focus-visible {
+  color: #9cdcfe;
+}
+
+.editor-link:focus-visible {
+  outline: 1px solid #007acc;
+  outline-offset: 2px;
+}
+
 .tab {
   display: flex;
   align-items: center;
@@ -158,7 +226,6 @@ body {
 
 .close {
   color: #888;
-  cursor: pointer;
 }
 
 .close:hover {
@@ -220,8 +287,13 @@ body {
     font-size: 11px;
   }
 
-  .sidebar li {
+  .tree-item,
+  .tree-folder-label {
     padding: 6px 5px;
+  }
+
+  #file-tree ul {
+    padding-left: 8px;
   }
 
   .tab {

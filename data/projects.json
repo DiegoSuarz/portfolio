@@ -8,6 +8,19 @@
       "featured": true,
       "summary": "In-progress enterprise data warehouse project that transforms AdventureWorks transactional data into an analytics-ready dimensional model with controlled and observable data loads.",
       "problem": "Operational data is distributed across normalized transactional structures that are not optimized for historical analysis, consistent business metrics or repeatable analytical workloads.",
+      "architecture": {
+        "current": [
+          "AdventureWorks OLTP source",
+          "Staging layer",
+          "Dimensional data warehouse",
+          "ETL audit framework"
+        ],
+        "planned": [
+          "Incremental loading",
+          "Data quality and integration tests",
+          "Power BI analytical layer"
+        ]
+      },
       "technologies": [
         "SQL Server",
         "T-SQL"
@@ -32,6 +45,20 @@
       "featured": true,
       "summary": "In-progress data engineering platform with a containerized MySQL operational source that establishes a reproducible foundation for future ingestion and analytical modules.",
       "problem": "E-commerce data originates from interdependent operational entities and changes continuously, requiring a reliable source model and repeatable environment before analytical pipelines can be developed safely.",
+      "architecture": {
+        "current": [
+          "Containerized MySQL OLTP source",
+          "Repeatable database initialization",
+          "Documented sample data"
+        ],
+        "planned": [
+          "Python ETL pipelines",
+          "PostgreSQL dimensional data warehouse",
+          "Apache Airflow orchestration",
+          "Power BI analytical layer",
+          "Apache Spark processing module"
+        ]
+      },
       "technologies": [
         "MySQL",
         "Docker"

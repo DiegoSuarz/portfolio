@@ -79,6 +79,70 @@ function formatContact(profile) {
   ].join("\n");
 }
 
+function formatProjectOverview(projects) {
+  return [
+    "# Project Showcase",
+    "",
+    "Selected Data Engineering projects presented from their current, verifiable scope.",
+    "",
+    ...projects.flatMap(project => [
+      `## ${project.name}`,
+      `Status: ${formatProjectStatus(project.status)}`,
+      project.summary,
+      `File: projects/${project.id}.md`,
+      ""
+    ])
+  ].join("\n").trimEnd();
+}
+
+function formatProjectStatus(status) {
+  return status
+    .split("-")
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
+}
+
+function formatProjectLinks(links) {
+  const labels = {
+    repository: "Repository",
+    documentation: "Documentation",
+    demo: "Live demo"
+  };
+
+  return Object.entries(links)
+    .filter(([, url]) => url)
+    .map(([kind, url]) => `- [${labels[kind]}](${url})`);
+}
+
+function formatProjectCaseStudy(project) {
+  return [
+    `# ${project.name}`,
+    "",
+    `Status: ${formatProjectStatus(project.status)}`,
+    "",
+    "## Overview",
+    project.summary,
+    "",
+    "## Engineering Problem",
+    project.problem,
+    "",
+    "## Current Architecture",
+    ...project.architecture.current.map(component => `- ${component}`),
+    "",
+    "## Planned Evolution",
+    ...project.architecture.planned.map(component => `- ${component}`),
+    "",
+    "## Implemented Scope",
+    ...project.highlights.map(highlight => `- ${highlight}`),
+    "",
+    "## Technologies in Current Scope",
+    ...project.technologies.map(technology => `- ${technology}`),
+    "",
+    "## Explore",
+    ...formatProjectLinks(project.links)
+  ].join("\n");
+}
+
 export async function loadPortfolioFiles() {
   const keys = Object.keys(CONTENT_PATHS);
   const values = await Promise.all(keys.map(key => fetchJson(CONTENT_PATHS[key])));
@@ -93,10 +157,17 @@ export async function loadPortfolioFiles() {
       type: "markdown",
       content: formatExperience(content.experience.experience)
     },
-    "projects.json": {
-      type: "json",
-      content: JSON.stringify(content.projects, null, 2)
+    "projects/overview.md": {
+      type: "markdown",
+      content: formatProjectOverview(content.projects.projects)
     },
+    ...Object.fromEntries(content.projects.projects.map(project => [
+      `projects/${project.id}.md`,
+      {
+        type: "markdown",
+        content: formatProjectCaseStudy(project)
+      }
+    ])),
     "skills.json": {
       type: "json",
       content: JSON.stringify(content.skills, null, 2)

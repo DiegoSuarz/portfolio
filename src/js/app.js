@@ -21,18 +21,60 @@ document.addEventListener("DOMContentLoaded", async () => {
     const tree = document.getElementById("file-tree");
     tree.replaceChildren();
 
-    Object.keys(files).forEach(name => {
-      const item = document.createElement("li");
-      item.textContent = name;
-      item.tabIndex = 0;
-      item.addEventListener("click", () => openFile(name));
-      item.addEventListener("keydown", event => {
-        if (event.key === "Enter" || event.key === " ") {
-          event.preventDefault();
-          openFile(name);
-        }
+    const root = createExplorerTree(Object.keys(files));
+    renderExplorerNodes(root, tree);
+  }
+
+  function createExplorerTree(paths) {
+    const root = {};
+
+    paths.forEach(path => {
+      const segments = path.split("/");
+      let level = root;
+
+      segments.forEach((segment, index) => {
+        level[segment] ??= {
+          children: {},
+          path: index === segments.length - 1 ? path : null
+        };
+        level = level[segment].children;
       });
-      tree.appendChild(item);
+    });
+
+    return root;
+  }
+
+  function renderExplorerNodes(nodes, container) {
+    Object.entries(nodes).forEach(([name, node]) => {
+      const item = document.createElement("li");
+
+      if (node.path) {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "tree-item";
+        button.dataset.file = node.path;
+        button.textContent = name;
+        button.setAttribute("aria-label", `Open ${node.path}`);
+        button.addEventListener("click", () => openFile(node.path));
+        item.appendChild(button);
+      } else {
+        const folderButton = document.createElement("button");
+        const children = document.createElement("ul");
+        folderButton.type = "button";
+        folderButton.className = "tree-folder-label";
+        folderButton.textContent = `▾ ${name}`;
+        folderButton.setAttribute("aria-expanded", "true");
+        folderButton.addEventListener("click", () => {
+          const expanded = folderButton.getAttribute("aria-expanded") === "true";
+          folderButton.setAttribute("aria-expanded", String(!expanded));
+          folderButton.textContent = `${expanded ? "▸" : "▾"} ${name}`;
+          children.hidden = expanded;
+        });
+        renderExplorerNodes(node.children, children);
+        item.append(folderButton, children);
+      }
+
+      container.appendChild(item);
     });
   }
 
@@ -46,6 +88,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     activeFile = name;
     editor.innerHTML = highlight(file.content, file.type);
+    editor.classList.toggle("is-markdown", file.type === "markdown");
     document.getElementById("lang").textContent = file.type;
 
     renderLines(file.content);
@@ -78,24 +121,42 @@ document.addEventListener("DOMContentLoaded", async () => {
       tab = document.createElement("div");
       tab.className = "tab";
       tab.id = `tab-${name}`;
+      tab.dataset.file = name;
+      tab.setAttribute("role", "presentation");
 
-      const title = document.createElement("span");
-      title.textContent = name;
+      const title = document.createElement("button");
+      title.type = "button";
+      title.className = "tab-title";
+      title.textContent = name.split("/").pop();
+      title.setAttribute("role", "tab");
+      title.setAttribute("aria-controls", "editor");
+      title.setAttribute("aria-label", `Open ${name}`);
       title.addEventListener("click", () => openFile(name));
 
-      const close = document.createElement("span");
+      const close = document.createElement("button");
+      close.type = "button";
       close.textContent = "×";
       close.className = "close";
+      close.setAttribute("aria-label", `Close ${name}`);
       close.addEventListener("click", event => {
         event.stopPropagation();
+        const wasActive = activeFile === name;
         tab.remove();
 
-        if (activeFile === name) {
+        if (wasActive && tabs.lastElementChild) {
+          const fallbackTab = tabs.lastElementChild;
+          openFile(fallbackTab.dataset.file);
+          fallbackTab.querySelector(".tab-title").focus();
+        } else if (wasActive) {
           activeFile = null;
           editor.textContent = "";
+          editor.classList.remove("is-markdown");
           document.getElementById("lines").textContent = "";
           document.getElementById("lang").textContent = "Plain Text";
           updateActiveExplorerItem();
+          editor.focus();
+        } else {
+          document.querySelector(".tab.active .tab-title")?.focus();
         }
       });
 
@@ -104,12 +165,20 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     document.querySelectorAll(".tab").forEach(item => item.classList.remove("active"));
+    document.querySelectorAll(".tab-title").forEach(item => item.setAttribute("aria-selected", "false"));
     tab.classList.add("active");
+    tab.querySelector(".tab-title").setAttribute("aria-selected", "true");
   }
 
   function updateActiveExplorerItem() {
-    document.querySelectorAll(".sidebar li").forEach(item => {
-      item.classList.toggle("active", item.textContent === activeFile);
+    document.querySelectorAll(".tree-item").forEach(item => {
+      const active = item.dataset.file === activeFile;
+      item.classList.toggle("active", active);
+      if (active) {
+        item.setAttribute("aria-current", "page");
+      } else {
+        item.removeAttribute("aria-current");
+      }
     });
   }
 
@@ -133,6 +202,10 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     if (type === "markdown") {
       return safeContent
+        .replace(
+          /\[([^\]]+)\]\((https:\/\/[^)\s]+)\)/g,
+          '<a class="editor-link" href="$2" target="_blank" rel="noopener noreferrer">$1</a>'
+        )
         .replace(/^(#{1,2} .*)$/gm, '<span class="md-title">$1</span>')
         .replace(/^(- .*)$/gm, '<span class="comment">$1</span>');
     }

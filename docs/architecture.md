@@ -71,6 +71,10 @@ Expected modules/components:
 
 The presentation layer should not contain professional portfolio data directly.
 
+Interactive Explorer and tab controls use native buttons so keyboard behavior is available without custom key handling. Active files and tabs expose their state through ARIA attributes, while the editor announces file changes as a polite live region.
+
+Markdown content wraps within the editor viewport for case-study readability. Code-like JSON content retains horizontal scrolling, and decorative cursor animation respects the user's reduced-motion preference.
+
 ### 4.2 Application Layer
 
 Responsible for application behavior and coordination between UI components and portfolio content.
@@ -154,9 +158,15 @@ New directories and modules should continue to be introduced only when they have
 
 Application entry point. Initializes the interface, coordinates application state, and manages Explorer, Editor and Tabs interactions.
 
+The Explorer derives its hierarchy from slash-delimited virtual file paths. Folders are presentation state rather than content domains: they can be expanded or collapsed, while leaf nodes retain the complete virtual path used to open a file.
+
 ### content-loader.js
 
 Loads the structured content domains and maps them to the virtual files displayed by the VS Code-inspired interface. It owns content formatting but does not manipulate the DOM.
+
+Project content is exposed as a virtual `projects/` directory with an overview and one source-backed Markdown case study per project. The loader formats each case study from structured JSON and remains responsible for deciding the virtual path; the Explorer only renders that path as a hierarchy.
+
+Markdown links are converted to anchors only after the source content is HTML-escaped and only when the URL uses HTTPS. External project links open in a separate browsing context with opener access disabled.
 
 ### Future UI modules
 

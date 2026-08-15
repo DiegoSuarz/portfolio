@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -11,25 +11,25 @@
 <div class="window">
 
   <!-- Activity Bar -->
-  <nav class="activity-bar">
-    <div class="activity active">📁</div>
-    <div class="activity">🔍</div>
-    <div class="activity">🌿</div>
+  <nav class="activity-bar" aria-label="Portfolio sections">
+    <div class="activity active" aria-hidden="true">📁</div>
+    <div class="activity" aria-hidden="true">🔍</div>
+    <div class="activity" aria-hidden="true">🌿</div>
   </nav>
 
   <!-- Sidebar -->
-  <aside class="sidebar">
+  <aside class="sidebar" aria-label="Portfolio Explorer">
     <div class="sidebar-title">EXPLORER</div>
-    <ul id="file-tree"></ul>
+    <ul id="file-tree" aria-label="Portfolio files"></ul>
   </aside>
 
   <!-- Main -->
   <main class="main">
-    <div class="tabs" id="tabs"></div>
+    <div class="tabs" id="tabs" role="tablist" aria-label="Open portfolio files"></div>
 
     <div class="editor">
       <div class="lines" id="lines"></div>
-      <pre class="code" id="editor" tabindex="0"></pre>
+      <pre class="code" id="editor" tabindex="0" aria-label="Portfolio file content" aria-live="polite"></pre>
     </div>
 
     <div class="terminal">
@@ -43,7 +43,7 @@
 
 </div>
 
-<footer class="status-bar">
+<footer class="status-bar" aria-label="Editor status">
   <span>Ln 1, Col 1</span>
   <span>UTF-8</span>
   <span id="lang">Plain Text</span>
