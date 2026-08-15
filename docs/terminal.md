@@ -59,4 +59,4 @@ Clears terminal output while preserving the command input and application state.
 
 ## 6. Ownership
 
-The terminal controller owns input, history, parsing and output. File navigation and CV download continue to use the existing application functions so the terminal does not duplicate portfolio behavior.
+The terminal controller owns input, in-memory history and text-only output. The command dispatcher owns parsing, command validation and mapping commands to application actions. File navigation and CV download continue to use the existing application functions so the terminal does not duplicate portfolio behavior.

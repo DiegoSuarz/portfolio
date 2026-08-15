@@ -83,6 +83,7 @@ portfolio/
 |   |   `-- style.css
 |   `-- js/
 |       |-- app.js
+|       |-- commands.js
 |       |-- content-loader.js
 |       `-- terminal.js
 |

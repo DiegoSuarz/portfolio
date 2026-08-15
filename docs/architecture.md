@@ -139,6 +139,7 @@ portfolio/
 |   |
 |   `-- js/
 |       |-- app.js
+|       |-- commands.js
 |       |-- content-loader.js
 |       `-- terminal.js
 |
@@ -172,6 +173,10 @@ Markdown links are converted to anchors only after the source content is HTML-es
 ### terminal.js
 
 Owns terminal input submission, text-only output, in-memory command history and history navigation. It receives a command callback from the application layer and does not know how portfolio commands are executed.
+
+### commands.js
+
+Owns the terminal command grammar and dispatches only the documented command set. It receives narrow callbacks for file access, navigation and terminal clearing; it cannot execute arbitrary JavaScript or operating-system commands.
 
 ### Future UI modules
 
