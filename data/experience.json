@@ -28,8 +28,8 @@
       "role": "Laboratory Assistant",
       "location": "Lima, Peru",
       "startDate": "2023-05",
-      "endDate": null,
-      "current": true,
+      "endDate": "2024-08",
+      "current": false,
       "summary": "Laboratory operations role combining information management, programming support, technical documentation and process coordination.",
       "highlights": [
         "Managed laboratory inventory records in Microsoft Excel, maintaining information on equipment, loans and availability.",
