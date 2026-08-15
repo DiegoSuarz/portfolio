@@ -34,8 +34,16 @@ function formatProfile(profile) {
     `# ${profile.name}`,
     "",
     profile.headline,
+    profile.location,
+    profile.tagline,
     "",
     profile.summary,
+    "",
+    "## What I Build",
+    ...profile.buildAreas.map(area => `- ${area.title}: ${area.description}`),
+    "",
+    "## Core Stack",
+    profile.coreStack.join(" · "),
     "",
     "## Focus Areas",
     ...profile.focusAreas.map(area => `- ${area}`)
@@ -151,7 +159,12 @@ export async function loadPortfolioFiles() {
   return {
     "about.md": {
       type: "markdown",
-      content: formatProfile(content.profile)
+      content: formatProfile(content.profile),
+      preview: {
+        profile: content.profile,
+        projectCount: content.projects.projects.length,
+        certificationCount: content.certifications.certifications.length
+      }
     },
     "experience.md": {
       type: "markdown",

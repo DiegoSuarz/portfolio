@@ -145,6 +145,7 @@ portfolio/
 |   |
 |   `-- js/
 |       |-- app.js
+|       |-- about-viewer.js
 |       |-- command-palette.js
 |       |-- commands.js
 |       |-- content-loader.js
@@ -172,6 +173,10 @@ New directories and modules should continue to be introduced only when they have
 Application entry point. Initializes the interface, coordinates application state, and manages Explorer, Editor and Tabs interactions.
 
 The Explorer derives its hierarchy from slash-delimited virtual file paths. Folders are presentation state rather than content domains: they can be expanded or collapsed, while leaf nodes retain the complete virtual path used to open a file.
+
+### about-viewer.js
+
+Owns the recruiter-oriented About preview. It receives profile content and derived portfolio counts from the application layer, creates all content through text-safe DOM APIs and exposes only predefined navigation actions. Project and credential metrics are calculated from their source collections rather than maintained as duplicated profile claims.
 
 ### content-loader.js
 

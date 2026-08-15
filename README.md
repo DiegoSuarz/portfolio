@@ -199,6 +199,8 @@ The Recruiter Visual Experience milestone improves information hierarchy and rea
 
 Its VS Code-inspired workspace now includes a searchable Command Palette (`Ctrl+Shift+P`), a centered Command Center, active-file breadcrumbs, descriptive Activity Bar tooltips, a richer status bar and keyboard-accessible panel resizing on desktop. These controls provide real navigation and layout behavior rather than decorative imitation.
 
+The About file opens as a recruiter-oriented professional overview with direct portfolio actions, concise focus areas, a prioritized core stack and evidence counts derived from the project and certification collections. Its source-oriented Markdown view remains available through `Code`.
+
 JSON portfolio files open by default in a responsive `Preview` that presents the factual data as readable cards and tags, including `skills.json`. The technical `Code` view remains available with type-aware syntax colors, indentation guides, foldable objects and arrays, structural breadcrumbs, word wrapping and a minimap.
 
 ## Engineering Principles

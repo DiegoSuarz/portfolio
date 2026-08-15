@@ -6,6 +6,7 @@ import { createPanelTabs } from "./panel-tabs.js";
 import { createLayoutResizers } from "./layout-resizer.js";
 import { createCommandPalette } from "./command-palette.js";
 import { createJsonViewer } from "./json-viewer.js";
+import { createAboutViewer } from "./about-viewer.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
   let files = {};
@@ -14,6 +15,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   let jsonViewMode = "preview";
   let jsonWrap = true;
   let jsonMinimap = true;
+  let aboutViewMode = "preview";
 
   const editor = document.getElementById("editor");
   const explorer = document.getElementById("portfolio-explorer");
@@ -21,10 +23,21 @@ document.addEventListener("DOMContentLoaded", async () => {
   const mobileViewport = window.matchMedia("(max-width: 600px)");
   const statusLeft = document.getElementById("status-position");
   const jsonToolbar = document.getElementById("json-toolbar");
+  const aboutToolbar = document.getElementById("about-toolbar");
   const jsonViewer = createJsonViewer({
     editor,
     minimap: document.getElementById("json-minimap"),
     onPathChange: updateJsonBreadcrumb
+  });
+  const aboutViewer = createAboutViewer({
+    editor,
+    actions: {
+      openProjects: () => openFile("projects/overview.md"),
+      downloadCv: () => openFile("cv.docx"),
+      openLinkedin: url => window.open(url, "_blank", "noopener,noreferrer"),
+      openContact: () => openFile("contact.txt"),
+      openCertifications: () => openFile("certifications.json")
+    }
   });
   let terminalController;
   const executeTerminalCommand = createCommandDispatcher({
@@ -71,6 +84,9 @@ document.addEventListener("DOMContentLoaded", async () => {
   document.getElementById("command-center").addEventListener("click", commandPalette.open);
   jsonToolbar.querySelectorAll("[data-json-view]").forEach(button => {
     button.addEventListener("click", () => setJsonView(button.dataset.jsonView));
+  });
+  aboutToolbar.querySelectorAll("[data-about-view]").forEach(button => {
+    button.addEventListener("click", () => setAboutView(button.dataset.aboutView));
   });
   document.getElementById("json-wrap-toggle").addEventListener("click", event => {
     jsonWrap = !jsonWrap;
@@ -330,9 +346,15 @@ document.addEventListener("DOMContentLoaded", async () => {
     editor.className = "code";
     editor.replaceChildren();
     jsonToolbar.hidden = file.type !== "json";
-    document.getElementById("lines").hidden = file.type === "json";
+    aboutToolbar.hidden = name !== "about.md";
+    document.getElementById("lines").hidden = file.type === "json" || name === "about.md";
+    document.getElementById("json-minimap").hidden = true;
 
-    if (file.type === "json") {
+    if (name === "about.md") {
+      aboutViewMode = "preview";
+      syncAboutToolbar();
+      aboutViewer.show(file.preview);
+    } else if (file.type === "json") {
       jsonViewMode = "preview";
       syncJsonToolbar();
       jsonViewer.show(file.content, jsonViewMode);
@@ -340,10 +362,10 @@ document.addEventListener("DOMContentLoaded", async () => {
       editor.innerHTML = highlight(file.content, file.type);
       document.getElementById("json-minimap").hidden = true;
     }
-    editor.classList.toggle("is-markdown", file.type === "markdown");
+    editor.classList.toggle("is-markdown", file.type === "markdown" && name !== "about.md");
     document.getElementById("lang").textContent = file.type;
 
-    if (file.type !== "json") renderLines(file.content);
+    if (file.type !== "json" && name !== "about.md") renderLines(file.content);
     updateTabs(name);
     updateBreadcrumbs(name);
     updateActiveExplorerItem();
@@ -351,6 +373,31 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (mobileViewport.matches) {
       closeMobileExplorer();
     }
+  }
+
+  function setAboutView(mode) {
+    if (activeFile !== "about.md") return;
+    aboutViewMode = mode;
+    syncAboutToolbar();
+    editor.className = "code";
+    editor.replaceChildren();
+    if (mode === "preview") {
+      document.getElementById("lines").hidden = true;
+      aboutViewer.show(files[activeFile].preview);
+    } else {
+      document.getElementById("lines").hidden = false;
+      editor.innerHTML = highlight(files[activeFile].content, "markdown");
+      editor.classList.add("is-markdown");
+      renderLines(files[activeFile].content);
+    }
+  }
+
+  function syncAboutToolbar() {
+    aboutToolbar.querySelectorAll("[data-about-view]").forEach(button => {
+      const active = button.dataset.aboutView === aboutViewMode;
+      button.classList.toggle("active", active);
+      button.setAttribute("aria-pressed", String(active));
+    });
   }
 
   function setJsonView(mode) {

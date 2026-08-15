@@ -24,8 +24,16 @@ File: `data/profile.json`
 {
   "name": "string",
   "headline": "string",
+  "tagline": "string",
   "location": "string",
   "summary": "string",
+  "buildAreas": [
+    {
+      "title": "string",
+      "description": "string"
+    }
+  ],
+  "coreStack": ["string"],
   "focusAreas": ["string"],
   "email": "string",
   "links": {
@@ -40,6 +48,8 @@ File: `data/profile.json`
 The profile model stores identity and professional positioning information that may be reused by About, Contact, terminal commands, metadata, and other UI surfaces.
 
 `focusAreas` contains concise professional domains that reinforce positioning without duplicating the detailed technology inventory owned by `skills.json`.
+
+`tagline` provides a short outcome-oriented introduction for the About preview. `buildAreas` explains a small number of supported Data Engineering focus areas, while `coreStack` exposes only the most relevant tools for quick recruiter scanning. The complete prioritized capability inventory remains owned by `skills.json`.
 
 The profile model is also the single source of truth for public contact information. Contact views should reuse `email` and `links` instead of copying those values into a separate content file. Phone numbers and other personal details should not be published unless they are deliberately added to this contract.
 
