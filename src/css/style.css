@@ -299,6 +299,26 @@ body {
   font: inherit;
 }
 
+.terminal-submit {
+  border: 0;
+  padding: 2px 6px;
+  background: transparent;
+  color: #9cdcfe;
+  font: inherit;
+  cursor: pointer;
+}
+
+.terminal-submit:hover,
+.terminal-submit:focus-visible {
+  background: #094771;
+  color: white;
+}
+
+.terminal-submit:focus-visible {
+  outline: 1px solid #007acc;
+  outline-offset: 1px;
+}
+
 .terminal-form:focus-within {
   outline: 1px solid #007acc;
   outline-offset: -1px;

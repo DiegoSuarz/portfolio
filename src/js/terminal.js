@@ -40,6 +40,12 @@ export function createTerminal({ form, input, output, onCommand }) {
   });
 
   input.addEventListener("keydown", event => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      form.requestSubmit();
+      return;
+    }
+
     if (!history.length || (event.key !== "ArrowUp" && event.key !== "ArrowDown")) {
       return;
     }
