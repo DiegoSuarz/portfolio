@@ -76,7 +76,40 @@ Initial categories may include:
 
 The `level` property is optional because the portfolio should avoid arbitrary self-rating unless the label provides useful professional context.
 
-## 5. Projects Model
+## 5. Experience Model
+
+File: `data/experience.json`
+
+```json
+{
+  "experience": [
+    {
+      "id": "string",
+      "company": "string",
+      "role": "string",
+      "location": "string",
+      "startDate": "YYYY-MM",
+      "endDate": "YYYY-MM|null",
+      "current": true,
+      "summary": "string",
+      "highlights": ["string"],
+      "dataEngineeringRelevance": ["string"]
+    }
+  ]
+}
+```
+
+### Responsibilities
+
+The experience model stores factual employment history while making transferable skills explicit for Data Engineering positioning.
+
+`highlights` describes actual responsibilities and contributions.
+
+`dataEngineeringRelevance` summarizes transferable capabilities such as programming, validation, documentation, information management, troubleshooting, and process standardization. It should not be used to imply a job title or responsibility that was not actually held.
+
+Dates are stored in machine-friendly form so the presentation layer can format them consistently.
+
+## 6. Projects Model
 
 File: `data/projects.json`
 
@@ -113,29 +146,29 @@ File: `data/projects.json`
 
 `featured: true` identifies projects that should receive stronger visibility in the portfolio. The UI decides how featured content is presented; the data model only expresses the intent.
 
-## 6. Future Domains
+## 7. Future Domains
 
 The following domains are planned but should be introduced only when their corresponding features are implemented:
 
-- `experience.json`
 - `certifications.json`
 - `education.json`
 
 This avoids speculative schema design and unnecessary files.
 
-## 7. Data Ownership
+## 8. Data Ownership
 
 Each content file owns one professional domain:
 
 ```text
-profile.json   -> identity and professional summary
-skills.json    -> technical capabilities
-projects.json  -> project portfolio
+profile.json     -> identity and professional summary
+skills.json      -> technical capabilities
+experience.json  -> employment history and transferable skills
+projects.json    -> project portfolio
 ```
 
 Application code may read these files but should not redefine their content internally.
 
-## 8. Evolution Rules
+## 9. Evolution Rules
 
 When changing a content model:
 
@@ -143,6 +176,6 @@ When changing a content model:
 2. Document meaningful schema changes.
 3. Avoid fields that exist only for visual styling.
 4. Add a field only when at least one feature needs it.
-5. Keep project content factual and verifiable.
+5. Keep project and professional content factual and verifiable.
 
 The content layer represents professional information; the presentation layer decides how that information is displayed.
