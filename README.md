@@ -1,112 +1,191 @@
-# 🧠 VS Code–Inspired Portfolio — Diego
+# VS Code–Inspired Data Engineering Portfolio
 
-Portfolio web interactivo que **recrea de forma fiel la interfaz de Visual Studio Code**, desarrollado con **HTML, CSS y JavaScript puro**, sin frameworks ni librerías externas.
+Professional portfolio for **Diego Suarez**, designed as a Visual Studio Code–inspired interface and focused on showcasing Data Engineering projects, technical capabilities, engineering decisions, and professional growth.
 
-Este proyecto está orientado a demostrar **criterio de ingeniería**, atención al detalle y capacidad para diseñar interfaces modulares, mantenibles y escalables, habilidades clave en **Data Engineering**.
+The application is intentionally built with **HTML, CSS, and Vanilla JavaScript** and deployed as a static site through GitHub Pages.
 
----
+## Live Portfolio
 
-## 🚀 Live Demo
+https://diegosuarz.github.io/portfolio/
 
-🔗 https://github.com/DiegoSuarz/portfolio
+## Project Status
 
----
+**Active development — pre-1.0**
 
-## 🏗️ Engineering Highlights
+The project is being rebuilt incrementally from an earlier prototype using a documented architecture, structured content models, short-lived branches, Pull Requests, and milestone-based releases.
 
-- Arquitectura modular (separación clara de responsabilidades)
-- Simulación de entorno de trabajo técnico (IDE-like)
-- Manejo dinámico del DOM y estado de la aplicación
-- Contenido desacoplado mediante archivos `.md`
-- Enfoque en mantenibilidad y legibilidad del código
-- Cero dependencias externas
+Current milestone: **Portfolio Foundation**.
 
----
+## Goals
 
-## 🛠️ Tech Stack
+- Present Data Engineering projects in a clear and differentiated way.
+- Keep professional content independent from UI and application logic.
+- Demonstrate maintainable software engineering practices in a small static application.
+- Provide a scalable foundation for project case studies, an interactive terminal, architecture diagrams, CV access, and professional contact information.
+- Maintain compatibility with GitHub Pages without requiring a backend.
 
-- **HTML5** — estructura semántica
-- **CSS3** — layout, tematización y diseño responsivo
-- **JavaScript (Vanilla)** — lógica, eventos y estado
-- **Markdown** — contenido desacoplado
-- **Git / GitHub** — control de versiones
-- **GitHub Pages** — despliegue
+## Tech Stack
 
----
+- **HTML5** — application structure
+- **CSS3** — VS Code-inspired interface and layout
+- **JavaScript (Vanilla)** — application behavior and state
+- **JSON** — structured portfolio content
+- **Git / GitHub** — version control and collaboration workflow
+- **GitHub Pages** — static deployment
 
-## 📂 Project Structure
+## Architecture
 
+The portfolio follows a lightweight layered architecture:
 
----
+```text
+Presentation Layer
+        |
+        v
+Application Layer
+        |
+        v
+Data / Content Layer
 
-## 📂 Estructura del proyecto
-
-```
-📦 vscode-portfolio
-┣ 📜 index.html
-┣ 📂 styles
-┃ ┗ 📜 style.css
-┣ 📂 scripts
-┃ ┗ 📜 app.js
-┣ 📂 content
-┃ ┣ 📜 about.md
-┃ ┣ 📜 projects.md
-┃ ┗ 📜 skills.md
-┗ 📜 README.md
++ Assets
++ Documentation
 ```
 
----
+The architecture intentionally avoids unnecessary abstractions and external frameworks. New modules are introduced only when they have a concrete responsibility.
 
---
+Detailed architecture documentation is available in [`docs/architecture.md`](docs/architecture.md).
 
-## 🧩 Design Philosophy (Data Engineering Mindset)
+The structured content contract is documented in [`docs/content-model.md`](docs/content-model.md).
 
-Este proyecto sigue principios aplicables a sistemas de datos:
+## Current Project Structure
 
-- **Separación de capas** (UI, lógica, contenido)
-- **Bajo acoplamiento**
-- **Alta cohesión**
-- **Facilidad de extensión**
-- **Pensamiento orientado a sistemas**
+```text
+portfolio/
+|
+|-- assets/
+|
+|-- data/
+|   |-- files.json
+|   |-- profile.json
+|   |-- projects.json
+|   `-- skills.json
+|
+|-- docs/
+|   |-- architecture.md
+|   `-- content-model.md
+|
+|-- src/
+|   |-- css/
+|   |   `-- style.css
+|   `-- js/
+|       `-- app.js
+|
+|-- CONTRIBUTING.md
+|-- index.html
+`-- README.md
+```
 
-El mismo enfoque utilizado en pipelines de datos, ETL y arquitecturas distribuidas.
+`data/files.json` belongs to the original prototype and remains temporarily in use while the application is migrated toward the new content model.
 
----
+## Content Model
 
-## 📌 Use Case
+Professional information is stored independently from application code.
 
-Este portfolio está diseñado para:
-- Mostrar habilidades técnicas de forma no convencional
-- Simular un entorno real de trabajo para ingenieros
-- Demostrar pensamiento estructural y criterio técnico
-- Diferenciarse de portfolios tradicionales
+Initial domains:
 
----
+```text
+profile.json   -> professional identity and summary
+projects.json  -> Data Engineering project catalog
+skills.json    -> technical capabilities by category
+```
 
-## 🔮 Roadmap
+Planned domains such as experience and certifications will be introduced when their corresponding features are implemented.
 
-- Terminal interactiva (comandos tipo CLI)
-- Visualización de datasets simulados
-- Theme switching (Dark / Light)
-- Extensión de comandos personalizados
-- Integración futura con APIs
+## Featured Project Direction
 
----
+The portfolio is being prepared to highlight Data Engineering work through project-oriented case studies. Initial featured projects include:
 
+- **AdventureWorks Enterprise Data Warehouse**
+- **E-Commerce Data Engineering Platform**
 
-## 📬 Contacto
+Projects under active development are explicitly represented as such rather than presented as completed work.
 
-- 💼 LinkedIn: https://www.linkedin.com/in/diegosuarezinocente/
-- 📧 Email: diego.suarez.dev@outlook.com
-- 🌐 Portfolio: https://diegosuarz.github.io/portfolio/
+## Development Workflow
 
----
+`main` represents the stable portfolio version.
 
-## 📄 Licencia
+Development is performed through short-lived branches such as:
 
-Este proyecto es de uso personal.  
-Si deseas reutilizar partes del código, menciona la fuente 🙌
+```text
+feature/*
+fix/*
+refactor/*
+docs/*
+chore/*
+```
 
----
+Changes are integrated through Pull Requests, with **Squash and Merge** as the preferred merge strategy.
 
-**Developed by Diego — Data Engineering Focus**
+Commit messages follow Conventional Commit style where practical.
+
+See [`CONTRIBUTING.md`](CONTRIBUTING.md) for the complete workflow and Definition of Done.
+
+## Running Locally
+
+Because the application loads JSON content with `fetch()`, it should be served through a local HTTP server instead of opening `index.html` directly with the `file://` protocol.
+
+One simple option with Python is:
+
+```bash
+python -m http.server 8000
+```
+
+Then open:
+
+```text
+http://localhost:8000
+```
+
+No package installation or build step is currently required.
+
+## Roadmap
+
+The project follows milestone-based development:
+
+```text
+v0.1.0  Portfolio Foundation
+v0.2.0  Professional Content
+v0.3.0  Project Showcase
+v0.4.0  Interactive Terminal
+v0.9.0  Production Readiness
+v1.0.0  Production Portfolio
+```
+
+Version numbers are roadmap targets and are created as releases only after the corresponding milestone is completed and validated.
+
+## Engineering Principles
+
+- Separation of concerns
+- Low coupling
+- Clear module ownership
+- Content-driven design
+- Progressive enhancement
+- Maintainability over unnecessary abstraction
+- Static deployment compatibility
+- Factual and verifiable professional content
+
+## Documentation
+
+- [`docs/architecture.md`](docs/architecture.md) — architecture, layers, module boundaries, and evolution strategy
+- [`docs/content-model.md`](docs/content-model.md) — structured portfolio data contracts
+- [`CONTRIBUTING.md`](CONTRIBUTING.md) — Git/GitHub workflow, commit conventions, PR expectations, and releases
+
+## Contact
+
+- GitHub: https://github.com/DiegoSuarz
+- LinkedIn: https://www.linkedin.com/in/diegosuarezinocente/
+- Email: diego.suarez.dev@outlook.com
+- Portfolio: https://diegosuarz.github.io/portfolio/
+
+## License
+
+This repository currently contains a personal portfolio project. A formal open-source license has not yet been assigned.
