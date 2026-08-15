@@ -175,6 +175,10 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     if (type === "markdown") {
       return safeContent
+        .replace(
+          /\[([^\]]+)\]\((https:\/\/[^)\s]+)\)/g,
+          '<a class="editor-link" href="$2" target="_blank" rel="noopener noreferrer">$1</a>'
+        )
         .replace(/^(#{1,2} .*)$/gm, '<span class="md-title">$1</span>')
         .replace(/^(- .*)$/gm, '<span class="comment">$1</span>');
     }

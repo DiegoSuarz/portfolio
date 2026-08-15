@@ -87,11 +87,60 @@ function formatProjectOverview(projects) {
     "",
     ...projects.flatMap(project => [
       `## ${project.name}`,
-      `Status: ${project.status}`,
+      `Status: ${formatProjectStatus(project.status)}`,
       project.summary,
+      `File: projects/${project.id}.md`,
       ""
     ])
   ].join("\n").trimEnd();
+}
+
+function formatProjectStatus(status) {
+  return status
+    .split("-")
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
+}
+
+function formatProjectLinks(links) {
+  const labels = {
+    repository: "Repository",
+    documentation: "Documentation",
+    demo: "Live demo"
+  };
+
+  return Object.entries(links)
+    .filter(([, url]) => url)
+    .map(([kind, url]) => `- [${labels[kind]}](${url})`);
+}
+
+function formatProjectCaseStudy(project) {
+  return [
+    `# ${project.name}`,
+    "",
+    `Status: ${formatProjectStatus(project.status)}`,
+    "",
+    "## Overview",
+    project.summary,
+    "",
+    "## Engineering Problem",
+    project.problem,
+    "",
+    "## Current Architecture",
+    ...project.architecture.current.map(component => `- ${component}`),
+    "",
+    "## Planned Evolution",
+    ...project.architecture.planned.map(component => `- ${component}`),
+    "",
+    "## Implemented Scope",
+    ...project.highlights.map(highlight => `- ${highlight}`),
+    "",
+    "## Technologies in Current Scope",
+    ...project.technologies.map(technology => `- ${technology}`),
+    "",
+    "## Explore",
+    ...formatProjectLinks(project.links)
+  ].join("\n");
 }
 
 export async function loadPortfolioFiles() {
@@ -113,10 +162,10 @@ export async function loadPortfolioFiles() {
       content: formatProjectOverview(content.projects.projects)
     },
     ...Object.fromEntries(content.projects.projects.map(project => [
-      `projects/${project.id}.json`,
+      `projects/${project.id}.md`,
       {
-        type: "json",
-        content: JSON.stringify(project, null, 2)
+        type: "markdown",
+        content: formatProjectCaseStudy(project)
       }
     ])),
     "skills.json": {
