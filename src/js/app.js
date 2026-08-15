@@ -1,4 +1,4 @@
-import { loadPortfolioFiles } from "./content-loader.js";
+import { loadPortfolioFiles } from "./content-loader.js?v=2";
 import { createCommandDispatcher } from "./commands.js";
 import { createTerminal } from "./terminal.js?v=3";
 import { createMenuBar } from "./menu-bar.js?v=2";
@@ -6,7 +6,7 @@ import { createPanelTabs } from "./panel-tabs.js";
 import { createLayoutResizers } from "./layout-resizer.js";
 import { createCommandPalette } from "./command-palette.js";
 import { createJsonViewer } from "./json-viewer.js";
-import { createAboutViewer } from "./about-viewer.js";
+import { createAboutViewer } from "./about-viewer.js?v=2";
 
 document.addEventListener("DOMContentLoaded", async () => {
   let files = {};
@@ -351,9 +351,16 @@ document.addEventListener("DOMContentLoaded", async () => {
     document.getElementById("json-minimap").hidden = true;
 
     if (name === "about.md") {
-      aboutViewMode = "preview";
+      aboutViewMode = file.preview ? "preview" : "code";
       syncAboutToolbar();
-      aboutViewer.show(file.preview);
+      if (file.preview) {
+        aboutViewer.show(file.preview);
+      } else {
+        document.getElementById("lines").hidden = false;
+        editor.innerHTML = highlight(file.content, "markdown");
+        editor.classList.add("is-markdown");
+        renderLines(file.content);
+      }
     } else if (file.type === "json") {
       jsonViewMode = "preview";
       syncJsonToolbar();
@@ -377,6 +384,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   function setAboutView(mode) {
     if (activeFile !== "about.md") return;
+    if (mode === "preview" && !files[activeFile].preview) mode = "code";
     aboutViewMode = mode;
     syncAboutToolbar();
     editor.className = "code";
