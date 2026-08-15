@@ -1,0 +1,48 @@
+{
+  "categories": [
+    {
+      "id": "programming",
+      "name": "Programming",
+      "items": [
+        { "name": "Python", "level": null },
+        { "name": "SQL", "level": null }
+      ]
+    },
+    {
+      "id": "databases",
+      "name": "Databases",
+      "items": [
+        { "name": "SQL Server", "level": null },
+        { "name": "PostgreSQL", "level": null },
+        { "name": "MySQL", "level": null }
+      ]
+    },
+    {
+      "id": "data-engineering",
+      "name": "Data Engineering",
+      "items": [
+        { "name": "ETL / ELT", "level": null },
+        { "name": "Data Warehousing", "level": null },
+        { "name": "Dimensional Modeling", "level": null }
+      ]
+    },
+    {
+      "id": "orchestration",
+      "name": "Orchestration",
+      "items": [
+        { "name": "Apache Airflow", "level": null },
+        { "name": "Azure Data Factory", "level": null }
+      ]
+    },
+    {
+      "id": "tooling",
+      "name": "DevOps / Tooling",
+      "items": [
+        { "name": "Git", "level": null },
+        { "name": "GitHub", "level": null },
+        { "name": "Docker", "level": null },
+        { "name": "Linux", "level": null }
+      ]
+    }
+  ]
+}
