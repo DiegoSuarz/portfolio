@@ -6,23 +6,21 @@
       "shortName": "AdventureWorks EDW",
       "status": "in-progress",
       "featured": true,
-      "summary": "Enterprise-style data warehouse project built around AdventureWorks with dimensional modeling, ETL and data engineering practices.",
-      "problem": null,
+      "summary": "In-progress enterprise data warehouse project that transforms AdventureWorks transactional data into an analytics-ready dimensional model with controlled and observable data loads.",
+      "problem": "Operational data is distributed across normalized transactional structures that are not optimized for historical analysis, consistent business metrics or repeatable analytical workloads.",
       "technologies": [
         "SQL Server",
-        "T-SQL",
-        "Azure Data Factory",
-        "Apache Airflow"
+        "T-SQL"
       ],
       "highlights": [
-        "Dimensional data modeling",
-        "ETL and incremental loading",
-        "Slowly Changing Dimensions",
-        "Audit and execution logging"
+        "Implemented dimensional and staging structures for core business entities",
+        "Developed full-load ETL procedures with transaction and error handling",
+        "Implemented Slowly Changing Dimension Type 2 for historical product data",
+        "Added ETL auditing and execution logging for observable pipeline runs"
       ],
       "links": {
-        "repository": null,
-        "documentation": null,
+        "repository": "https://github.com/DiegoSuarz/AdventureWorks-Enterprise-DataWarehouse",
+        "documentation": "https://github.com/DiegoSuarz/AdventureWorks-Enterprise-DataWarehouse/tree/main/docs",
         "demo": null
       }
     },
@@ -32,21 +30,21 @@
       "shortName": "E-Commerce Data Platform",
       "status": "in-progress",
       "featured": true,
-      "summary": "End-to-end data engineering platform designed to reproduce a realistic e-commerce data ecosystem and its data pipelines.",
-      "problem": null,
+      "summary": "In-progress data engineering platform with a containerized MySQL operational source that establishes a reproducible foundation for future ingestion and analytical modules.",
+      "problem": "E-commerce data originates from interdependent operational entities and changes continuously, requiring a reliable source model and repeatable environment before analytical pipelines can be developed safely.",
       "technologies": [
         "MySQL",
-        "Python",
         "Docker"
       ],
       "highlights": [
-        "OLTP source database",
-        "Reproducible development environment",
-        "Incremental platform development"
+        "Implemented a relational OLTP schema for core e-commerce transactions",
+        "Containerized the MySQL source database for reproducible development",
+        "Added repeatable scripts for database initialization and access provisioning",
+        "Loaded documented sample datasets into the operational source"
       ],
       "links": {
-        "repository": null,
-        "documentation": null,
+        "repository": "https://github.com/DiegoSuarz/ecommerce-data-engineering-platform",
+        "documentation": "https://github.com/DiegoSuarz/ecommerce-data-engineering-platform/blob/main/01-oltp-database/README.md",
         "demo": null
       }
     }

@@ -1,47 +1,39 @@
 {
   "categories": [
     {
-      "id": "programming",
-      "name": "Programming",
+      "id": "core-data-engineering",
+      "name": "Core Data Engineering",
       "items": [
-        { "name": "Python", "level": null },
-        { "name": "SQL", "level": null }
+        { "name": "SQL" },
+        { "name": "Python" },
+        { "name": "ETL / ELT" },
+        { "name": "Data Warehousing" },
+        { "name": "Dimensional Modeling" }
       ]
     },
     {
       "id": "databases",
-      "name": "Databases",
+      "name": "Databases & SQL",
       "items": [
-        { "name": "SQL Server", "level": null },
-        { "name": "PostgreSQL", "level": null },
-        { "name": "MySQL", "level": null }
+        { "name": "SQL Server" },
+        { "name": "T-SQL" },
+        { "name": "MySQL" }
       ]
     },
     {
-      "id": "data-engineering",
-      "name": "Data Engineering",
+      "id": "orchestration-cloud",
+      "name": "Orchestration & Cloud",
       "items": [
-        { "name": "ETL / ELT", "level": null },
-        { "name": "Data Warehousing", "level": null },
-        { "name": "Dimensional Modeling", "level": null }
-      ]
-    },
-    {
-      "id": "orchestration",
-      "name": "Orchestration",
-      "items": [
-        { "name": "Apache Airflow", "level": null },
-        { "name": "Azure Data Factory", "level": null }
+        { "name": "Azure Data Factory" },
+        { "name": "Apache Airflow" }
       ]
     },
     {
       "id": "tooling",
-      "name": "DevOps / Tooling",
+      "name": "Engineering Tooling",
       "items": [
-        { "name": "Git", "level": null },
-        { "name": "GitHub", "level": null },
-        { "name": "Docker", "level": null },
-        { "name": "Linux", "level": null }
+        { "name": "Git & GitHub" },
+        { "name": "Docker" }
       ]
     }
   ]

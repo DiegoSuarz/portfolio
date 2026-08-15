@@ -14,7 +14,7 @@ https://diegosuarz.github.io/portfolio/
 
 The project is being rebuilt incrementally from an earlier prototype using a documented architecture, structured content models, short-lived branches, Pull Requests, and milestone-based releases.
 
-Current milestone: **Portfolio Foundation**.
+Current milestone: **Professional Content**.
 
 ## Goals
 
@@ -62,9 +62,14 @@ The structured content contract is documented in [`docs/content-model.md`](docs/
 portfolio/
 |
 |-- assets/
+|   |-- cv/
+|   `-- icons.svg
 |
 |-- data/
-|   |-- files.json
+|   |-- certifications.json
+|   |-- cv.json
+|   |-- education.json
+|   |-- experience.json
 |   |-- profile.json
 |   |-- projects.json
 |   `-- skills.json
@@ -77,28 +82,31 @@ portfolio/
 |   |-- css/
 |   |   `-- style.css
 |   `-- js/
-|       `-- app.js
+|       |-- app.js
+|       `-- content-loader.js
 |
 |-- CONTRIBUTING.md
 |-- index.html
 `-- README.md
 ```
 
-`data/files.json` belongs to the original prototype and remains temporarily in use while the application is migrated toward the new content model.
+The application loads the professional content domains at startup and maps them to virtual files in the Explorer. The public CV is exposed as a downloadable asset instead of duplicating its content in application code.
 
 ## Content Model
 
 Professional information is stored independently from application code.
 
-Initial domains:
+Current domains:
 
 ```text
-profile.json   -> professional identity and summary
-projects.json  -> Data Engineering project catalog
-skills.json    -> technical capabilities by category
+profile.json        -> professional identity and public contact
+experience.json     -> professional experience
+projects.json       -> Data Engineering project catalog
+skills.json         -> prioritized technical capabilities
+education.json      -> formal education
+certifications.json -> curated professional credentials
+cv.json             -> public CV asset metadata
 ```
-
-Planned domains such as experience and certifications will be introduced when their corresponding features are implemented.
 
 ## Featured Project Direction
 

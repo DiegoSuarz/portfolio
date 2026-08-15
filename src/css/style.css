@@ -14,6 +14,7 @@ body {
 
 /* Activity Bar */
 .activity-bar {
+  flex: 0 0 48px;
   width: 48px;
   background: #333;
 }
@@ -29,6 +30,7 @@ body {
 
 /* Sidebar */
 .sidebar {
+  flex: 0 0 240px;
   width: 240px;
   background: #252526;
 }
@@ -56,6 +58,7 @@ body {
 /* Main */
 .main {
   flex: 1;
+  min-width: 0;
   display: flex;
   flex-direction: column;
 }
@@ -65,9 +68,12 @@ body {
   height: 35px;
   background: #2d2d2d;
   display: flex;
+  overflow-x: auto;
+  overflow-y: hidden;
 }
 
 .tab {
+  flex: 0 0 auto;
   padding: 8px 12px;
   border-right: 1px solid #1e1e1e;
   display: flex;
@@ -81,6 +87,7 @@ body {
 /* Editor */
 .editor {
   flex: 1;
+  min-width: 0;
   display: flex;
   overflow: hidden;
 }
@@ -91,9 +98,12 @@ body {
   text-align: right;
   color: #858585;
   user-select: none;
+  white-space: pre;
 }
 
 .code {
+  flex: 1;
+  min-width: 0;
   padding: 10px;
   white-space: pre;
   overflow: auto;
@@ -192,4 +202,50 @@ body {
 
 ::selection {
   background: #264f78;
+}
+
+@media (max-width: 600px) {
+  .activity-bar {
+    flex-basis: 36px;
+    width: 36px;
+  }
+
+  .activity {
+    padding: 9px;
+  }
+
+  .sidebar {
+    flex-basis: 124px;
+    width: 124px;
+    font-size: 11px;
+  }
+
+  .sidebar li {
+    padding: 6px 5px;
+  }
+
+  .tab {
+    padding-inline: 8px;
+  }
+
+  .lines,
+  .code {
+    padding: 8px 5px;
+    font-size: 11px;
+  }
+
+  .terminal {
+    height: 110px;
+    font-size: 11px;
+  }
+
+  .terminal-body {
+    padding: 8px 5px;
+    overflow: auto;
+    white-space: nowrap;
+  }
+
+  .status-bar {
+    padding-inline: 5px;
+  }
 }

@@ -26,6 +26,7 @@ File: `data/profile.json`
   "headline": "string",
   "location": "string",
   "summary": "string",
+  "focusAreas": ["string"],
   "email": "string",
   "links": {
     "github": "string",
@@ -37,6 +38,10 @@ File: `data/profile.json`
 ### Responsibilities
 
 The profile model stores identity and professional positioning information that may be reused by About, Contact, terminal commands, metadata, and other UI surfaces.
+
+`focusAreas` contains concise professional domains that reinforce positioning without duplicating the detailed technology inventory owned by `skills.json`.
+
+The profile model is also the single source of truth for public contact information. Contact views should reuse `email` and `links` instead of copying those values into a separate content file. Phone numbers and other personal details should not be published unless they are deliberately added to this contract.
 
 ## 4. Skills Model
 
@@ -50,8 +55,7 @@ File: `data/skills.json`
       "name": "string",
       "items": [
         {
-          "name": "string",
-          "level": "string|null"
+          "name": "string"
         }
       ]
     }
@@ -59,21 +63,57 @@ File: `data/skills.json`
 }
 ```
 
-### Skill Categories
+### Responsibilities
 
-Initial categories may include:
+The skills model stores a curated inventory of technical capabilities that are relevant to the target Junior Data Engineer profile and supported by professional experience or active portfolio projects.
 
-- Languages
-- Databases
-- Data Engineering
-- Cloud
-- Orchestration
-- DevOps / Tooling
-- Analytics
+Categories and items are ordered by professional relevance. Core Data Engineering capabilities appear before supporting platforms and tools so the UI can preserve a meaningful priority without presentation-specific fields.
 
-The `level` property is optional because the portfolio should avoid arbitrary self-rating unless the label provides useful professional context.
+The current category vocabulary is:
 
-## 5. Projects Model
+- Core Data Engineering
+- Databases & SQL
+- Orchestration & Cloud
+- Engineering Tooling
+
+Skills should be concise, factual, and verifiable. Closely related tools may be grouped when listing them separately would add noise, while distinct concepts such as SQL, ETL/ELT, and dimensional modeling remain explicit because they communicate different capabilities.
+
+Self-assessed proficiency levels are intentionally excluded. A skill should be added only when it is supported by experience, an active project, or another portfolio artifact; brief exposure alone is not enough.
+
+## 5. Experience Model
+
+File: `data/experience.json`
+
+```json
+{
+  "experience": [
+    {
+      "id": "string",
+      "company": "string",
+      "role": "string",
+      "location": "string",
+      "startDate": "YYYY-MM",
+      "endDate": "YYYY-MM|null",
+      "current": true,
+      "summary": "string",
+      "highlights": ["string"],
+      "dataEngineeringRelevance": ["string"]
+    }
+  ]
+}
+```
+
+### Responsibilities
+
+The experience model stores factual employment history while making transferable skills explicit for Data Engineering positioning.
+
+`highlights` describes actual responsibilities and contributions.
+
+`dataEngineeringRelevance` summarizes transferable capabilities such as programming, validation, documentation, information management, troubleshooting, and process standardization. It should not be used to imply a job title or responsibility that was not actually held.
+
+Dates are stored in machine-friendly form so the presentation layer can format them consistently.
+
+## 6. Projects Model
 
 File: `data/projects.json`
 
@@ -110,29 +150,108 @@ File: `data/projects.json`
 
 `featured: true` identifies projects that should receive stronger visibility in the portfolio. The UI decides how featured content is presented; the data model only expresses the intent.
 
-## 6. Future Domains
+### Responsibilities
 
-The following domains are planned but should be introduced only when their corresponding features are implemented:
+The projects model presents technical work as professional case studies rather than as a flat technology list.
 
-- `experience.json`
-- `certifications.json`
-- `education.json`
+`summary` states what the project is and its current scope. For work in progress, it must make that status clear instead of implying completion.
+
+`problem` explains the engineering need addressed by the project. It describes the technical or business context without inventing measured impact.
+
+`highlights` communicates the most relevant implementation areas. Entries for an in-progress project should use language that reflects ongoing work and must not present planned features as completed outcomes.
+
+`technologies` lists tools that belong to the documented project scope. Technologies considered only for future use should not be included.
+
+Project links remain `null` until the corresponding repository, documentation or demo is publicly accessible. Completed projects should include verifiable results when available; metrics must not be estimated or fabricated.
+
+## 7. Education Model
+
+File: `data/education.json`
+
+```json
+{
+  "education": [
+    {
+      "id": "string",
+      "institution": "string",
+      "degree": "string",
+      "startDate": "YYYY-MM",
+      "endDate": "YYYY-MM|null",
+      "completed": true
+    }
+  ]
+}
+```
+
+The education model stores formal academic education. Dates use the same machine-friendly format as professional experience, and `completed` must reflect the actual program status.
+
+## 8. Certifications Model
+
+File: `data/certifications.json`
+
+```json
+{
+  "certifications": [
+    {
+      "id": "string",
+      "name": "string",
+      "issuer": "string",
+      "credentialUrl": "string",
+      "focusAreas": ["string"]
+    }
+  ]
+}
+```
+
+The certifications model stores a curated selection of completed credentials that reinforce the target Data Engineering profile.
+
+`credentialUrl` must point to a public or shareable credential. `focusAreas` summarizes the credential scope using concise, verifiable concepts rather than promotional descriptions or self-assessed proficiency.
+
+Exam preparation programs must not be presented as official vendor certifications. Overlapping introductory credentials may be omitted when a broader professional certificate already provides stronger evidence of the same capabilities.
+
+## 9. CV Model
+
+File: `data/cv.json`
+
+```json
+{
+  "cv": {
+    "title": "string",
+    "language": "string",
+    "format": "docx|pdf",
+    "downloadPath": "string",
+    "updatedDate": "YYYY-MM"
+  }
+}
+```
+
+The CV model describes the public résumé asset without duplicating its professional content. `downloadPath` is a repository-relative path owned by the static application, while `updatedDate` helps the UI communicate document freshness.
+
+Only a reviewed and intentionally public copy should be referenced. The public asset may omit private contact details that remain present in a personal source document. Course completion and exam preparation must not be labeled as official vendor certification unless the corresponding certification was actually obtained.
+
+## 10. Future Domains
+
+Additional domains should be introduced only when their corresponding features are implemented.
 
 This avoids speculative schema design and unnecessary files.
 
-## 7. Data Ownership
+## 11. Data Ownership
 
 Each content file owns one professional domain:
 
 ```text
-profile.json   -> identity and professional summary
-skills.json    -> technical capabilities
-projects.json  -> project portfolio
+profile.json     -> identity and professional summary
+skills.json      -> technical capabilities
+experience.json  -> employment history and transferable skills
+projects.json    -> project portfolio
+education.json   -> formal academic education
+certifications.json -> curated professional credentials
+cv.json          -> public résumé asset metadata
 ```
 
 Application code may read these files but should not redefine their content internally.
 
-## 8. Evolution Rules
+## 12. Evolution Rules
 
 When changing a content model:
 
@@ -140,6 +259,6 @@ When changing a content model:
 2. Document meaningful schema changes.
 3. Avoid fields that exist only for visual styling.
 4. Add a field only when at least one feature needs it.
-5. Keep project content factual and verifiable.
+5. Keep project and professional content factual and verifiable.
 
 The content layer represents professional information; the presentation layer decides how that information is displayed.

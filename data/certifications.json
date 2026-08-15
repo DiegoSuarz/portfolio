@@ -1,0 +1,69 @@
+{
+  "certifications": [
+    {
+      "id": "ibm-data-engineering-professional-certificate",
+      "name": "IBM Data Engineering Professional Certificate",
+      "issuer": "IBM",
+      "credentialUrl": "https://coursera.org/share/f88987020b5ee4fc36f62b7ed93b4431",
+      "focusAreas": [
+        "Data engineering",
+        "Relational databases",
+        "ETL and data pipelines",
+        "Data warehousing",
+        "Apache Spark"
+      ]
+    },
+    {
+      "id": "microsoft-sql-server-professional-certificate",
+      "name": "Microsoft SQL Server Professional Certificate",
+      "issuer": "Microsoft",
+      "credentialUrl": "https://coursera.org/share/9d83017688a787852dd183812ed1107f",
+      "focusAreas": [
+        "SQL Server",
+        "T-SQL",
+        "Query optimization",
+        "Database security",
+        "Backup and recovery"
+      ]
+    },
+    {
+      "id": "ibm-data-warehouse-engineer",
+      "name": "IBM Data Warehouse Engineer",
+      "issuer": "IBM",
+      "credentialUrl": "https://coursera.org/share/1aa91d9f213b7a2d494fdfc59f527d39",
+      "focusAreas": [
+        "Data warehousing",
+        "SQL",
+        "ETL pipelines",
+        "Apache Airflow",
+        "Business intelligence"
+      ]
+    },
+    {
+      "id": "microsoft-modern-data-architecture",
+      "name": "Microsoft Data Architecture for Modern Data Stacks",
+      "issuer": "Microsoft",
+      "credentialUrl": "https://coursera.org/share/39fa0da1b94c3e2dcae50600d3241bb4",
+      "focusAreas": [
+        "Microsoft Fabric",
+        "OneLake",
+        "Lakehouse architecture",
+        "Data governance",
+        "Power BI"
+      ]
+    },
+    {
+      "id": "ibm-nosql-big-data-spark-foundations",
+      "name": "NoSQL, Big Data, and Spark Foundations",
+      "issuer": "IBM",
+      "credentialUrl": "https://coursera.org/share/ab2d56bb1f826ff1158266a5341e6d99",
+      "focusAreas": [
+        "NoSQL databases",
+        "Apache Hadoop",
+        "Apache Spark",
+        "Spark SQL",
+        "Distributed data processing"
+      ]
+    }
+  ]
+}
