@@ -22,23 +22,123 @@ body {
 }
 
 .activity {
+  position: relative;
   display: block;
   width: 100%;
   border: 0;
-  padding: 12px;
+  height: 48px;
+  padding: 0;
   background: transparent;
-  color: inherit;
+  color: #858585;
   font: inherit;
   cursor: pointer;
 }
 
 .activity.active {
-  background: #007acc;
+  color: #ffffff;
+}
+
+.activity.active::before {
+  content: "";
+  position: absolute;
+  inset: 9px auto 9px 0;
+  width: 2px;
+  background: #ffffff;
+}
+
+.activity:hover {
+  color: #ffffff;
 }
 
 .activity:focus-visible {
   outline: 2px solid #ffffff;
   outline-offset: -3px;
+}
+
+.activity-icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: block;
+  width: 24px;
+  height: 24px;
+  transform: translate(-50%, -50%);
+}
+
+.activity-icon--files::before,
+.activity-icon--files::after {
+  content: "";
+  position: absolute;
+  width: 13px;
+  height: 17px;
+  border: 1.8px solid currentColor;
+  border-radius: 1px;
+}
+
+.activity-icon--files::before {
+  top: 2px;
+  left: 7px;
+}
+
+.activity-icon--files::after {
+  top: 5px;
+  left: 3px;
+  background: #333333;
+}
+
+.activity-icon--search::before {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 12px;
+  height: 12px;
+  border: 1.8px solid currentColor;
+  border-radius: 50%;
+}
+
+.activity-icon--search::after {
+  content: "";
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  width: 8px;
+  height: 1.8px;
+  border-radius: 1px;
+  background: currentColor;
+  transform: rotate(45deg);
+  transform-origin: left center;
+}
+
+.activity-icon--source {
+  background:
+    radial-gradient(circle at 6px 5px, transparent 0 2px, currentColor 2.4px 3.7px, transparent 4px),
+    radial-gradient(circle at 6px 19px, transparent 0 2px, currentColor 2.4px 3.7px, transparent 4px),
+    radial-gradient(circle at 18px 8px, transparent 0 2px, currentColor 2.4px 3.7px, transparent 4px);
+}
+
+.activity-icon--source::before {
+  content: "";
+  position: absolute;
+  top: 8px;
+  left: 5px;
+  width: 11px;
+  height: 10px;
+  border-left: 1.8px solid currentColor;
+  border-bottom: 1.8px solid currentColor;
+  border-radius: 0 0 0 7px;
+}
+
+.activity-icon--source::after {
+  content: "";
+  position: absolute;
+  top: 8px;
+  left: 7px;
+  width: 10px;
+  height: 6px;
+  border-top: 1.8px solid currentColor;
+  border-right: 1.8px solid currentColor;
+  border-radius: 0 6px 0 0;
 }
 
 /* Sidebar */
@@ -365,7 +465,7 @@ body {
   }
 
   .activity {
-    padding: 9px;
+    height: 44px;
   }
 
   .sidebar {

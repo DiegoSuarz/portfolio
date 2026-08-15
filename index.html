@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Diego | VS Code Portfolio</title>
-  <link rel="stylesheet" href="src/css/style.css?v=3">
+  <link rel="stylesheet" href="src/css/style.css?v=4">
 </head>
 <body>
 
@@ -12,9 +12,15 @@
 
   <!-- Activity Bar -->
   <nav class="activity-bar" aria-label="Portfolio sections">
-    <button class="activity active" id="explorer-toggle" type="button" aria-label="Toggle Portfolio Explorer" aria-controls="portfolio-explorer" aria-expanded="true">📁</button>
-    <div class="activity" aria-hidden="true">🔍</div>
-    <div class="activity" aria-hidden="true">🌿</div>
+    <button class="activity active" id="explorer-toggle" type="button" aria-label="Toggle Portfolio Explorer" aria-controls="portfolio-explorer" aria-expanded="true">
+      <span class="activity-icon activity-icon--files" aria-hidden="true"></span>
+    </button>
+    <div class="activity" aria-hidden="true">
+      <span class="activity-icon activity-icon--search"></span>
+    </div>
+    <div class="activity" aria-hidden="true">
+      <span class="activity-icon activity-icon--source"></span>
+    </div>
   </nav>
 
   <!-- Sidebar -->
