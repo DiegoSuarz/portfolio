@@ -3,6 +3,8 @@
 body {
   margin: 0;
   font-family: "Cascadia Code", Consolas, monospace;
+  font-size: 15px;
+  line-height: 1.5;
   background: #1e1e1e;
   color: #d4d4d4;
 }
@@ -20,12 +22,23 @@ body {
 }
 
 .activity {
+  display: block;
+  width: 100%;
+  border: 0;
   padding: 12px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
   cursor: pointer;
 }
 
 .activity.active {
   background: #007acc;
+}
+
+.activity:focus-visible {
+  outline: 2px solid #ffffff;
+  outline-offset: -3px;
 }
 
 /* Sidebar */
@@ -37,7 +50,7 @@ body {
 }
 
 .sidebar-title {
-  font-size: 11px;
+  font-size: 12px;
   padding: 8px;
   color: #c5c5c5;
 }
@@ -67,6 +80,8 @@ body {
   text-align: left;
   white-space: nowrap;
   cursor: pointer;
+  font-size: 14px;
+  line-height: 1.45;
 }
 
 .tree-item:hover,
@@ -146,6 +161,8 @@ body {
   flex: 1;
   min-width: 0;
   padding: 10px;
+  font-size: 15px;
+  line-height: 1.55;
   white-space: pre;
   overflow: auto;
 }
@@ -254,7 +271,8 @@ body {
   flex-direction: column;
   background: #1e1e1e;
   border-top: 1px solid #333;
-  font-size: 13px;
+  font-size: 14px;
+  line-height: 1.45;
 }
 
 .terminal-header {
@@ -351,14 +369,27 @@ body {
   }
 
   .sidebar {
-    flex-basis: 124px;
-    width: 124px;
-    font-size: 11px;
+    position: fixed;
+    z-index: 20;
+    top: 0;
+    bottom: 22px;
+    left: 36px;
+    width: min(300px, calc(100vw - 36px));
+    transform: translateX(-110%);
+    transition: transform 160ms ease-out;
+    box-shadow: 8px 0 24px rgb(0 0 0 / 35%);
+    visibility: hidden;
+  }
+
+  .sidebar.is-open {
+    transform: translateX(0);
+    visibility: visible;
   }
 
   .tree-item,
   .tree-folder-label {
-    padding: 6px 5px;
+    padding: 8px 10px;
+    font-size: 14px;
   }
 
   #file-tree ul {
@@ -371,22 +402,29 @@ body {
 
   .lines,
   .code {
-    padding: 8px 5px;
-    font-size: 11px;
+    padding: 10px 7px;
+    font-size: 14px;
+    line-height: 1.5;
   }
 
   .terminal {
-    height: 110px;
-    font-size: 11px;
+    height: 132px;
+    font-size: 13px;
   }
 
   .terminal-body {
-    padding: 8px 5px;
+    padding: 8px 7px;
     overflow: auto;
-    white-space: nowrap;
+    white-space: pre-wrap;
   }
 
   .status-bar {
     padding-inline: 5px;
+  }
+}
+
+@media (max-width: 600px) and (prefers-reduced-motion: reduce) {
+  .sidebar {
+    transition: none;
   }
 }

@@ -14,7 +14,7 @@ https://diegosuarz.github.io/portfolio/
 
 The project is being rebuilt incrementally from an earlier prototype using a documented architecture, structured content models, short-lived branches, Pull Requests, and milestone-based releases.
 
-Current milestone: **Interactive Terminal**.
+Current milestone: **Recruiter Visual Experience**.
 
 ## Goals
 
@@ -186,11 +186,14 @@ v0.1.0  Portfolio Foundation
 v0.2.0  Professional Content
 v0.3.0  Project Showcase
 v0.4.0  Interactive Terminal
+v0.5.0  Recruiter Visual Experience
 v0.9.0  Production Readiness
 v1.0.0  Production Portfolio
 ```
 
 Version numbers are roadmap targets and are created as releases only after the corresponding milestone is completed and validated.
+
+The Recruiter Visual Experience milestone improves information hierarchy and readability through short visual iterations. On mobile, the Explorer behaves as an overlay controlled from the Activity Bar so professional content retains the available reading width.
 
 ## Engineering Principles
 

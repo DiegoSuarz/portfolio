@@ -73,6 +73,8 @@ The presentation layer should not contain professional portfolio data directly.
 
 Interactive Explorer and tab controls use native buttons so keyboard behavior is available without custom key handling. Active files and tabs expose their state through ARIA attributes, while the editor announces file changes as a polite live region.
 
+At mobile widths, the Explorer is hidden by default and becomes an overlay controlled by the Explorer button in the Activity Bar. Opening a file closes the overlay, while Escape closes it and returns focus to its trigger. The closed Explorer is removed from keyboard navigation so it cannot trap focus outside the visible interface.
+
 Markdown content wraps within the editor viewport for case-study readability. Code-like JSON content retains horizontal scrolling, and decorative cursor animation respects the user's reduced-motion preference.
 
 ### 4.2 Application Layer

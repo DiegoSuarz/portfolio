@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Diego | VS Code Portfolio</title>
-  <link rel="stylesheet" href="src/css/style.css?v=2">
+  <link rel="stylesheet" href="src/css/style.css?v=3">
 </head>
 <body>
 
@@ -12,13 +12,13 @@
 
   <!-- Activity Bar -->
   <nav class="activity-bar" aria-label="Portfolio sections">
-    <div class="activity active" aria-hidden="true">📁</div>
+    <button class="activity active" id="explorer-toggle" type="button" aria-label="Toggle Portfolio Explorer" aria-controls="portfolio-explorer" aria-expanded="true">📁</button>
     <div class="activity" aria-hidden="true">🔍</div>
     <div class="activity" aria-hidden="true">🌿</div>
   </nav>
 
   <!-- Sidebar -->
-  <aside class="sidebar" aria-label="Portfolio Explorer">
+  <aside class="sidebar" id="portfolio-explorer" aria-label="Portfolio Explorer">
     <div class="sidebar-title">EXPLORER</div>
     <ul id="file-tree" aria-label="Portfolio files"></ul>
   </aside>
@@ -53,6 +53,6 @@
   <span id="lang">Plain Text</span>
 </footer>
 
-<script type="module" src="src/js/app.js?v=4"></script>
+<script type="module" src="src/js/app.js?v=5"></script>
 </body>
 </html>

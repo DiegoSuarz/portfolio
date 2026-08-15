@@ -7,6 +7,9 @@ document.addEventListener("DOMContentLoaded", async () => {
   let activeFile = null;
 
   const editor = document.getElementById("editor");
+  const explorer = document.getElementById("portfolio-explorer");
+  const explorerToggle = document.getElementById("explorer-toggle");
+  const mobileViewport = window.matchMedia("(max-width: 600px)");
   const statusLeft = document.querySelector(".status-bar span");
   let terminalController;
   const executeTerminalCommand = createCommandDispatcher({
@@ -19,6 +22,15 @@ document.addEventListener("DOMContentLoaded", async () => {
     input: document.getElementById("terminal-input"),
     output: document.getElementById("terminal-output"),
     onCommand: executeTerminalCommand
+  });
+
+  syncExplorerWithViewport();
+  explorerToggle.addEventListener("click", toggleExplorer);
+  mobileViewport.addEventListener("change", syncExplorerWithViewport);
+  document.addEventListener("keydown", event => {
+    if (event.key === "Escape" && mobileViewport.matches && explorer.classList.contains("is-open")) {
+      closeMobileExplorer(true);
+    }
   });
 
   try {
@@ -36,6 +48,42 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     const root = createExplorerTree(Object.keys(files));
     renderExplorerNodes(root, tree);
+  }
+
+  function toggleExplorer() {
+    if (!mobileViewport.matches) {
+      return;
+    }
+
+    const shouldOpen = !explorer.classList.contains("is-open");
+    explorer.classList.toggle("is-open", shouldOpen);
+    explorer.inert = !shouldOpen;
+    explorerToggle.setAttribute("aria-expanded", String(shouldOpen));
+
+    if (shouldOpen) {
+      explorer.querySelector("button")?.focus();
+    }
+  }
+
+  function closeMobileExplorer(returnFocus = false) {
+    explorer.classList.remove("is-open");
+    explorer.inert = true;
+    explorerToggle.setAttribute("aria-expanded", "false");
+
+    if (returnFocus) {
+      explorerToggle.focus();
+    }
+  }
+
+  function syncExplorerWithViewport() {
+    if (mobileViewport.matches) {
+      closeMobileExplorer();
+      return;
+    }
+
+    explorer.classList.remove("is-open");
+    explorer.inert = false;
+    explorerToggle.setAttribute("aria-expanded", "true");
   }
 
   function createExplorerTree(paths) {
@@ -107,6 +155,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     renderLines(file.content);
     updateTabs(name);
     updateActiveExplorerItem();
+
+    if (mobileViewport.matches) {
+      closeMobileExplorer();
+    }
   }
 
   function downloadFile(path) {
