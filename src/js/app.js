@@ -5,6 +5,7 @@ import { createTerminal } from "./terminal.js";
 document.addEventListener("DOMContentLoaded", async () => {
   let files = {};
   let activeFile = null;
+  let desktopExplorerOpen = true;
 
   const editor = document.getElementById("editor");
   const explorer = document.getElementById("portfolio-explorer");
@@ -51,18 +52,23 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   function toggleExplorer() {
-    if (!mobileViewport.matches) {
+    if (mobileViewport.matches) {
+      const shouldOpen = !explorer.classList.contains("is-open");
+      explorer.classList.toggle("is-open", shouldOpen);
+      explorer.inert = !shouldOpen;
+      explorerToggle.setAttribute("aria-expanded", String(shouldOpen));
+
+      if (shouldOpen) {
+        explorer.querySelector("button")?.focus();
+      }
+
       return;
     }
 
-    const shouldOpen = !explorer.classList.contains("is-open");
-    explorer.classList.toggle("is-open", shouldOpen);
-    explorer.inert = !shouldOpen;
-    explorerToggle.setAttribute("aria-expanded", String(shouldOpen));
-
-    if (shouldOpen) {
-      explorer.querySelector("button")?.focus();
-    }
+    desktopExplorerOpen = !desktopExplorerOpen;
+    explorer.classList.toggle("is-collapsed", !desktopExplorerOpen);
+    explorer.inert = !desktopExplorerOpen;
+    explorerToggle.setAttribute("aria-expanded", String(desktopExplorerOpen));
   }
 
   function closeMobileExplorer(returnFocus = false) {
@@ -82,8 +88,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     explorer.classList.remove("is-open");
-    explorer.inert = false;
-    explorerToggle.setAttribute("aria-expanded", "true");
+    explorer.classList.toggle("is-collapsed", !desktopExplorerOpen);
+    explorer.inert = !desktopExplorerOpen;
+    explorerToggle.setAttribute("aria-expanded", String(desktopExplorerOpen));
   }
 
   function createExplorerTree(paths) {

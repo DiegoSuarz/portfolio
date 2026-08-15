@@ -149,6 +149,13 @@ body {
   overflow: auto;
 }
 
+.sidebar.is-collapsed {
+  flex-basis: 0;
+  width: 0;
+  visibility: hidden;
+  overflow: hidden;
+}
+
 .sidebar-title {
   font-size: 12px;
   padding: 8px;
@@ -479,6 +486,10 @@ body {
     transition: transform 160ms ease-out;
     box-shadow: 8px 0 24px rgb(0 0 0 / 35%);
     visibility: hidden;
+  }
+
+  .sidebar.is-collapsed {
+    width: min(300px, calc(100vw - 36px));
   }
 
   .sidebar.is-open {
