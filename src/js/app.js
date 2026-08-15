@@ -88,6 +88,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     activeFile = name;
     editor.innerHTML = highlight(file.content, file.type);
+    editor.classList.toggle("is-markdown", file.type === "markdown");
     document.getElementById("lang").textContent = file.type;
 
     renderLines(file.content);
@@ -120,24 +121,42 @@ document.addEventListener("DOMContentLoaded", async () => {
       tab = document.createElement("div");
       tab.className = "tab";
       tab.id = `tab-${name}`;
+      tab.dataset.file = name;
+      tab.setAttribute("role", "presentation");
 
-      const title = document.createElement("span");
+      const title = document.createElement("button");
+      title.type = "button";
+      title.className = "tab-title";
       title.textContent = name.split("/").pop();
+      title.setAttribute("role", "tab");
+      title.setAttribute("aria-controls", "editor");
+      title.setAttribute("aria-label", `Open ${name}`);
       title.addEventListener("click", () => openFile(name));
 
-      const close = document.createElement("span");
+      const close = document.createElement("button");
+      close.type = "button";
       close.textContent = "×";
       close.className = "close";
+      close.setAttribute("aria-label", `Close ${name}`);
       close.addEventListener("click", event => {
         event.stopPropagation();
+        const wasActive = activeFile === name;
         tab.remove();
 
-        if (activeFile === name) {
+        if (wasActive && tabs.lastElementChild) {
+          const fallbackTab = tabs.lastElementChild;
+          openFile(fallbackTab.dataset.file);
+          fallbackTab.querySelector(".tab-title").focus();
+        } else if (wasActive) {
           activeFile = null;
           editor.textContent = "";
+          editor.classList.remove("is-markdown");
           document.getElementById("lines").textContent = "";
           document.getElementById("lang").textContent = "Plain Text";
           updateActiveExplorerItem();
+          editor.focus();
+        } else {
+          document.querySelector(".tab.active .tab-title")?.focus();
         }
       });
 
@@ -146,12 +165,20 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     document.querySelectorAll(".tab").forEach(item => item.classList.remove("active"));
+    document.querySelectorAll(".tab-title").forEach(item => item.setAttribute("aria-selected", "false"));
     tab.classList.add("active");
+    tab.querySelector(".tab-title").setAttribute("aria-selected", "true");
   }
 
   function updateActiveExplorerItem() {
     document.querySelectorAll(".tree-item").forEach(item => {
-      item.classList.toggle("active", item.dataset.file === activeFile);
+      const active = item.dataset.file === activeFile;
+      item.classList.toggle("active", active);
+      if (active) {
+        item.setAttribute("aria-current", "page");
+      } else {
+        item.removeAttribute("aria-current");
+      }
     });
   }
 

@@ -33,6 +33,7 @@ body {
   flex: 0 0 240px;
   width: 240px;
   background: #252526;
+  overflow: auto;
 }
 
 .sidebar-title {
@@ -108,6 +109,22 @@ body {
   background: #1e1e1e;
 }
 
+.tab-title,
+.close {
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.tab-title:focus-visible,
+.close:focus-visible {
+  outline: 1px solid #007acc;
+  outline-offset: 2px;
+}
+
 /* Editor */
 .editor {
   flex: 1;
@@ -131,6 +148,11 @@ body {
   padding: 10px;
   white-space: pre;
   overflow: auto;
+}
+
+.code.is-markdown {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
 }
 
 /* Status Bar */
@@ -161,6 +183,12 @@ body {
 
 @keyframes blink {
   50% { opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .code::after {
+    animation: none;
+  }
 }
 
 .tree-item.active {
@@ -198,7 +226,6 @@ body {
 
 .close {
   color: #888;
-  cursor: pointer;
 }
 
 .close:hover {
