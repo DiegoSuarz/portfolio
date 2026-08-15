@@ -75,6 +75,8 @@ Interactive Explorer and tab controls use native buttons so keyboard behavior is
 
 Explorer items and open tabs derive decorative icons from each virtual file extension. Markdown, JSON, text and Word assets retain distinct visual treatments, while accessible names continue to expose only the file or folder name.
 
+Scrollable interface surfaces share a thin dark scrollbar treatment so tabs, Explorer, editor and terminal remain visually consistent across supported browsers.
+
 The Explorer button in the Activity Bar toggles the panel at every viewport size. At mobile widths, the Explorer is hidden by default and becomes an overlay instead of reducing the editor width. Opening a file closes the mobile overlay, while Escape closes it and returns focus to its trigger. A closed Explorer is removed from keyboard navigation so it cannot trap focus outside the visible interface.
 
 Markdown content wraps within the editor viewport for case-study readability. Code-like JSON content retains horizontal scrolling, and decorative cursor animation respects the user's reduced-motion preference.
