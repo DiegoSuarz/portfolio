@@ -18,6 +18,17 @@ async function fetchJson(path) {
   return response.json();
 }
 
+function formatDate(value) {
+  const [year, month] = value.split("-").map(Number);
+  const date = new Date(Date.UTC(year, month - 1, 1));
+
+  return new Intl.DateTimeFormat("en-US", {
+    month: "short",
+    year: "numeric",
+    timeZone: "UTC"
+  }).format(date);
+}
+
 function formatProfile(profile) {
   return [
     `# ${profile.name}`,
@@ -33,7 +44,9 @@ function formatProfile(profile) {
 
 function formatExperience(entries) {
   const sections = entries.map(entry => {
-    const period = `${entry.startDate} - ${entry.current ? "Present" : entry.endDate}`;
+    const startDate = formatDate(entry.startDate);
+    const endDate = entry.current ? "Present" : formatDate(entry.endDate);
+    const period = `${startDate} - ${endDate}`;
     return [
       `## ${entry.role} | ${entry.company}`,
       `${entry.location} | ${period}`,
@@ -51,7 +64,7 @@ function formatEducation(entries) {
   const sections = entries.map(entry => [
     `## ${entry.degree}`,
     entry.institution,
-    `${entry.startDate} - ${entry.endDate}`,
+    `${formatDate(entry.startDate)} - ${formatDate(entry.endDate)}`,
     entry.completed ? "Completed" : "In progress"
   ].join("\n"));
 
