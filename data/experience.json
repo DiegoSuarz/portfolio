@@ -1,0 +1,49 @@
+{
+  "experience": [
+    {
+      "id": "eplimin-preprofessional-intern",
+      "company": "Eplimin S.A.C",
+      "role": "Pre-professional Engineering Intern",
+      "location": "Lima, Peru",
+      "startDate": "2022-08",
+      "endDate": "2023-03",
+      "current": false,
+      "summary": "Engineering internship focused on programming, technical validation, troubleshooting and structured execution of engineering tasks.",
+      "highlights": [
+        "Developed and debugged programmable solutions, applying validation logic and systematic troubleshooting to ensure reliable operation.",
+        "Analyzed technical test information to identify faults and support improvement proposals for engineering prototypes.",
+        "Worked with the engineering team following standardized procedures and documented development practices.",
+        "Participated in technical incident analysis and validation activities, using test results to support reliability improvements."
+      ],
+      "dataEngineeringRelevance": [
+        "Programming and debugging",
+        "Data validation and troubleshooting",
+        "Technical documentation",
+        "Structured problem solving"
+      ]
+    },
+    {
+      "id": "utp-laboratory-assistant",
+      "company": "Universidad Tecnológica del Perú",
+      "role": "Laboratory Assistant",
+      "location": "Lima, Peru",
+      "startDate": "2023-05",
+      "endDate": null,
+      "current": true,
+      "summary": "Laboratory operations role combining information management, programming support, technical documentation and process coordination.",
+      "highlights": [
+        "Managed laboratory inventory records in Microsoft Excel, maintaining information on equipment, loans and availability.",
+        "Developed and adapted Python-based programs to support laboratory practices and academic projects involving data acquisition and connected devices.",
+        "Recorded and standardized procedures, configurations and test results to improve traceability of technical information.",
+        "Collaborated with instructors and technical teams to support laboratory processes and continuous operational improvement."
+      ],
+      "dataEngineeringRelevance": [
+        "Information and inventory data management",
+        "Python programming",
+        "Data traceability and documentation",
+        "Process standardization",
+        "Cross-functional collaboration"
+      ]
+    }
+  ]
+}
