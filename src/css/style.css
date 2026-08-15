@@ -1,3 +1,8 @@
+:root {
+  --sidebar-width: 240px;
+  --panel-height: 160px;
+}
+
 * { box-sizing: border-box; }
 
 body {
@@ -20,18 +25,33 @@ body {
   user-select: none;
 }
 
-.window-title {
+.command-center {
   position: absolute;
   left: 50%;
-  max-width: 42vw;
+  display: flex;
+  width: min(420px, 42vw);
+  height: 24px;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  border: 1px solid #3c3c3c;
+  border-radius: 6px;
+  padding: 0 12px;
   overflow: hidden;
+  background: #242424;
   color: #bcbcbc;
+  font: inherit;
   font-size: 12px;
   text-overflow: ellipsis;
   white-space: nowrap;
   transform: translateX(-50%);
-  pointer-events: none;
+  cursor: pointer;
 }
+
+.command-center:hover { background: #2a2d2e; color: #ffffff; }
+.command-center:focus-visible { outline: 1px solid #007fd4; outline-offset: 1px; }
+.command-center-search { width: 10px; height: 10px; border: 1px solid currentColor; border-radius: 50%; }
+.command-center-search::after { content: ""; display: block; width: 4px; height: 1px; background: currentColor; transform: translate(7px, 8px) rotate(45deg); }
 
 .menu-bar {
   display: flex;
@@ -145,6 +165,30 @@ body {
   cursor: pointer;
 }
 
+.activity[data-tooltip]::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  z-index: 80;
+  top: 9px;
+  left: 52px;
+  min-width: max-content;
+  max-width: 280px;
+  border: 1px solid #454545;
+  border-radius: 3px;
+  padding: 5px 8px;
+  background: #252526;
+  color: #f0f0f0;
+  box-shadow: 0 4px 12px rgb(0 0 0 / 40%);
+  font-size: 12px;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(6px);
+  transition: opacity 100ms ease 450ms, transform 100ms ease 450ms;
+}
+
+.activity[data-tooltip]:hover::after,
+.activity[data-tooltip]:focus-visible::after { opacity: 1; transform: translateY(0); }
+
 .activity.active {
   color: #ffffff;
 }
@@ -254,11 +298,27 @@ body {
 
 /* Sidebar */
 .sidebar {
-  flex: 0 0 240px;
-  width: 240px;
+  flex: 0 0 var(--sidebar-width);
+  width: var(--sidebar-width);
   background: #252526;
   overflow: auto;
 }
+
+.resize-handle {
+  position: relative;
+  z-index: 5;
+  flex: 0 0 4px;
+  background: transparent;
+  touch-action: none;
+}
+.resize-handle::after { content: ""; position: absolute; background: #007fd4; opacity: 0; transition: opacity 100ms ease; }
+.resize-handle:hover::after, .resize-handle:focus-visible::after, .resize-handle.is-dragging::after { opacity: 1; }
+.resize-handle--sidebar { margin-left: -2px; cursor: col-resize; }
+.resize-handle--sidebar::after { inset: 0 1px; }
+.resize-handle--panel { flex-basis: 4px; margin-bottom: -2px; cursor: row-resize; }
+.resize-handle--panel::after { inset: 1px 0; }
+.resize-handle:focus-visible { outline: 0; }
+.resize-handle[hidden] { display: none; }
 
 .sidebar.is-collapsed {
   flex-basis: 0;
@@ -361,6 +421,24 @@ body {
   gap: 6px;
 }
 
+.breadcrumbs {
+  display: flex;
+  min-height: 28px;
+  align-items: center;
+  gap: 3px;
+  border-bottom: 1px solid #252525;
+  padding: 0 10px;
+  overflow: hidden;
+  background: #1e1e1e;
+  color: #b8b8b8;
+  font-size: 12px;
+  white-space: nowrap;
+}
+.breadcrumb-item { display: inline-flex; min-width: 0; align-items: center; gap: 5px; border: 0; padding: 3px 2px; overflow: hidden; background: transparent; color: inherit; font: inherit; text-overflow: ellipsis; cursor: pointer; }
+.breadcrumb-item:hover { color: #ffffff; }
+.breadcrumb-item:focus-visible { outline: 1px solid #007fd4; }
+.breadcrumb-separator { color: #707070; }
+
 .tab-title:focus-visible,
 .close:focus-visible {
   outline: 1px solid #007acc;
@@ -407,6 +485,7 @@ body {
   font-size: 12px;
   display: flex;
   justify-content: space-between;
+  align-items: center;
   padding: 0 10px;
 }
 
@@ -486,6 +565,10 @@ body {
   scrollbar-width: thin;
 }
 
+.status-group { display: flex; min-width: 0; align-items: center; gap: 12px; white-space: nowrap; }
+.status-group--right { justify-content: flex-end; }
+.status-branch { overflow: hidden; text-overflow: ellipsis; }
+
 .sidebar::-webkit-scrollbar,
 .tabs::-webkit-scrollbar,
 .code::-webkit-scrollbar,
@@ -535,7 +618,7 @@ body {
 
 .terminal {
   position: relative;
-  height: 160px;
+  height: var(--panel-height);
   display: flex;
   flex-direction: column;
   background: #1e1e1e;
@@ -543,6 +626,25 @@ body {
   font-size: 14px;
   line-height: 1.45;
 }
+
+.command-palette-backdrop {
+  position: fixed;
+  z-index: 100;
+  inset: 35px 0 22px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 7vh;
+  background: rgb(0 0 0 / 28%);
+}
+.command-palette-backdrop[hidden] { display: none; }
+.command-palette { width: min(620px, calc(100vw - 32px)); border: 1px solid #454545; border-radius: 7px; padding: 6px; background: #252526; box-shadow: 0 12px 35px rgb(0 0 0 / 55%); }
+.command-palette input { width: 100%; height: 36px; border: 1px solid #007acc; outline: 0; padding: 0 10px; background: #3c3c3c; color: #ffffff; font: inherit; }
+.command-list { max-height: 310px; margin-top: 5px; overflow-y: auto; }
+.command-option { display: flex; width: 100%; min-height: 30px; align-items: center; justify-content: space-between; border: 0; border-radius: 3px; padding: 5px 10px; background: transparent; color: #d8d8d8; font: inherit; text-align: left; cursor: pointer; }
+.command-option[aria-selected="true"], .command-option:hover { background: #04395e; color: #ffffff; }
+.command-option kbd { border: 1px solid #5a5a5a; border-radius: 3px; padding: 1px 5px; background: #333333; color: #c8c8c8; font: inherit; font-size: 11px; }
+.command-empty { margin: 0; padding: 12px 10px; color: #999999; }
 
 .panel-close {
   position: absolute;
@@ -819,7 +921,7 @@ body {
 }
 
 @media (max-width: 600px) {
-  .window-title {
+  .command-center {
     display: none;
   }
 
@@ -859,6 +961,10 @@ body {
     box-shadow: 8px 0 24px rgb(0 0 0 / 35%);
     visibility: hidden;
   }
+
+  .resize-handle { display: none; }
+
+  .breadcrumbs { min-height: 26px; padding-inline: 7px; }
 
   .sidebar.is-collapsed {
     width: min(300px, calc(100vw - 36px));
@@ -914,6 +1020,14 @@ body {
   .status-bar {
     padding-inline: 5px;
   }
+
+  .status-branch,
+  .status-group--right span:nth-child(2),
+  .status-group--right span:nth-child(3) { display: none; }
+
+  .status-group { gap: 7px; }
+
+  .command-palette-backdrop { padding-top: 12px; }
 }
 
 @media (max-width: 600px) and (prefers-reduced-motion: reduce) {

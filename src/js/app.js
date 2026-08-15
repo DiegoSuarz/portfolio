@@ -3,6 +3,8 @@ import { createCommandDispatcher } from "./commands.js";
 import { createTerminal } from "./terminal.js?v=3";
 import { createMenuBar } from "./menu-bar.js?v=2";
 import { createPanelTabs } from "./panel-tabs.js";
+import { createLayoutResizers } from "./layout-resizer.js";
+import { createCommandPalette } from "./command-palette.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
   let files = {};
@@ -13,7 +15,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const explorer = document.getElementById("portfolio-explorer");
   const explorerToggle = document.getElementById("explorer-toggle");
   const mobileViewport = window.matchMedia("(max-width: 600px)");
-  const statusLeft = document.querySelector(".status-bar span");
+  const statusLeft = document.getElementById("status-position");
   let terminalController;
   const executeTerminalCommand = createCommandDispatcher({
     getFiles: () => files,
@@ -30,6 +32,34 @@ document.addEventListener("DOMContentLoaded", async () => {
     container: document.querySelector(".panel-tabs")
   });
 
+  createLayoutResizers({
+    sidebar: explorer,
+    panel: document.getElementById("bottom-panel"),
+    sidebarHandle: document.getElementById("sidebar-resizer"),
+    panelHandle: document.getElementById("panel-resizer")
+  });
+
+  const paletteCommands = [
+    { label: "Files: Open Professional Profile", action: () => openFile("about.md") },
+    { label: "Files: Open Project Overview", action: () => openFile("projects/overview.md") },
+    { label: "Files: Open Experience", action: () => openFile("experience.md") },
+    { label: "Files: Open Skills", action: () => openFile("skills.json") },
+    { label: "Files: Open Education", action: () => openFile("education.md") },
+    { label: "Files: Open Contact", action: () => openFile("contact.txt") },
+    { label: "View: Toggle Explorer", action: toggleExplorer },
+    { label: "View: Toggle Terminal", action: toggleTerminal },
+    { label: "Terminal: New Terminal", action: newTerminal },
+    { label: "Terminal: Show Available Commands", action: showTerminalHelp },
+    { label: "Help: Open GitHub Profile", action: () => window.open("https://github.com/DiegoSuarz", "_blank", "noopener,noreferrer") }
+  ];
+  const commandPalette = createCommandPalette({
+    dialog: document.getElementById("command-palette"),
+    input: document.getElementById("command-palette-input"),
+    list: document.getElementById("command-list"),
+    commands: paletteCommands
+  });
+  document.getElementById("command-center").addEventListener("click", commandPalette.open);
+
   createMenuBar({
     container: document.getElementById("menu-bar"),
     actions: {
@@ -41,6 +71,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       clearSelection: () => window.getSelection()?.removeAllRanges(),
       toggleExplorer,
       toggleTerminal,
+      openCommandPalette: commandPalette.open,
       openExperience: () => openFile("experience.md"),
       openSkills: () => openFile("skills.json"),
       openEducation: () => openFile("education.md"),
@@ -100,6 +131,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     explorer.classList.toggle("is-collapsed", !desktopExplorerOpen);
     explorer.inert = !desktopExplorerOpen;
     explorerToggle.setAttribute("aria-expanded", String(desktopExplorerOpen));
+    document.getElementById("sidebar-resizer").hidden = !desktopExplorerOpen;
   }
 
   function closeMobileExplorer(returnFocus = false) {
@@ -122,6 +154,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     explorer.classList.toggle("is-collapsed", !desktopExplorerOpen);
     explorer.inert = !desktopExplorerOpen;
     explorerToggle.setAttribute("aria-expanded", String(desktopExplorerOpen));
+    document.getElementById("sidebar-resizer").hidden = !desktopExplorerOpen;
   }
 
   function getFileType(path) {
@@ -142,6 +175,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const terminal = document.querySelector(".terminal");
     const shouldShow = terminal.classList.contains("is-hidden");
     terminal.classList.toggle("is-hidden", !shouldShow);
+    document.getElementById("panel-resizer").hidden = !shouldShow;
 
     if (shouldShow) {
       focusTerminal();
@@ -150,10 +184,12 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   function hideTerminal() {
     document.querySelector(".terminal").classList.add("is-hidden");
+    document.getElementById("panel-resizer").hidden = true;
   }
 
   function newTerminal() {
     terminalController.reset();
+    document.getElementById("panel-resizer").hidden = false;
     focusTerminal();
   }
 
@@ -161,6 +197,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const terminal = document.querySelector(".terminal");
     const input = document.getElementById("terminal-input");
     terminal.classList.remove("is-hidden");
+    document.getElementById("panel-resizer").hidden = false;
     panelTabsController.activate("terminal");
     input.value = "help";
     document.getElementById("terminal-form").requestSubmit();
@@ -169,6 +206,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   function focusTerminal() {
     document.querySelector(".terminal").classList.remove("is-hidden");
+    document.getElementById("panel-resizer").hidden = false;
     panelTabsController.activate("terminal");
     document.getElementById("terminal-input").focus();
   }
@@ -219,6 +257,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         label.className = "tree-item-label";
         label.textContent = name;
         button.setAttribute("aria-label", `Open ${node.path}`);
+        button.dataset.tooltip = node.path;
+        button.title = node.path;
         button.addEventListener("click", () => openFile(node.path));
         button.append(createFileIcon(node.path), label);
         item.appendChild(button);
@@ -268,6 +308,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     renderLines(file.content);
     updateTabs(name);
+    updateBreadcrumbs(name);
     updateActiveExplorerItem();
 
     if (mobileViewport.matches) {
@@ -334,6 +375,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           editor.classList.remove("is-markdown");
           document.getElementById("lines").textContent = "";
           document.getElementById("lang").textContent = "Plain Text";
+          document.getElementById("breadcrumbs").replaceChildren();
           updateActiveExplorerItem();
           editor.focus();
         } else {
@@ -349,6 +391,40 @@ document.addEventListener("DOMContentLoaded", async () => {
     document.querySelectorAll(".tab-title").forEach(item => item.setAttribute("aria-selected", "false"));
     tab.classList.add("active");
     tab.querySelector(".tab-title").setAttribute("aria-selected", "true");
+  }
+
+  function updateBreadcrumbs(name) {
+    const breadcrumbs = document.getElementById("breadcrumbs");
+    breadcrumbs.replaceChildren();
+    const segments = name.split("/");
+    segments.forEach((segment, index) => {
+      if (index) {
+        const separator = document.createElement("span");
+        separator.className = "breadcrumb-separator";
+        separator.textContent = ">";
+        separator.setAttribute("aria-hidden", "true");
+        breadcrumbs.appendChild(separator);
+      }
+      const item = document.createElement("button");
+      item.type = "button";
+      item.className = "breadcrumb-item";
+      item.textContent = segment;
+      if (index === segments.length - 1) {
+        item.prepend(createFileIcon(name));
+        item.setAttribute("aria-current", "page");
+        item.addEventListener("click", () => editor.focus());
+      } else {
+        item.addEventListener("click", () => {
+          explorer.classList.remove("is-collapsed");
+          desktopExplorerOpen = true;
+          explorer.inert = false;
+          explorerToggle.setAttribute("aria-expanded", "true");
+          document.getElementById("sidebar-resizer").hidden = false;
+          explorer.querySelector(`[data-file="${CSS.escape(name)}"]`)?.focus();
+        });
+      }
+      breadcrumbs.appendChild(item);
+    });
   }
 
   function updateActiveExplorerItem() {

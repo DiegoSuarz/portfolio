@@ -4,26 +4,29 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Diego | VS Code Portfolio</title>
-  <link rel="stylesheet" href="src/css/style.css?v=8">
+  <link rel="stylesheet" href="src/css/style.css?v=9">
 </head>
 <body>
 
 <header class="title-bar">
   <nav class="menu-bar" id="menu-bar" aria-label="Application menu"></nav>
-  <div class="window-title">Diego Suarez — Data Engineering Portfolio</div>
+  <button class="command-center" id="command-center" type="button" aria-haspopup="dialog" aria-controls="command-palette">
+    <span class="command-center-search" aria-hidden="true"></span>
+    <span>Diego Suarez — Data Engineering Portfolio</span>
+  </button>
 </header>
 
 <div class="window">
 
   <!-- Activity Bar -->
   <nav class="activity-bar" aria-label="Portfolio sections">
-    <button class="activity active" id="explorer-toggle" type="button" aria-label="Toggle Portfolio Explorer" aria-controls="portfolio-explorer" aria-expanded="true">
+    <button class="activity active" id="explorer-toggle" type="button" aria-label="Toggle Portfolio Explorer" aria-controls="portfolio-explorer" aria-expanded="true" data-tooltip="Explorer (Ctrl+Shift+E)">
       <span class="activity-icon activity-icon--files" aria-hidden="true"></span>
     </button>
-    <div class="activity" aria-hidden="true">
+    <div class="activity" aria-hidden="true" data-tooltip="Search">
       <span class="activity-icon activity-icon--search"></span>
     </div>
-    <div class="activity" aria-hidden="true">
+    <div class="activity" aria-hidden="true" data-tooltip="Source Control">
       <span class="activity-icon activity-icon--source"></span>
     </div>
   </nav>
@@ -34,16 +37,22 @@
     <ul id="file-tree" aria-label="Portfolio files"></ul>
   </aside>
 
+  <div class="resize-handle resize-handle--sidebar" id="sidebar-resizer" role="separator" aria-label="Resize Explorer" aria-orientation="vertical" aria-valuemin="180" aria-valuemax="420" aria-valuenow="240" tabindex="0"></div>
+
   <!-- Main -->
   <main class="main">
     <div class="tabs" id="tabs" role="tablist" aria-label="Open portfolio files"></div>
+
+    <nav class="breadcrumbs" id="breadcrumbs" aria-label="Current file path"></nav>
 
     <div class="editor">
       <div class="lines" id="lines"></div>
       <pre class="code" id="editor" tabindex="0" aria-label="Portfolio file content" aria-live="polite"></pre>
     </div>
 
-    <div class="terminal">
+    <div class="resize-handle resize-handle--panel" id="panel-resizer" role="separator" aria-label="Resize bottom panel" aria-orientation="horizontal" aria-valuemin="120" aria-valuemax="420" aria-valuenow="160" tabindex="0"></div>
+
+    <div class="terminal" id="bottom-panel">
       <div class="panel-tabs" role="tablist" aria-label="Bottom panel views">
         <button class="panel-tab" id="problems-tab" type="button" role="tab" aria-controls="problems-panel" aria-selected="false" tabindex="-1" data-panel="problems">Problems</button>
         <button class="panel-tab" id="output-tab" type="button" role="tab" aria-controls="output-panel" aria-selected="false" tabindex="-1" data-panel="output">Output</button>
@@ -69,12 +78,20 @@
 
 </div>
 
+<div class="command-palette-backdrop" id="command-palette" role="dialog" aria-modal="true" aria-labelledby="command-palette-title" hidden>
+  <section class="command-palette">
+    <h2 class="sr-only" id="command-palette-title">Command Palette</h2>
+    <label class="sr-only" for="command-palette-input">Search commands</label>
+    <input id="command-palette-input" type="text" autocomplete="off" spellcheck="false" placeholder="> Search portfolio commands">
+    <div class="command-list" id="command-list" role="listbox" aria-label="Available commands"></div>
+  </section>
+</div>
+
 <footer class="status-bar" aria-label="Editor status">
-  <span>Ln 1, Col 1</span>
-  <span>UTF-8</span>
-  <span id="lang">Plain Text</span>
+  <div class="status-group"><span class="status-branch" aria-label="Git branch">⑂ feature/recruiter-visual-experience</span><span id="status-position">Ln 1, Col 1</span></div>
+  <div class="status-group status-group--right"><span>UTF-8</span><span>LF</span><span>{ }</span><span id="lang">Plain Text</span><span aria-label="Notifications">◯</span></div>
 </footer>
 
-<script type="module" src="src/js/app.js?v=12"></script>
+<script type="module" src="src/js/app.js?v=13"></script>
 </body>
 </html>

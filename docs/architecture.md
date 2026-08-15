@@ -145,8 +145,10 @@ portfolio/
 |   |
 |   `-- js/
 |       |-- app.js
+|       |-- command-palette.js
 |       |-- commands.js
 |       |-- content-loader.js
+|       |-- layout-resizer.js
 |       |-- menu-bar.js
 |       |-- panel-tabs.js
 |       `-- terminal.js
@@ -190,13 +192,21 @@ Owns the VS Code-inspired application menus, dropdown state, outside-click dismi
 
 Owns the Problems, Output, Debug Console and Terminal tab state in the bottom panel, including arrow-key navigation and ARIA selection state. The application can activate Terminal through its narrow public interface when a menu action needs terminal input.
 
+### command-palette.js
+
+Owns Command Palette filtering, active-option navigation, keyboard shortcuts, dismissal and command execution. The module receives a closed command catalogue from `app.js`; it does not load portfolio content or infer actions from user-entered text.
+
+### layout-resizer.js
+
+Owns the desktop Explorer and bottom-panel separator interactions. Pointer dragging, arrow-key increments, bounded dimensions and double-click reset update CSS custom properties without persisting device-specific layout state. Resize handles are removed from the mobile layout, where the Explorer continues to behave as an overlay.
+
 ### commands.js
 
 Owns the terminal command grammar and dispatches only the documented command set. It receives narrow callbacks for file access, navigation and terminal clearing; it cannot execute arbitrary JavaScript or operating-system commands.
 
 ### Future UI modules
 
-Explorer, Editor and Tabs may become separate modules when their behavior grows enough to justify independent ownership. They remain in `app.js` today to avoid premature abstraction. Terminal interaction moved to `terminal.js` when input and history introduced independent state.
+Explorer, Editor, Tabs and breadcrumbs may become separate modules when their behavior grows enough to justify independent ownership. They remain in `app.js` today to avoid premature abstraction. Terminal, command-palette and resizing interactions moved to dedicated modules when their independent state and keyboard behavior justified clear ownership.
 
 The Interactive Terminal contract is documented in [`terminal.md`](terminal.md). Its command dispatcher is a closed application interface over existing portfolio actions, not a browser shell or an arbitrary code-execution surface.
 

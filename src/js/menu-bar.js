@@ -2,7 +2,7 @@ const MENU_DEFINITIONS = [
   { label: "File", items: [["Open Profile", "openAbout"], ["Open Projects", "openProjects"], null, ["Download CV", "downloadCv"]] },
   { label: "Edit", items: [["Focus Editor", "focusEditor"], ["Select All Content", "selectEditor"]] },
   { label: "Selection", items: [["Select Editor Content", "selectEditor"], ["Clear Selection", "clearSelection"]] },
-  { label: "View", items: [["Toggle Explorer", "toggleExplorer"], ["Toggle Terminal", "toggleTerminal"]] },
+  { label: "View", items: [["Command Palette...", "openCommandPalette"], null, ["Toggle Explorer", "toggleExplorer"], ["Toggle Terminal", "toggleTerminal"]] },
   { label: "Go", items: [["Experience", "openExperience"], ["Skills", "openSkills"], ["Education", "openEducation"], ["Contact", "openContact"]] },
   { label: "Run", items: [["Focus Terminal", "focusTerminal"], ["Run Terminal Command", "runTerminal"]] },
   { label: "Terminal", items: [["New Terminal", "newTerminal"], null, ["Focus Terminal", "focusTerminal"], ["Clear Terminal", "clearTerminal"], ["Show Available Commands", "showTerminalHelp"]] },

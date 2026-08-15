@@ -197,6 +197,8 @@ Version numbers are roadmap targets and are created as releases only after the c
 
 The Recruiter Visual Experience milestone improves information hierarchy and readability through short visual iterations. On mobile, the Explorer behaves as an overlay controlled from the Activity Bar so professional content retains the available reading width.
 
+Its VS Code-inspired workspace now includes a searchable Command Palette (`Ctrl+Shift+P`), a centered Command Center, active-file breadcrumbs, descriptive Activity Bar tooltips, a richer status bar and keyboard-accessible panel resizing on desktop. These controls provide real navigation and layout behavior rather than decorative imitation.
+
 ## Engineering Principles
 
 - Separation of concerns
