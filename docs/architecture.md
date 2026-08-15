@@ -1,0 +1,216 @@
+# Portfolio Architecture
+
+## 1. Purpose
+
+This document defines the initial architecture for Diego Suarez's professional Data Engineering portfolio.
+
+The project is intentionally built with HTML, CSS and Vanilla JavaScript and deployed through GitHub Pages. The architecture should remain simple enough for a static website while providing clear separation of responsibilities as the portfolio grows.
+
+## 2. Architectural Principles
+
+The project follows these principles:
+
+- Separation of concerns
+- Low coupling between UI, application logic and content
+- Content-driven design
+- Progressive enhancement
+- Maintainability over unnecessary abstraction
+- No framework dependency unless a future requirement justifies it
+- GitHub Pages compatibility
+
+## 3. Architecture Overview
+
+```text
+Browser
+  |
+  v
+index.html
+  |
+  +--> Presentation Layer
+  |      Activity Bar
+  |      Explorer
+  |      Tabs
+  |      Editor
+  |      Terminal
+  |      Status Bar
+  |
+  +--> Application Layer
+  |      App bootstrap
+  |      State
+  |      Explorer controller
+  |      Editor controller
+  |      Tabs controller
+  |      Terminal controller
+  |      Content renderer
+  |
+  +--> Data / Content Layer
+         Profile
+         Skills
+         Projects
+         Experience
+         Certifications
+         Contact
+```
+
+## 4. Layers
+
+### 4.1 Presentation Layer
+
+Responsible only for visual structure and user interaction surfaces.
+
+Expected modules/components:
+
+- Activity Bar
+- Explorer
+- Tabs
+- Editor
+- Terminal
+- Status Bar
+
+The presentation layer should not contain professional portfolio data directly.
+
+### 4.2 Application Layer
+
+Responsible for application behavior and coordination between UI components and portfolio content.
+
+Initial responsibilities:
+
+- Bootstrap the application
+- Load portfolio content
+- Maintain active file/tab state
+- Handle Explorer navigation
+- Render file content
+- Coordinate Editor and Status Bar
+- Handle Terminal commands in a later milestone
+
+Application modules should have one primary responsibility whenever practical.
+
+### 4.3 Data / Content Layer
+
+Responsible for portfolio information independently from presentation logic.
+
+Planned content domains:
+
+- Profile
+- Projects
+- Skills
+- Experience
+- Certifications
+- Contact
+
+Structured data should use JSON where appropriate. Longer narrative content may use Markdown or plain text when that better represents the VS Code-inspired interface.
+
+### 4.4 Assets and Documentation
+
+Assets contain static visual resources such as images, icons and architecture diagrams.
+
+Documentation records project architecture and significant engineering decisions.
+
+## 5. Proposed Source Structure
+
+```text
+portfolio/
+|
+|-- assets/
+|   |-- icons/
+|   |-- images/
+|   `-- diagrams/
+|
+|-- data/
+|   |-- profile.json
+|   |-- projects.json
+|   `-- skills.json
+|
+|-- src/
+|   |-- css/
+|   |   |-- main.css
+|   |   |-- layout.css
+|   |   `-- components.css
+|   |
+|   `-- js/
+|       |-- app.js
+|       |-- explorer.js
+|       |-- editor.js
+|       |-- tabs.js
+|       `-- terminal.js
+|
+|-- docs/
+|   |-- architecture.md
+|   `-- decisions/
+|
+|-- index.html
+|-- README.md
+`-- .gitignore
+```
+
+This structure is a target architecture. Directories and modules should be introduced progressively when they have a concrete responsibility; empty folders should not be added simply to match the diagram.
+
+## 6. Module Boundaries
+
+### app.js
+
+Application entry point. Initializes modules and coordinates application startup.
+
+### explorer.js
+
+Builds and manages the virtual file explorer and emits file-selection actions.
+
+### editor.js
+
+Displays selected content, line numbers and content type information.
+
+### tabs.js
+
+Manages open tabs and active-tab state.
+
+### terminal.js
+
+Reserved for interactive terminal behavior. It should be introduced only when terminal functionality is implemented.
+
+### Content renderer
+
+Content rendering and syntax presentation may initially remain part of the editor module. It should become a separate module only if the rendering logic becomes sufficiently complex.
+
+## 7. State Management
+
+The portfolio does not currently justify an external state-management library.
+
+Initial state should remain lightweight and may include:
+
+```text
+activeFile
+openTabs
+loadedContent
+```
+
+State ownership should be explicit and shared global mutable state should be minimized.
+
+## 8. Dependency Strategy
+
+The initial production version should remain dependency-free where practical.
+
+External libraries or frameworks should only be introduced when they solve a concrete requirement that cannot be reasonably handled by the current architecture.
+
+## 9. Deployment Constraint
+
+The architecture must remain compatible with static deployment through GitHub Pages.
+
+This means the application should not require:
+
+- A backend server
+- Server-side rendering
+- Runtime database connections
+- Secrets exposed in client-side code
+
+## 10. Evolution Strategy
+
+The architecture will evolve incrementally.
+
+Before adding a new abstraction, ask:
+
+1. Does it solve a current problem?
+2. Does it reduce coupling or complexity?
+3. Will another module reuse it?
+4. Is the added complexity justified?
+
+If the answer is no, prefer the simpler implementation.

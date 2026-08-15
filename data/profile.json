@@ -1,0 +1,11 @@
+{
+  "name": "Diego Suarez",
+  "headline": "Data Engineer Jr.",
+  "location": "Lima, Peru",
+  "summary": "Data Engineering professional focused on building reliable data pipelines, data warehouses and cloud-based data solutions.",
+  "email": "diego.suarez.dev@outlook.com",
+  "links": {
+    "github": "https://github.com/DiegoSuarz",
+    "linkedin": "https://www.linkedin.com/in/diegosuarezinocente/"
+  }
+}

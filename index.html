@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Diego | VS Code Portfolio</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="src/css/style.css">
 </head>
 <body>
 
@@ -30,6 +30,14 @@
       <div class="lines" id="lines"></div>
       <pre class="code" id="editor" tabindex="0"></pre>
     </div>
+
+    <div class="terminal">
+      <div class="terminal-header">TERMINAL</div>
+      <div class="terminal-body" id="terminal">
+        > npm run dev<br>
+        servidor iniciado...
+      </div>
+    </div>
   </main>
 
 </div>
@@ -40,14 +48,6 @@
   <span id="lang">Plain Text</span>
 </footer>
 
-<script src="script.js"></script>
+<script src="src/js/app.js"></script>
 </body>
 </html>
-
-<div class="terminal">
-  <div class="terminal-header">TERMINAL</div>
-  <div class="terminal-body" id="terminal">
-    > npm run dev<br>
-    servidor iniciado...
-  </div>
-</div>
