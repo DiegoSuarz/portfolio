@@ -49,7 +49,9 @@ index.html
          Projects
          Experience
          Certifications
-         Contact
+         Education
+         CV metadata
+         Contact (owned by Profile)
 ```
 
 ## 4. Layers
@@ -89,14 +91,17 @@ Application modules should have one primary responsibility whenever practical.
 
 Responsible for portfolio information independently from presentation logic.
 
-Planned content domains:
+Current content domains:
 
 - Profile
 - Projects
 - Skills
 - Experience
 - Certifications
-- Contact
+- Education
+- CV metadata
+
+Public contact information is owned by Profile so email and professional links are not duplicated across content files.
 
 Structured data should use JSON where appropriate. Longer narrative content may use Markdown or plain text when that better represents the VS Code-inspired interface.
 
@@ -106,70 +111,60 @@ Assets contain static visual resources such as images, icons and architecture di
 
 Documentation records project architecture and significant engineering decisions.
 
-## 5. Proposed Source Structure
+## 5. Current Source Structure
 
 ```text
 portfolio/
 |
 |-- assets/
-|   |-- icons/
-|   |-- images/
-|   `-- diagrams/
+|   |-- cv/
+|   `-- icons.svg
 |
 |-- data/
+|   |-- certifications.json
+|   |-- cv.json
+|   |-- education.json
+|   |-- experience.json
 |   |-- profile.json
 |   |-- projects.json
 |   `-- skills.json
 |
 |-- src/
 |   |-- css/
-|   |   |-- main.css
-|   |   |-- layout.css
-|   |   `-- components.css
+|   |   `-- style.css
 |   |
 |   `-- js/
 |       |-- app.js
-|       |-- explorer.js
-|       |-- editor.js
-|       |-- tabs.js
-|       `-- terminal.js
+|       `-- content-loader.js
 |
 |-- docs/
 |   |-- architecture.md
-|   `-- decisions/
+|   `-- content-model.md
 |
+|-- CONTRIBUTING.md
 |-- index.html
-|-- README.md
-`-- .gitignore
+`-- README.md
 ```
 
-This structure is a target architecture. Directories and modules should be introduced progressively when they have a concrete responsibility; empty folders should not be added simply to match the diagram.
+New directories and modules should continue to be introduced only when they have a concrete responsibility; empty structures should not be added to imitate a larger application.
 
 ## 6. Module Boundaries
 
 ### app.js
 
-Application entry point. Initializes modules and coordinates application startup.
+Application entry point. Initializes the interface, coordinates application state, and manages Explorer, Editor and Tabs interactions.
 
-### explorer.js
+### content-loader.js
 
-Builds and manages the virtual file explorer and emits file-selection actions.
+Loads the structured content domains and maps them to the virtual files displayed by the VS Code-inspired interface. It owns content formatting but does not manipulate the DOM.
 
-### editor.js
+### Future UI modules
 
-Displays selected content, line numbers and content type information.
-
-### tabs.js
-
-Manages open tabs and active-tab state.
-
-### terminal.js
-
-Reserved for interactive terminal behavior. It should be introduced only when terminal functionality is implemented.
+Explorer, Editor, Tabs and Terminal may become separate modules when their behavior grows enough to justify independent ownership. They remain in `app.js` today to avoid premature abstraction.
 
 ### Content renderer
 
-Content rendering and syntax presentation may initially remain part of the editor module. It should become a separate module only if the rendering logic becomes sufficiently complex.
+Content rendering and syntax presentation currently remain in `app.js`. They should become a separate module only if the rendering logic becomes sufficiently complex.
 
 ## 7. State Management
 
