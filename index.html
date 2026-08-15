@@ -44,15 +44,25 @@
     </div>
 
     <div class="terminal">
-      <div class="terminal-header">TERMINAL</div>
-      <div class="terminal-body" id="terminal-output" role="log" aria-live="polite"></div>
-      <form class="terminal-form" id="terminal-form">
-        <span class="terminal-prompt" aria-hidden="true">$</span>
-        <label class="sr-only" for="terminal-input">Terminal command</label>
-        <input id="terminal-input" name="command" type="text" autocomplete="off" spellcheck="false" aria-describedby="terminal-hint">
-        <button class="terminal-submit" type="submit" aria-label="Run command">↵</button>
-        <span class="sr-only" id="terminal-hint">Enter a command. Use Arrow Up and Arrow Down to navigate command history.</span>
-      </form>
+      <div class="panel-tabs" role="tablist" aria-label="Bottom panel views">
+        <button class="panel-tab" id="problems-tab" type="button" role="tab" aria-controls="problems-panel" aria-selected="false" tabindex="-1" data-panel="problems">Problems</button>
+        <button class="panel-tab" id="output-tab" type="button" role="tab" aria-controls="output-panel" aria-selected="false" tabindex="-1" data-panel="output">Output</button>
+        <button class="panel-tab" id="debug-tab" type="button" role="tab" aria-controls="debug-panel" aria-selected="false" tabindex="-1" data-panel="debug">Debug Console</button>
+        <button class="panel-tab" id="terminal-tab" type="button" role="tab" aria-controls="terminal-panel" aria-selected="true" data-panel="terminal">Terminal</button>
+      </div>
+      <div class="panel-view panel-message" id="problems-panel" role="tabpanel" aria-labelledby="problems-tab" hidden>No problems detected.</div>
+      <div class="panel-view panel-message" id="output-panel" role="tabpanel" aria-labelledby="output-tab" hidden>Portfolio content loaded successfully.</div>
+      <div class="panel-view panel-message" id="debug-panel" role="tabpanel" aria-labelledby="debug-tab" hidden>No active debug session.</div>
+      <div class="panel-view terminal-view" id="terminal-panel" role="tabpanel" aria-labelledby="terminal-tab">
+        <div class="terminal-body" id="terminal-output" role="log" aria-live="polite"></div>
+        <form class="terminal-form" id="terminal-form">
+          <span class="terminal-prompt" aria-hidden="true">$</span>
+          <label class="sr-only" for="terminal-input">Terminal command</label>
+          <input id="terminal-input" name="command" type="text" autocomplete="off" spellcheck="false" aria-describedby="terminal-hint">
+          <button class="terminal-submit" type="submit" aria-label="Run command">↵</button>
+          <span class="sr-only" id="terminal-hint">Enter a command. Use Arrow Up and Arrow Down to navigate command history.</span>
+        </form>
+      </div>
     </div>
   </main>
 
@@ -64,6 +74,6 @@
   <span id="lang">Plain Text</span>
 </footer>
 
-<script type="module" src="src/js/app.js?v=7"></script>
+<script type="module" src="src/js/app.js?v=8"></script>
 </body>
 </html>

@@ -497,10 +497,63 @@ body {
   display: none;
 }
 
-.terminal-header {
+.panel-tabs {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 4px;
+  min-height: 34px;
+  padding: 3px 6px;
+  background: #1e1e1e;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.panel-tab {
+  flex: 0 0 auto;
+  min-height: 28px;
+  border: 0;
+  border-radius: 4px;
   padding: 4px 10px;
+  background: transparent;
+  color: #a8a8a8;
+  font: inherit;
+  cursor: pointer;
+}
+
+.panel-tab:hover {
   background: #2d2d2d;
-  color: #c5c5c5;
+  color: #e5e5e5;
+}
+
+.panel-tab[aria-selected="true"] {
+  background: #3c3c3c;
+  color: #ffffff;
+}
+
+.panel-tab:focus-visible {
+  outline: 1px solid #007fd4;
+  outline-offset: -2px;
+}
+
+.panel-view {
+  flex: 1;
+  min-height: 0;
+}
+
+.panel-view[hidden] {
+  display: none;
+}
+
+.panel-message {
+  padding: 12px 16px;
+  overflow: auto;
+  color: #cccccc;
+}
+
+.terminal-view {
+  display: flex;
+  flex-direction: column;
 }
 
 .terminal-body {
@@ -653,8 +706,17 @@ body {
   }
 
   .terminal {
-    height: 132px;
+    height: 164px;
     font-size: 13px;
+  }
+
+  .panel-tabs {
+    gap: 2px;
+    padding-inline: 4px;
+  }
+
+  .panel-tab {
+    padding-inline: 7px;
   }
 
   .terminal-body {

@@ -2,6 +2,7 @@ import { loadPortfolioFiles } from "./content-loader.js";
 import { createCommandDispatcher } from "./commands.js";
 import { createTerminal } from "./terminal.js";
 import { createMenuBar } from "./menu-bar.js";
+import { createPanelTabs } from "./panel-tabs.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
   let files = {};
@@ -24,6 +25,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     input: document.getElementById("terminal-input"),
     output: document.getElementById("terminal-output"),
     onCommand: executeTerminalCommand
+  });
+  const panelTabsController = createPanelTabs({
+    container: document.querySelector(".panel-tabs")
   });
 
   createMenuBar({
@@ -124,7 +128,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     terminal.classList.toggle("is-hidden", !shouldShow);
 
     if (shouldShow) {
-      document.getElementById("terminal-input").focus();
+      focusTerminal();
     }
   }
 
@@ -132,6 +136,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const terminal = document.querySelector(".terminal");
     const input = document.getElementById("terminal-input");
     terminal.classList.remove("is-hidden");
+    panelTabsController.activate("terminal");
     input.value = "help";
     document.getElementById("terminal-form").requestSubmit();
     input.focus();
@@ -139,6 +144,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   function focusTerminal() {
     document.querySelector(".terminal").classList.remove("is-hidden");
+    panelTabsController.activate("terminal");
     document.getElementById("terminal-input").focus();
   }
 

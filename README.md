@@ -86,6 +86,7 @@ portfolio/
 |       |-- commands.js
 |       |-- content-loader.js
 |       |-- menu-bar.js
+|       |-- panel-tabs.js
 |       `-- terminal.js
 |
 |-- CONTRIBUTING.md

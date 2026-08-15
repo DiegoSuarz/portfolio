@@ -144,6 +144,7 @@ portfolio/
 |       |-- commands.js
 |       |-- content-loader.js
 |       |-- menu-bar.js
+|       |-- panel-tabs.js
 |       `-- terminal.js
 |
 |-- docs/
@@ -180,6 +181,10 @@ Owns terminal input submission, text-only output, in-memory command history and 
 ### menu-bar.js
 
 Owns the VS Code-inspired application menus, dropdown state, outside-click dismissal and keyboard navigation. Menu items receive narrow callbacks from the application entry point so the component does not own portfolio content or application state.
+
+### panel-tabs.js
+
+Owns the Problems, Output, Debug Console and Terminal tab state in the bottom panel, including arrow-key navigation and ARIA selection state. The application can activate Terminal through its narrow public interface when a menu action needs terminal input.
 
 ### commands.js
 
