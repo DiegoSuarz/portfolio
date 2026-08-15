@@ -53,8 +53,7 @@ File: `data/skills.json`
       "name": "string",
       "items": [
         {
-          "name": "string",
-          "level": "string|null"
+          "name": "string"
         }
       ]
     }
@@ -62,19 +61,22 @@ File: `data/skills.json`
 }
 ```
 
-### Skill Categories
+### Responsibilities
 
-Initial categories may include:
+The skills model stores a curated inventory of technical capabilities that are relevant to the target Junior Data Engineer profile and supported by professional experience or active portfolio projects.
 
-- Languages
-- Databases
-- Data Engineering
-- Cloud
-- Orchestration
-- DevOps / Tooling
-- Analytics
+Categories and items are ordered by professional relevance. Core Data Engineering capabilities appear before supporting platforms and tools so the UI can preserve a meaningful priority without presentation-specific fields.
 
-The `level` property is optional because the portfolio should avoid arbitrary self-rating unless the label provides useful professional context.
+The current category vocabulary is:
+
+- Core Data Engineering
+- Databases & SQL
+- Orchestration & Cloud
+- Engineering Tooling
+
+Skills should be concise, factual, and verifiable. Closely related tools may be grouped when listing them separately would add noise, while distinct concepts such as SQL, ETL/ELT, and dimensional modeling remain explicit because they communicate different capabilities.
+
+Self-assessed proficiency levels are intentionally excluded. A skill should be added only when it is supported by experience, an active project, or another portfolio artifact; brief exposure alone is not enough.
 
 ## 5. Experience Model
 
