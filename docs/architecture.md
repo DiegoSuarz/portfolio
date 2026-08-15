@@ -160,7 +160,9 @@ The Explorer derives its hierarchy from slash-delimited virtual file paths. Fold
 
 Loads the structured content domains and maps them to the virtual files displayed by the VS Code-inspired interface. It owns content formatting but does not manipulate the DOM.
 
-Project content is exposed as a virtual `projects/` directory with an overview and one source-backed file per project. The loader remains responsible for deciding the virtual path; the Explorer only renders that path as a hierarchy.
+Project content is exposed as a virtual `projects/` directory with an overview and one source-backed Markdown case study per project. The loader formats each case study from structured JSON and remains responsible for deciding the virtual path; the Explorer only renders that path as a hierarchy.
+
+Markdown links are converted to anchors only after the source content is HTML-escaped and only when the URL uses HTTPS. External project links open in a separate browsing context with opener access disabled.
 
 ### Future UI modules
 
