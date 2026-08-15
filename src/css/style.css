@@ -91,6 +91,7 @@ body {
   text-align: right;
   color: #858585;
   user-select: none;
+  white-space: pre;
 }
 
 .code {
