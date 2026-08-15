@@ -148,6 +148,20 @@ File: `data/projects.json`
 
 `featured: true` identifies projects that should receive stronger visibility in the portfolio. The UI decides how featured content is presented; the data model only expresses the intent.
 
+### Responsibilities
+
+The projects model presents technical work as professional case studies rather than as a flat technology list.
+
+`summary` states what the project is and its current scope. For work in progress, it must make that status clear instead of implying completion.
+
+`problem` explains the engineering need addressed by the project. It describes the technical or business context without inventing measured impact.
+
+`highlights` communicates the most relevant implementation areas. Entries for an in-progress project should use language that reflects ongoing work and must not present planned features as completed outcomes.
+
+`technologies` lists tools that belong to the documented project scope. Technologies considered only for future use should not be included.
+
+Project links remain `null` until the corresponding repository, documentation or demo is publicly accessible. Completed projects should include verifiable results when available; metrics must not be estimated or fabricated.
+
 ## 7. Future Domains
 
 The following domains are planned but should be introduced only when their corresponding features are implemented:
