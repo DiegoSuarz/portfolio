@@ -71,6 +71,10 @@ Expected modules/components:
 
 The presentation layer should not contain professional portfolio data directly.
 
+Interactive Explorer and tab controls use native buttons so keyboard behavior is available without custom key handling. Active files and tabs expose their state through ARIA attributes, while the editor announces file changes as a polite live region.
+
+Markdown content wraps within the editor viewport for case-study readability. Code-like JSON content retains horizontal scrolling, and decorative cursor animation respects the user's reduced-motion preference.
+
 ### 4.2 Application Layer
 
 Responsible for application behavior and coordination between UI components and portfolio content.
