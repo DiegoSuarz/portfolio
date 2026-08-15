@@ -1,7 +1,7 @@
 import { loadPortfolioFiles } from "./content-loader.js";
 import { createCommandDispatcher } from "./commands.js";
-import { createTerminal } from "./terminal.js?v=2";
-import { createMenuBar } from "./menu-bar.js";
+import { createTerminal } from "./terminal.js?v=3";
+import { createMenuBar } from "./menu-bar.js?v=2";
 import { createPanelTabs } from "./panel-tabs.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
@@ -47,6 +47,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       openContact: () => openFile("contact.txt"),
       focusTerminal,
       runTerminal: runTerminalCommand,
+      newTerminal,
       clearTerminal: () => terminalController.clear(),
       showTerminalHelp,
       openGithub: () => window.open("https://github.com/DiegoSuarz", "_blank", "noopener,noreferrer"),
@@ -56,6 +57,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   syncExplorerWithViewport();
   explorerToggle.addEventListener("click", toggleExplorer);
+  document.getElementById("panel-close").addEventListener("click", hideTerminal);
   mobileViewport.addEventListener("change", syncExplorerWithViewport);
   document.addEventListener("keydown", event => {
     if (event.key === "Escape" && mobileViewport.matches && explorer.classList.contains("is-open")) {
@@ -144,6 +146,15 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (shouldShow) {
       focusTerminal();
     }
+  }
+
+  function hideTerminal() {
+    document.querySelector(".terminal").classList.add("is-hidden");
+  }
+
+  function newTerminal() {
+    terminalController.reset();
+    focusTerminal();
   }
 
   function showTerminalHelp() {

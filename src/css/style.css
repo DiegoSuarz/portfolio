@@ -493,6 +493,7 @@ body {
 }
 
 .terminal {
+  position: relative;
   height: 160px;
   display: flex;
   flex-direction: column;
@@ -500,6 +501,37 @@ body {
   border-top: 1px solid #333;
   font-size: 14px;
   line-height: 1.45;
+}
+
+.panel-close {
+  position: absolute;
+  z-index: 2;
+  top: 4px;
+  right: 7px;
+  display: grid;
+  width: 26px;
+  height: 26px;
+  place-items: center;
+  border: 0;
+  border-radius: 4px;
+  padding: 0;
+  background: transparent;
+  color: #a8a8a8;
+  font: inherit;
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.panel-close:hover,
+.panel-close:focus-visible {
+  background: #3c3c3c;
+  color: #ffffff;
+}
+
+.panel-close:focus-visible {
+  outline: 1px solid #007fd4;
+  outline-offset: -2px;
 }
 
 .tree-item-label {
@@ -595,7 +627,7 @@ body {
   align-items: center;
   gap: 4px;
   min-height: 34px;
-  padding: 3px 6px;
+  padding: 3px 38px 3px 6px;
   background: #1e1e1e;
   overflow-x: auto;
   overflow-y: hidden;
@@ -824,11 +856,12 @@ body {
 
   .panel-tabs {
     gap: 2px;
-    padding-inline: 4px;
+    padding: 3px 36px 3px 4px;
   }
 
   .panel-tab {
-    padding-inline: 7px;
+    padding-inline: 5px;
+    font-size: 12px;
   }
 
   .terminal-body {

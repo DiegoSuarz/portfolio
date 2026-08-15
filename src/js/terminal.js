@@ -41,6 +41,13 @@ export function createTerminal({ form, input, output, onCommand }) {
     output.replaceChildren();
   }
 
+  function reset() {
+    clear();
+    history.length = 0;
+    historyIndex = 0;
+    input.value = "";
+  }
+
   form.addEventListener("submit", async event => {
     event.preventDefault();
     const command = input.value.trim();
@@ -78,5 +85,5 @@ export function createTerminal({ form, input, output, onCommand }) {
     input.setSelectionRange(input.value.length, input.value.length);
   });
 
-  return { clear, write };
+  return { clear, reset, write };
 }

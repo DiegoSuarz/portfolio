@@ -5,7 +5,7 @@ const MENU_DEFINITIONS = [
   { label: "View", items: [["Toggle Explorer", "toggleExplorer"], ["Toggle Terminal", "toggleTerminal"]] },
   { label: "Go", items: [["Experience", "openExperience"], ["Skills", "openSkills"], ["Education", "openEducation"], ["Contact", "openContact"]] },
   { label: "Run", items: [["Focus Terminal", "focusTerminal"], ["Run Terminal Command", "runTerminal"]] },
-  { label: "Terminal", items: [["Focus Terminal", "focusTerminal"], ["Clear Terminal", "clearTerminal"], ["Show Available Commands", "showTerminalHelp"]] },
+  { label: "Terminal", items: [["New Terminal", "newTerminal"], null, ["Focus Terminal", "focusTerminal"], ["Clear Terminal", "clearTerminal"], ["Show Available Commands", "showTerminalHelp"]] },
   { label: "Help", items: [["Terminal Command Reference", "showTerminalHelp"], null, ["GitHub Profile", "openGithub"], ["LinkedIn Profile", "openLinkedin"]] }
 ];
 

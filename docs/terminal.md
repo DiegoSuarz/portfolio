@@ -53,6 +53,8 @@ Clears terminal output while preserving the command input and application state.
 
 The visible prompt identifies the public portfolio as `DiegoSuarz@portfolio:~$`. The same prompt prefixes every submitted command so the GitHub identity remains visible without implying access to a real operating-system shell.
 
+Closing the bottom panel preserves the current terminal session. The `New Terminal` application-menu action reopens Terminal with empty output, empty input and a new in-memory history.
+
 - Enter or the labeled Run button submits a non-empty command.
 - Arrow Up and Arrow Down navigate commands submitted during the current page session.
 - Command history remains in memory and is not written to browser storage.
