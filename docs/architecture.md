@@ -148,6 +148,7 @@ portfolio/
 |       |-- command-palette.js
 |       |-- commands.js
 |       |-- content-loader.js
+|       |-- json-viewer.js
 |       |-- layout-resizer.js
 |       |-- menu-bar.js
 |       |-- panel-tabs.js
@@ -199,6 +200,12 @@ Owns Command Palette filtering, active-option navigation, keyboard shortcuts, di
 ### layout-resizer.js
 
 Owns the desktop Explorer and bottom-panel separator interactions. Pointer dragging, arrow-key increments, bounded dimensions and double-click reset update CSS custom properties without persisting device-specific layout state. Resize handles are removed from the mobile layout, where the Explorer continues to behave as an overlay.
+
+### json-viewer.js
+
+Owns the structured presentation of JSON virtual files. It parses the already-loaded JSON text and produces either an accessible code tree or a recruiter-friendly preview from the same source. The code view owns type-aware tokens, fold state, structural path reporting and minimap marks; display preferences such as wrapping and minimap visibility remain local to the current page session.
+
+The viewer never mutates or rewrites the source data. External HTTPS values in Preview are rendered as links with opener access disabled, while every other value is inserted through text nodes.
 
 ### commands.js
 

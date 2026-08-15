@@ -5,17 +5,27 @@ import { createMenuBar } from "./menu-bar.js?v=2";
 import { createPanelTabs } from "./panel-tabs.js";
 import { createLayoutResizers } from "./layout-resizer.js";
 import { createCommandPalette } from "./command-palette.js";
+import { createJsonViewer } from "./json-viewer.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
   let files = {};
   let activeFile = null;
   let desktopExplorerOpen = true;
+  let jsonViewMode = "code";
+  let jsonWrap = true;
+  let jsonMinimap = true;
 
   const editor = document.getElementById("editor");
   const explorer = document.getElementById("portfolio-explorer");
   const explorerToggle = document.getElementById("explorer-toggle");
   const mobileViewport = window.matchMedia("(max-width: 600px)");
   const statusLeft = document.getElementById("status-position");
+  const jsonToolbar = document.getElementById("json-toolbar");
+  const jsonViewer = createJsonViewer({
+    editor,
+    minimap: document.getElementById("json-minimap"),
+    onPathChange: updateJsonBreadcrumb
+  });
   let terminalController;
   const executeTerminalCommand = createCommandDispatcher({
     getFiles: () => files,
@@ -59,6 +69,21 @@ document.addEventListener("DOMContentLoaded", async () => {
     commands: paletteCommands
   });
   document.getElementById("command-center").addEventListener("click", commandPalette.open);
+  jsonToolbar.querySelectorAll("[data-json-view]").forEach(button => {
+    button.addEventListener("click", () => setJsonView(button.dataset.jsonView));
+  });
+  document.getElementById("json-wrap-toggle").addEventListener("click", event => {
+    jsonWrap = !jsonWrap;
+    event.currentTarget.classList.toggle("active", jsonWrap);
+    event.currentTarget.setAttribute("aria-pressed", String(jsonWrap));
+    jsonViewer.setWrap(jsonWrap);
+  });
+  document.getElementById("json-minimap-toggle").addEventListener("click", event => {
+    jsonMinimap = !jsonMinimap;
+    event.currentTarget.classList.toggle("active", jsonMinimap);
+    event.currentTarget.setAttribute("aria-pressed", String(jsonMinimap));
+    jsonViewer.setMinimap(jsonMinimap, jsonViewMode);
+  });
 
   createMenuBar({
     container: document.getElementById("menu-bar"),
@@ -302,11 +327,23 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     activeFile = name;
-    editor.innerHTML = highlight(file.content, file.type);
+    editor.className = "code";
+    editor.replaceChildren();
+    jsonToolbar.hidden = file.type !== "json";
+    document.getElementById("lines").hidden = file.type === "json";
+
+    if (file.type === "json") {
+      jsonViewMode = "code";
+      syncJsonToolbar();
+      jsonViewer.show(file.content, jsonViewMode);
+    } else {
+      editor.innerHTML = highlight(file.content, file.type);
+      document.getElementById("json-minimap").hidden = true;
+    }
     editor.classList.toggle("is-markdown", file.type === "markdown");
     document.getElementById("lang").textContent = file.type;
 
-    renderLines(file.content);
+    if (file.type !== "json") renderLines(file.content);
     updateTabs(name);
     updateBreadcrumbs(name);
     updateActiveExplorerItem();
@@ -314,6 +351,24 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (mobileViewport.matches) {
       closeMobileExplorer();
     }
+  }
+
+  function setJsonView(mode) {
+    if (!activeFile || files[activeFile]?.type !== "json") return;
+    jsonViewMode = mode;
+    syncJsonToolbar();
+    jsonViewer.show(files[activeFile].content, mode);
+    updateBreadcrumbs(activeFile);
+  }
+
+  function syncJsonToolbar() {
+    jsonToolbar.querySelectorAll("[data-json-view]").forEach(button => {
+      const active = button.dataset.jsonView === jsonViewMode;
+      button.classList.toggle("active", active);
+      button.setAttribute("aria-pressed", String(active));
+    });
+    jsonViewer.setWrap(jsonWrap);
+    jsonViewer.setMinimap(jsonMinimap, jsonViewMode);
   }
 
   function downloadFile(path) {
@@ -424,6 +479,22 @@ document.addEventListener("DOMContentLoaded", async () => {
         });
       }
       breadcrumbs.appendChild(item);
+    });
+  }
+
+  function updateJsonBreadcrumb(path) {
+    if (!activeFile || files[activeFile]?.type !== "json") return;
+    updateBreadcrumbs(activeFile);
+    const breadcrumbs = document.getElementById("breadcrumbs");
+    path.forEach(segment => {
+      const separator = document.createElement("span");
+      separator.className = "breadcrumb-separator";
+      separator.textContent = ">";
+      separator.setAttribute("aria-hidden", "true");
+      const item = document.createElement("span");
+      item.className = "breadcrumb-structure";
+      item.textContent = segment;
+      breadcrumbs.append(separator, item);
     });
   }
 

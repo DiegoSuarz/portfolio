@@ -438,6 +438,15 @@ body {
 .breadcrumb-item:hover { color: #ffffff; }
 .breadcrumb-item:focus-visible { outline: 1px solid #007fd4; }
 .breadcrumb-separator { color: #707070; }
+.breadcrumb-structure { overflow: hidden; color: #9cdcfe; text-overflow: ellipsis; }
+
+.json-toolbar { display: flex; min-height: 34px; align-items: center; justify-content: space-between; gap: 12px; border-bottom: 1px solid #2b2b2b; padding: 3px 10px; background: #181818; }
+.json-toolbar[hidden] { display: none; }
+.json-view-switch, .json-view-options { display: flex; align-items: center; gap: 3px; }
+.json-tool { min-height: 25px; border: 0; border-radius: 3px; padding: 3px 9px; background: transparent; color: #9d9d9d; font: inherit; font-size: 12px; cursor: pointer; }
+.json-tool:hover { background: #2a2d2e; color: #ffffff; }
+.json-tool.active { background: #37373d; color: #ffffff; }
+.json-tool:focus-visible { outline: 1px solid #007fd4; outline-offset: -1px; }
 
 .tab-title:focus-visible,
 .close:focus-visible {
@@ -558,12 +567,49 @@ body {
 .sidebar,
 .tabs,
 .code,
+.json-minimap,
+.command-list,
 .terminal-body,
 .panel-tabs,
 .menu-bar {
   scrollbar-color: #424242 transparent;
   scrollbar-width: thin;
 }
+
+.code.is-json { counter-reset: json-line; padding: 9px 0 18px; white-space: normal; }
+.json-line { position: relative; min-height: 23px; padding: 1px 18px 1px calc(52px + var(--json-depth) * 18px); outline: none; overflow-wrap: anywhere; background-image: repeating-linear-gradient(to right, transparent 0 17px, #404040 17px 18px); background-position: calc(45px + var(--json-depth) * 18px) 0; background-size: calc(var(--json-depth) * 18px) 100%; background-repeat: no-repeat; counter-increment: json-line; }
+.json-line::before { content: counter(json-line); position: absolute; left: 6px; width: 32px; color: #858585; text-align: right; user-select: none; }
+.json-line:hover { background-color: #242424; }
+.json-line:focus { background-color: #2a2d2e; box-shadow: inset 2px 0 #007acc; }
+.json-node[data-comma="true"] > .json-line:last-child::after { content: ","; color: #d4d4d4; }
+.json-node.is-collapsed[data-comma="true"] > .json-line:first-child::after { content: ","; color: #d4d4d4; }
+.json-key { color: #9cdcfe; }
+.json-string { color: #ce9178; }
+.json-number { color: #b5cea8; }
+.json-boolean, .json-null { color: #569cd6; }
+.json-punctuation { color: #d4d4d4; }
+.json-fold { position: absolute; left: calc(38px + var(--json-depth) * 18px); top: 2px; width: 16px; height: 19px; border: 0; padding: 0; background: transparent; color: #c5c5c5; font: inherit; line-height: 16px; cursor: pointer; }
+.json-fold:hover { color: #ffffff; }
+.json-fold:focus-visible { outline: 1px solid #007fd4; }
+.json-summary { border-radius: 3px; margin-left: 4px; padding: 0 5px; background: #333333; color: #9d9d9d; font-size: 12px; }
+.json-no-wrap .json-line { overflow-wrap: normal; white-space: pre; }
+
+.json-minimap { flex: 0 0 92px; width: 92px; padding: 7px 5px; overflow: hidden; border-left: 1px solid #2b2b2b; background: #1e1e1e; opacity: .78; user-select: none; }
+.json-minimap[hidden] { display: none; }
+.json-minimap span { display: block; height: 2px; margin-bottom: 2px; background: #6d6d6d; }
+.json-minimap span:nth-child(4n+1) { background: #9cdcfe; }
+.json-minimap span:nth-child(5n+2) { background: #ce9178; }
+
+.json-view--preview { overflow: auto; }
+.json-preview-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr)); gap: 12px; padding: 4px; }
+.json-preview-card { min-width: 0; border: 1px solid #3b3b3b; border-radius: 6px; padding: 14px; background: #252526; box-shadow: 0 2px 6px rgb(0 0 0 / 18%); }
+.json-preview-card h3 { margin: 0 0 12px; color: #4ec9b0; font-size: 15px; line-height: 1.35; }
+.json-preview-card dl { display: grid; grid-template-columns: minmax(92px, .45fr) 1fr; gap: 8px 12px; margin: 0; }
+.json-preview-card dt { color: #9cdcfe; font-size: 12px; }
+.json-preview-card dd { min-width: 0; margin: 0; color: #d4d4d4; overflow-wrap: anywhere; }
+.json-preview-card a { color: #4fc1ff; }
+.json-preview-tags { display: flex; flex-wrap: wrap; gap: 5px; }
+.json-preview-tags span { border: 1px solid #3f566b; border-radius: 10px; padding: 2px 7px; background: #1f3345; color: #c8e6ff; font-size: 11px; }
 
 .status-group { display: flex; min-width: 0; align-items: center; gap: 12px; white-space: nowrap; }
 .status-group--right { justify-content: flex-end; }
@@ -572,6 +618,8 @@ body {
 .sidebar::-webkit-scrollbar,
 .tabs::-webkit-scrollbar,
 .code::-webkit-scrollbar,
+.json-minimap::-webkit-scrollbar,
+.command-list::-webkit-scrollbar,
 .terminal-body::-webkit-scrollbar,
 .panel-tabs::-webkit-scrollbar,
 .menu-bar::-webkit-scrollbar {
@@ -582,6 +630,8 @@ body {
 .sidebar::-webkit-scrollbar-track,
 .tabs::-webkit-scrollbar-track,
 .code::-webkit-scrollbar-track,
+.json-minimap::-webkit-scrollbar-track,
+.command-list::-webkit-scrollbar-track,
 .terminal-body::-webkit-scrollbar-track,
 .panel-tabs::-webkit-scrollbar-track,
 .menu-bar::-webkit-scrollbar-track {
@@ -591,6 +641,8 @@ body {
 .sidebar::-webkit-scrollbar-thumb,
 .tabs::-webkit-scrollbar-thumb,
 .code::-webkit-scrollbar-thumb,
+.json-minimap::-webkit-scrollbar-thumb,
+.command-list::-webkit-scrollbar-thumb,
 .terminal-body::-webkit-scrollbar-thumb,
 .panel-tabs::-webkit-scrollbar-thumb,
 .menu-bar::-webkit-scrollbar-thumb {
@@ -603,6 +655,8 @@ body {
 .sidebar::-webkit-scrollbar-thumb:hover,
 .tabs::-webkit-scrollbar-thumb:hover,
 .code::-webkit-scrollbar-thumb:hover,
+.json-minimap::-webkit-scrollbar-thumb:hover,
+.command-list::-webkit-scrollbar-thumb:hover,
 .terminal-body::-webkit-scrollbar-thumb:hover,
 .panel-tabs::-webkit-scrollbar-thumb:hover,
 .menu-bar::-webkit-scrollbar-thumb:hover {
@@ -965,6 +1019,17 @@ body {
   .resize-handle { display: none; }
 
   .breadcrumbs { min-height: 26px; padding-inline: 7px; }
+
+  .json-toolbar { padding-inline: 5px; }
+  .json-view-options { gap: 1px; }
+  .json-tool { padding-inline: 6px; font-size: 11px; }
+  #json-minimap-toggle { display: none; }
+  .json-minimap { display: none; }
+  .json-line { padding-right: 8px; padding-left: calc(43px + var(--json-depth) * 14px); background-position: calc(39px + var(--json-depth) * 14px) 0; background-size: calc(var(--json-depth) * 14px) 100%; }
+  .json-fold { left: calc(30px + var(--json-depth) * 14px); }
+  .json-line::before { left: 2px; width: 25px; }
+  .json-preview-card dl { grid-template-columns: 1fr; gap: 3px; }
+  .json-preview-card dd { margin-bottom: 7px; }
 
   .sidebar.is-collapsed {
     width: min(300px, calc(100vw - 36px));

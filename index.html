@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Diego | VS Code Portfolio</title>
-  <link rel="stylesheet" href="src/css/style.css?v=9">
+  <link rel="stylesheet" href="src/css/style.css?v=10">
 </head>
 <body>
 
@@ -45,9 +45,21 @@
 
     <nav class="breadcrumbs" id="breadcrumbs" aria-label="Current file path"></nav>
 
+    <div class="json-toolbar" id="json-toolbar" aria-label="JSON view controls" hidden>
+      <div class="json-view-switch" role="group" aria-label="JSON display mode">
+        <button class="json-tool active" type="button" data-json-view="code" aria-pressed="true">Code</button>
+        <button class="json-tool" type="button" data-json-view="preview" aria-pressed="false">Preview</button>
+      </div>
+      <div class="json-view-options">
+        <button class="json-tool active" id="json-wrap-toggle" type="button" aria-pressed="true">Word Wrap</button>
+        <button class="json-tool active" id="json-minimap-toggle" type="button" aria-pressed="true">Minimap</button>
+      </div>
+    </div>
+
     <div class="editor">
       <div class="lines" id="lines"></div>
-      <pre class="code" id="editor" tabindex="0" aria-label="Portfolio file content" aria-live="polite"></pre>
+      <div class="code" id="editor" tabindex="0" aria-label="Portfolio file content" aria-live="polite"></div>
+      <aside class="json-minimap" id="json-minimap" aria-label="JSON minimap" hidden></aside>
     </div>
 
     <div class="resize-handle resize-handle--panel" id="panel-resizer" role="separator" aria-label="Resize bottom panel" aria-orientation="horizontal" aria-valuemin="120" aria-valuemax="420" aria-valuenow="160" tabindex="0"></div>
@@ -92,6 +104,6 @@
   <div class="status-group status-group--right"><span>UTF-8</span><span>LF</span><span>{ }</span><span id="lang">Plain Text</span><span aria-label="Notifications">◯</span></div>
 </footer>
 
-<script type="module" src="src/js/app.js?v=13"></script>
+<script type="module" src="src/js/app.js?v=14"></script>
 </body>
 </html>
