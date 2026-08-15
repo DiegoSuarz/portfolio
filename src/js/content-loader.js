@@ -79,6 +79,21 @@ function formatContact(profile) {
   ].join("\n");
 }
 
+function formatProjectOverview(projects) {
+  return [
+    "# Project Showcase",
+    "",
+    "Selected Data Engineering projects presented from their current, verifiable scope.",
+    "",
+    ...projects.flatMap(project => [
+      `## ${project.name}`,
+      `Status: ${project.status}`,
+      project.summary,
+      ""
+    ])
+  ].join("\n").trimEnd();
+}
+
 export async function loadPortfolioFiles() {
   const keys = Object.keys(CONTENT_PATHS);
   const values = await Promise.all(keys.map(key => fetchJson(CONTENT_PATHS[key])));
@@ -93,10 +108,17 @@ export async function loadPortfolioFiles() {
       type: "markdown",
       content: formatExperience(content.experience.experience)
     },
-    "projects.json": {
-      type: "json",
-      content: JSON.stringify(content.projects, null, 2)
+    "projects/overview.md": {
+      type: "markdown",
+      content: formatProjectOverview(content.projects.projects)
     },
+    ...Object.fromEntries(content.projects.projects.map(project => [
+      `projects/${project.id}.json`,
+      {
+        type: "json",
+        content: JSON.stringify(project, null, 2)
+      }
+    ])),
     "skills.json": {
       type: "json",
       content: JSON.stringify(content.skills, null, 2)
