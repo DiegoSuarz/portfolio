@@ -199,7 +199,7 @@ The Recruiter Visual Experience milestone improves information hierarchy and rea
 
 Its VS Code-inspired workspace now includes a searchable Command Palette (`Ctrl+Shift+P`), a centered Command Center, active-file breadcrumbs, descriptive Activity Bar tooltips, a richer status bar and keyboard-accessible panel resizing on desktop. These controls provide real navigation and layout behavior rather than decorative imitation.
 
-JSON portfolio files have a dedicated structured editor with type-aware syntax colors, indentation guides, foldable objects and arrays, structural breadcrumbs, word wrapping and a minimap. Recruiters can switch from the technical `Code` view to a responsive `Preview` that presents the same factual data as readable cards and tags.
+JSON portfolio files open by default in a responsive `Preview` that presents the factual data as readable cards and tags, including `skills.json`. The technical `Code` view remains available with type-aware syntax colors, indentation guides, foldable objects and arrays, structural breadcrumbs, word wrapping and a minimap.
 
 ## Engineering Principles
 

@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   let files = {};
   let activeFile = null;
   let desktopExplorerOpen = true;
-  let jsonViewMode = "code";
+  let jsonViewMode = "preview";
   let jsonWrap = true;
   let jsonMinimap = true;
 
@@ -333,7 +333,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     document.getElementById("lines").hidden = file.type === "json";
 
     if (file.type === "json") {
-      jsonViewMode = "code";
+      jsonViewMode = "preview";
       syncJsonToolbar();
       jsonViewer.show(file.content, jsonViewMode);
     } else {
