@@ -1,4 +1,5 @@
 import { loadPortfolioFiles } from "./content-loader.js";
+import { createCommandDispatcher } from "./commands.js";
 import { createTerminal } from "./terminal.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
@@ -7,11 +8,17 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   const editor = document.getElementById("editor");
   const statusLeft = document.querySelector(".status-bar span");
-  const terminalController = createTerminal({
+  let terminalController;
+  const executeTerminalCommand = createCommandDispatcher({
+    getFiles: () => files,
+    openFile,
+    clearTerminal: () => terminalController.clear()
+  });
+  terminalController = createTerminal({
     form: document.getElementById("terminal-form"),
     input: document.getElementById("terminal-input"),
     output: document.getElementById("terminal-output"),
-    onCommand: handleTerminalCommand
+    onCommand: executeTerminalCommand
   });
 
   try {
@@ -226,17 +233,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     terminalController.write(`Error: ${message}`);
     document.getElementById("lang").textContent = "Error";
     renderLines(message);
-  }
-
-  function handleTerminalCommand(command) {
-    if (command.toLowerCase() === "help") {
-      return [
-        "Available commands: help, ls, open, projects, contact, cv, clear",
-        "Use Arrow Up and Arrow Down to navigate command history."
-      ].join("\n");
-    }
-
-    return `Command not found: ${command}. Run help to list available commands.`;
   }
 
   editor.addEventListener("click", updateCursor);
