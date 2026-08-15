@@ -567,6 +567,24 @@ body {
 }
 
 .terminal-command {
+  color: #d4d4d4;
+}
+
+.prompt-identity {
+  color: #4ec9b0;
+  font-weight: 600;
+}
+
+.prompt-path {
+  color: #569cd6;
+  font-weight: 600;
+}
+
+.prompt-symbol {
+  color: #d4d4d4;
+}
+
+.terminal-command-text {
   color: #9cdcfe;
 }
 
@@ -579,7 +597,9 @@ body {
 }
 
 .terminal-prompt {
-  color: #4ec9b0;
+  display: inline-flex;
+  flex: 0 0 auto;
+  white-space: nowrap;
 }
 
 .terminal-form input {

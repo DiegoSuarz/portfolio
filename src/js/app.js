@@ -1,6 +1,6 @@
 import { loadPortfolioFiles } from "./content-loader.js";
 import { createCommandDispatcher } from "./commands.js";
-import { createTerminal } from "./terminal.js";
+import { createTerminal } from "./terminal.js?v=2";
 import { createMenuBar } from "./menu-bar.js";
 import { createPanelTabs } from "./panel-tabs.js";
 
