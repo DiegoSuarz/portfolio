@@ -162,16 +162,58 @@ The projects model presents technical work as professional case studies rather t
 
 Project links remain `null` until the corresponding repository, documentation or demo is publicly accessible. Completed projects should include verifiable results when available; metrics must not be estimated or fabricated.
 
-## 7. Future Domains
+## 7. Education Model
 
-The following domains are planned but should be introduced only when their corresponding features are implemented:
+File: `data/education.json`
 
-- `certifications.json`
-- `education.json`
+```json
+{
+  "education": [
+    {
+      "id": "string",
+      "institution": "string",
+      "degree": "string",
+      "startDate": "YYYY-MM",
+      "endDate": "YYYY-MM|null",
+      "completed": true
+    }
+  ]
+}
+```
+
+The education model stores formal academic education. Dates use the same machine-friendly format as professional experience, and `completed` must reflect the actual program status.
+
+## 8. Certifications Model
+
+File: `data/certifications.json`
+
+```json
+{
+  "certifications": [
+    {
+      "id": "string",
+      "name": "string",
+      "issuer": "string",
+      "credentialUrl": "string",
+      "focusAreas": ["string"]
+    }
+  ]
+}
+```
+
+The certifications model stores a curated selection of completed credentials that reinforce the target Data Engineering profile.
+
+`credentialUrl` must point to a public or shareable credential. `focusAreas` summarizes the credential scope using concise, verifiable concepts rather than promotional descriptions or self-assessed proficiency.
+
+Exam preparation programs must not be presented as official vendor certifications. Overlapping introductory credentials may be omitted when a broader professional certificate already provides stronger evidence of the same capabilities.
+
+## 9. Future Domains
+
+Additional domains should be introduced only when their corresponding features are implemented.
 
 This avoids speculative schema design and unnecessary files.
 
-## 8. Data Ownership
+## 10. Data Ownership
 
 Each content file owns one professional domain:
 
@@ -180,11 +222,13 @@ profile.json     -> identity and professional summary
 skills.json      -> technical capabilities
 experience.json  -> employment history and transferable skills
 projects.json    -> project portfolio
+education.json   -> formal academic education
+certifications.json -> curated professional credentials
 ```
 
 Application code may read these files but should not redefine their content internally.
 
-## 9. Evolution Rules
+## 11. Evolution Rules
 
 When changing a content model:
 
