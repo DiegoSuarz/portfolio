@@ -1,0 +1,54 @@
+{
+  "projects": [
+    {
+      "id": "adventureworks-edw",
+      "name": "AdventureWorks Enterprise Data Warehouse",
+      "shortName": "AdventureWorks EDW",
+      "status": "in-progress",
+      "featured": true,
+      "summary": "Enterprise-style data warehouse project built around AdventureWorks with dimensional modeling, ETL and data engineering practices.",
+      "problem": null,
+      "technologies": [
+        "SQL Server",
+        "T-SQL",
+        "Azure Data Factory",
+        "Apache Airflow"
+      ],
+      "highlights": [
+        "Dimensional data modeling",
+        "ETL and incremental loading",
+        "Slowly Changing Dimensions",
+        "Audit and execution logging"
+      ],
+      "links": {
+        "repository": null,
+        "documentation": null,
+        "demo": null
+      }
+    },
+    {
+      "id": "ecommerce-data-engineering-platform",
+      "name": "E-Commerce Data Engineering Platform",
+      "shortName": "E-Commerce Data Platform",
+      "status": "in-progress",
+      "featured": true,
+      "summary": "End-to-end data engineering platform designed to reproduce a realistic e-commerce data ecosystem and its data pipelines.",
+      "problem": null,
+      "technologies": [
+        "MySQL",
+        "Python",
+        "Docker"
+      ],
+      "highlights": [
+        "OLTP source database",
+        "Reproducible development environment",
+        "Incremental platform development"
+      ],
+      "links": {
+        "repository": null,
+        "documentation": null,
+        "demo": null
+      }
+    }
+  ]
+}
