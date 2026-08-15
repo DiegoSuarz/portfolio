@@ -9,9 +9,120 @@ body {
   color: #d4d4d4;
 }
 
+.title-bar {
+  position: relative;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  height: 35px;
+  border-bottom: 1px solid #191919;
+  background: #181818;
+  user-select: none;
+}
+
+.window-title {
+  position: absolute;
+  left: 50%;
+  max-width: 42vw;
+  overflow: hidden;
+  color: #bcbcbc;
+  font-size: 12px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+.menu-bar {
+  display: flex;
+  align-items: stretch;
+  height: 100%;
+  padding-left: 6px;
+}
+
+.app-menu {
+  position: relative;
+}
+
+.menu-trigger {
+  height: 100%;
+  border: 0;
+  padding: 0 7px;
+  background: transparent;
+  color: #cccccc;
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.menu-trigger:hover,
+.menu-trigger[aria-expanded="true"] {
+  background: #303030;
+  color: #ffffff;
+}
+
+.menu-trigger:focus-visible,
+.menu-item:focus-visible {
+  outline: 1px solid #007fd4;
+  outline-offset: -1px;
+}
+
+.menu-popover {
+  position: absolute;
+  z-index: 50;
+  top: 34px;
+  left: 0;
+  min-width: 230px;
+  margin: 0;
+  padding: 5px;
+  border: 1px solid #454545;
+  border-radius: 3px;
+  background: #252526;
+  box-shadow: 0 6px 18px rgb(0 0 0 / 45%);
+}
+
+.menu-popover[hidden] {
+  display: none;
+}
+
+.app-menu:last-child .menu-popover,
+.app-menu:nth-last-child(2) .menu-popover {
+  right: 0;
+  left: auto;
+}
+
+.menu-item {
+  display: flex;
+  width: 100%;
+  min-height: 28px;
+  align-items: center;
+  border: 0;
+  border-radius: 2px;
+  padding: 5px 22px;
+  background: transparent;
+  color: #d8d8d8;
+  font: inherit;
+  font-size: 13px;
+  text-align: left;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.menu-item:hover,
+.menu-item:focus-visible {
+  background: #094771;
+  color: #ffffff;
+}
+
+.menu-separator {
+  height: 1px;
+  margin: 4px 10px;
+  background: #454545;
+}
+
 .window {
   display: flex;
-  height: calc(100vh - 22px);
+  height: calc(100vh - 57px);
 }
 
 /* Activity Bar */
@@ -382,6 +493,10 @@ body {
   line-height: 1.45;
 }
 
+.terminal.is-hidden {
+  display: none;
+}
+
 .terminal-header {
   padding: 4px 10px;
   background: #2d2d2d;
@@ -466,6 +581,25 @@ body {
 }
 
 @media (max-width: 600px) {
+  .window-title {
+    display: none;
+  }
+
+  .menu-bar {
+    width: 100%;
+    justify-content: space-between;
+    padding-inline: 2px;
+  }
+
+  .menu-trigger {
+    padding-inline: 5px;
+    font-size: 12px;
+  }
+
+  .menu-popover {
+    min-width: min(230px, calc(100vw - 12px));
+  }
+
   .activity-bar {
     flex-basis: 36px;
     width: 36px;

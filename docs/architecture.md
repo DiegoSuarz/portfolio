@@ -143,6 +143,7 @@ portfolio/
 |       |-- app.js
 |       |-- commands.js
 |       |-- content-loader.js
+|       |-- menu-bar.js
 |       `-- terminal.js
 |
 |-- docs/
@@ -175,6 +176,10 @@ Markdown links are converted to anchors only after the source content is HTML-es
 ### terminal.js
 
 Owns terminal input submission, text-only output, in-memory command history and history navigation. It receives a command callback from the application layer and does not know how portfolio commands are executed.
+
+### menu-bar.js
+
+Owns the VS Code-inspired application menus, dropdown state, outside-click dismissal and keyboard navigation. Menu items receive narrow callbacks from the application entry point so the component does not own portfolio content or application state.
 
 ### commands.js
 

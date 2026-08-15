@@ -1,6 +1,7 @@
 import { loadPortfolioFiles } from "./content-loader.js";
 import { createCommandDispatcher } from "./commands.js";
 import { createTerminal } from "./terminal.js";
+import { createMenuBar } from "./menu-bar.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
   let files = {};
@@ -23,6 +24,30 @@ document.addEventListener("DOMContentLoaded", async () => {
     input: document.getElementById("terminal-input"),
     output: document.getElementById("terminal-output"),
     onCommand: executeTerminalCommand
+  });
+
+  createMenuBar({
+    container: document.getElementById("menu-bar"),
+    actions: {
+      openAbout: () => openFile("about.md"),
+      openProjects: () => openFile("projects/overview.md"),
+      downloadCv: () => openFile("cv.docx"),
+      focusEditor: () => editor.focus(),
+      selectEditor: selectEditorContent,
+      clearSelection: () => window.getSelection()?.removeAllRanges(),
+      toggleExplorer,
+      toggleTerminal,
+      openExperience: () => openFile("experience.md"),
+      openSkills: () => openFile("skills.json"),
+      openEducation: () => openFile("education.md"),
+      openContact: () => openFile("contact.txt"),
+      focusTerminal,
+      runTerminal: runTerminalCommand,
+      clearTerminal: () => terminalController.clear(),
+      showTerminalHelp,
+      openGithub: () => window.open("https://github.com/DiegoSuarz", "_blank", "noopener,noreferrer"),
+      openLinkedin: () => window.open("https://www.linkedin.com/in/diegosuarezinocente/", "_blank", "noopener,noreferrer")
+    }
   });
 
   syncExplorerWithViewport();
@@ -91,6 +116,44 @@ document.addEventListener("DOMContentLoaded", async () => {
     explorer.classList.toggle("is-collapsed", !desktopExplorerOpen);
     explorer.inert = !desktopExplorerOpen;
     explorerToggle.setAttribute("aria-expanded", String(desktopExplorerOpen));
+  }
+
+  function toggleTerminal() {
+    const terminal = document.querySelector(".terminal");
+    const shouldShow = terminal.classList.contains("is-hidden");
+    terminal.classList.toggle("is-hidden", !shouldShow);
+
+    if (shouldShow) {
+      document.getElementById("terminal-input").focus();
+    }
+  }
+
+  function showTerminalHelp() {
+    const terminal = document.querySelector(".terminal");
+    const input = document.getElementById("terminal-input");
+    terminal.classList.remove("is-hidden");
+    input.value = "help";
+    document.getElementById("terminal-form").requestSubmit();
+    input.focus();
+  }
+
+  function focusTerminal() {
+    document.querySelector(".terminal").classList.remove("is-hidden");
+    document.getElementById("terminal-input").focus();
+  }
+
+  function runTerminalCommand() {
+    focusTerminal();
+    document.getElementById("terminal-form").requestSubmit();
+  }
+
+  function selectEditorContent() {
+    const selection = window.getSelection();
+    const range = document.createRange();
+    range.selectNodeContents(editor);
+    selection.removeAllRanges();
+    selection.addRange(range);
+    editor.focus();
   }
 
   function createExplorerTree(paths) {
