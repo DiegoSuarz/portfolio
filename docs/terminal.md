@@ -51,10 +51,11 @@ Clears terminal output while preserving the command input and application state.
 
 ## 5. Interaction Contract
 
-- Enter submits a non-empty command.
+- Enter or the labeled Run button submits a non-empty command.
 - Arrow Up and Arrow Down navigate commands submitted during the current page session.
 - Command history remains in memory and is not written to browser storage.
 - Output is rendered as text, not injected as HTML.
+- Output uses a polite live log so new command results can be announced without interrupting the user.
 - Terminal controls remain usable with keyboard navigation and at mobile widths.
 
 ## 6. Ownership
