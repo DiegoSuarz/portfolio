@@ -139,7 +139,9 @@ portfolio/
 |   |
 |   `-- js/
 |       |-- app.js
-|       `-- content-loader.js
+|       |-- commands.js
+|       |-- content-loader.js
+|       `-- terminal.js
 |
 |-- docs/
 |   |-- architecture.md
@@ -168,9 +170,19 @@ Project content is exposed as a virtual `projects/` directory with an overview a
 
 Markdown links are converted to anchors only after the source content is HTML-escaped and only when the URL uses HTTPS. External project links open in a separate browsing context with opener access disabled.
 
+### terminal.js
+
+Owns terminal input submission, text-only output, in-memory command history and history navigation. It receives a command callback from the application layer and does not know how portfolio commands are executed.
+
+### commands.js
+
+Owns the terminal command grammar and dispatches only the documented command set. It receives narrow callbacks for file access, navigation and terminal clearing; it cannot execute arbitrary JavaScript or operating-system commands.
+
 ### Future UI modules
 
-Explorer, Editor, Tabs and Terminal may become separate modules when their behavior grows enough to justify independent ownership. They remain in `app.js` today to avoid premature abstraction.
+Explorer, Editor and Tabs may become separate modules when their behavior grows enough to justify independent ownership. They remain in `app.js` today to avoid premature abstraction. Terminal interaction moved to `terminal.js` when input and history introduced independent state.
+
+The Interactive Terminal contract is documented in [`terminal.md`](terminal.md). Its command dispatcher is a closed application interface over existing portfolio actions, not a browser shell or an arbitrary code-execution surface.
 
 ### Content renderer
 

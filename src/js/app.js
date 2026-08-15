@@ -1,4 +1,6 @@
 import { loadPortfolioFiles } from "./content-loader.js";
+import { createCommandDispatcher } from "./commands.js";
+import { createTerminal } from "./terminal.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
   let files = {};
@@ -6,13 +8,24 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   const editor = document.getElementById("editor");
   const statusLeft = document.querySelector(".status-bar span");
-  const terminal = document.getElementById("terminal");
+  let terminalController;
+  const executeTerminalCommand = createCommandDispatcher({
+    getFiles: () => files,
+    openFile,
+    clearTerminal: () => terminalController.clear()
+  });
+  terminalController = createTerminal({
+    form: document.getElementById("terminal-form"),
+    input: document.getElementById("terminal-input"),
+    output: document.getElementById("terminal-output"),
+    onCommand: executeTerminalCommand
+  });
 
   try {
     files = await loadPortfolioFiles();
     buildExplorer();
     openFile("about.md");
-    terminal.textContent = "> portfolio --content\nprofessional content loaded successfully";
+    terminalController.write("Portfolio content loaded successfully.\nType help to list available commands.");
   } catch (error) {
     showLoadError(error);
   }
@@ -216,7 +229,8 @@ document.addEventListener("DOMContentLoaded", async () => {
   function showLoadError(error) {
     const message = `Unable to load professional content. ${error.message}`;
     editor.textContent = message;
-    terminal.textContent = `> portfolio --content\nerror: ${message}`;
+    terminalController.clear();
+    terminalController.write(`Error: ${message}`);
     document.getElementById("lang").textContent = "Error";
     renderLines(message);
   }

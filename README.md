@@ -14,7 +14,7 @@ https://diegosuarz.github.io/portfolio/
 
 The project is being rebuilt incrementally from an earlier prototype using a documented architecture, structured content models, short-lived branches, Pull Requests, and milestone-based releases.
 
-Current milestone: **Project Showcase**.
+Current milestone: **Interactive Terminal**.
 
 ## Goals
 
@@ -83,7 +83,9 @@ portfolio/
 |   |   `-- style.css
 |   `-- js/
 |       |-- app.js
-|       `-- content-loader.js
+|       |-- commands.js
+|       |-- content-loader.js
+|       `-- terminal.js
 |
 |-- CONTRIBUTING.md
 |-- index.html
@@ -118,6 +120,24 @@ Current featured projects:
 - **E-Commerce Data Engineering Platform**
 
 Projects under active development are explicitly represented as such rather than presented as completed work. Case-study content is generated from `data/projects.json`, keeping presentation separate from factual project data.
+
+## Interactive Terminal
+
+The terminal provides a keyboard-first way to navigate the same virtual files exposed in the Explorer.
+
+```text
+help                 List supported commands
+ls [path]            List virtual files
+open <path>          Open a virtual file
+projects             Open the project showcase
+contact              Open professional contact details
+cv                   Download the public CV
+clear                Clear terminal output
+```
+
+Command history is available with Arrow Up and Arrow Down for the current page session. The terminal uses a closed command dispatcher and cannot execute arbitrary JavaScript, operating-system commands or external requests.
+
+Detailed command behavior is documented in [`docs/terminal.md`](docs/terminal.md).
 
 ## Development Workflow
 
