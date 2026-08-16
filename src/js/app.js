@@ -1,4 +1,4 @@
-import { loadPortfolioFiles } from "./content-loader.js?v=16";
+import { loadPortfolioFiles } from "./content-loader.js?v=17";
 import { createCommandDispatcher } from "./commands.js?v=3";
 import { createTerminal } from "./terminal.js?v=3";
 import { createMenuBar } from "./menu-bar.js?v=2";
@@ -17,7 +17,7 @@ import { createContactViewer } from "./contact-viewer.js?v=1";
 import { createMarkdownViewer } from "./markdown-viewer.js?v=1";
 
 const ABOUT_FILE = "about.json";
-const EXPERIENCE_FILE = "experience.json";
+const EXPERIENCE_FILE = "experience.ipynb";
 const PROJECTS_OVERVIEW_FILE = "projects/overview.json";
 const ADVENTUREWORKS_FILE = "projects/adventureworks-edw.json";
 const ECOMMERCE_FILE = "projects/ecommerce-data-engineering-platform.json";
@@ -336,7 +336,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   function getFileType(path) {
     const extension = path.split(".").pop()?.toLowerCase();
-    const types = { md: "markdown", json: "json", py: "python", sql: "sql", txt: "text", docx: "word" };
+    const types = { md: "markdown", json: "json", py: "python", ipynb: "notebook", sql: "sql", txt: "text", docx: "word" };
     return types[extension] ?? "file";
   }
 
@@ -505,6 +505,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     } else if (name === EXPERIENCE_FILE) {
       experienceViewMode = file.preview ? "preview" : "code";
       syncExperienceToolbar();
+      document.getElementById("lines").hidden = true;
       if (file.preview) experienceViewer.show(file.preview);
       else jsonViewer.show(file.content, "code");
     } else if (name === PROJECTS_OVERVIEW_FILE) {
@@ -622,7 +623,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     } else {
       jsonViewer.show(files[activeFile].content, "code");
     }
-    document.getElementById("lang").textContent = "json";
+    document.getElementById("lang").textContent = "jupyter";
     updateBreadcrumbs(activeFile);
   }
 

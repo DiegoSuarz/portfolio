@@ -192,7 +192,7 @@ Owns the shared project case-study preview for AdventureWorks and E-Commerce. It
 
 ### experience-viewer.js
 
-Owns the recruiter-oriented experience timeline. It receives experience entries already ordered by the content layer, derives human-readable periods and durations from structured dates, and keeps factual contributions visually separate from `dataEngineeringRelevance`. Related-navigation controls receive predefined callbacks from `app.js`; the paired Code view delegates the identical model to `json-viewer.js`.
+Owns the recruiter-oriented experience timeline. It receives experience entries already ordered by the content layer, derives human-readable periods and durations from structured dates, and keeps factual contributions visually separate from `dataEngineeringRelevance`. Related-navigation controls receive predefined callbacks from `app.js`; the paired `experience.ipynb` Code view delegates the generated, valid notebook JSON to `json-viewer.js`. Its Python cell is intentionally unexecuted and contains no fabricated outputs.
 
 ### education-viewer.js
 

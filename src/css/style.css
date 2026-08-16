@@ -1081,6 +1081,25 @@ body {
   text-shadow: 1px 1px 0 #ffd43b;
 }
 
+.file-icon[data-file-type="notebook"]::before {
+  content: "J";
+  color: #f37626;
+  font-family: Arial, sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.file-icon[data-file-type="notebook"]::after {
+  content: "";
+  position: absolute;
+  top: 1px;
+  right: 1px;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: #f37626;
+}
+
 .code.is-python {
   white-space: pre;
 }

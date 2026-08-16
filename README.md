@@ -203,7 +203,7 @@ Its VS Code-inspired workspace now includes a searchable Command Palette (`Ctrl+
 
 The About file opens as a recruiter-oriented professional overview with direct portfolio actions, concise focus areas, a prioritized core stack and evidence counts derived from the project and certification collections. Its `Code` view exposes the exact structured model behind that preview with the same folding, syntax, breadcrumbs and minimap behavior used by Skills.
 
-Experience follows the same `Preview | Code` contract through `experience.json`. Its default timeline orders roles by recency, calculates display periods and durations from structured dates, and separates factual contributions from transferable Data Engineering relevance.
+Experience follows the same `Preview | Code` contract through the virtual `experience.ipynb` notebook. Its default timeline orders roles by recency, calculates display periods and durations from structured dates, and separates factual contributions from transferable Data Engineering relevance. Code exposes a valid Jupyter notebook with descriptive Markdown and symbolic Python cells derived from `data/experience.json`; no cell is executed and no output is fabricated.
 
 The project catalogue is exposed as `projects/overview.json`. Preview derives project and status counts, emphasizes implemented evidence and current architecture, and keeps planned evolution visually distinct. Code exposes the identical overview model, while project-specific files remain the detailed case studies.
 

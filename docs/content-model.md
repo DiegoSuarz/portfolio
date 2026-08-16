@@ -129,6 +129,8 @@ The experience model stores factual employment history while making transferable
 
 Dates are stored in machine-friendly form so the presentation layer can format them consistently.
 
+The application exposes this model as the virtual `experience.ipynb` file. Preview consumes the ordered experience collection directly. Code derives a valid Jupyter Notebook document with one explanatory Markdown cell and one unexecuted Python cell containing the same roles, dates, highlights and Data Engineering relevance. Notebook outputs remain empty, and the generated notebook is a presentation artifact rather than a second source of employment data.
+
 ## 6. Projects Model
 
 File: `data/projects.json`

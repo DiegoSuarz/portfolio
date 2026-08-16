@@ -100,6 +100,72 @@ function formatCertificationsSql(model) {
   ].join("\n");
 }
 
+function formatExperiencePython(model) {
+  const roles = model.experience.map(role => [
+    "    {",
+    `        "company": ${JSON.stringify(role.company)},`,
+    `        "role": ${JSON.stringify(role.role)},`,
+    `        "location": ${JSON.stringify(role.location)},`,
+    `        "period": (${JSON.stringify(role.startDate)}, ${role.endDate ? JSON.stringify(role.endDate) : "None"}),`,
+    "        \"highlights\": [",
+    ...role.highlights.map(highlight => `            ${JSON.stringify(highlight)},`),
+    "        ],",
+    "        \"data_engineering_relevance\": [",
+    ...role.dataEngineeringRelevance.map(item => `            ${JSON.stringify(item)},`),
+    "        ],",
+    "    },"
+  ].join("\n"));
+
+  return [
+    "EXPERIENCE = [",
+    ...roles,
+    "]",
+    "",
+    "for position in EXPERIENCE:",
+    "    print(f\"{position['role']} | {position['company']}\")"
+  ].join("\n");
+}
+
+function notebookSource(content) {
+  return content.split("\n").map((line, index, lines) => `${line}${index < lines.length - 1 ? "\n" : ""}`);
+}
+
+function formatExperienceNotebook(model) {
+  return {
+    cells: [
+      {
+        cell_type: "markdown",
+        metadata: {},
+        source: notebookSource([
+          "# Professional Experience",
+          "",
+          "A factual, reverse-chronological representation of professional roles and transferable Data Engineering capabilities."
+        ].join("\n"))
+      },
+      {
+        cell_type: "code",
+        execution_count: null,
+        metadata: {},
+        outputs: [],
+        source: notebookSource(formatExperiencePython(model))
+      }
+    ],
+    metadata: {
+      kernelspec: {
+        display_name: "Python 3",
+        language: "python",
+        name: "python3"
+      },
+      language_info: {
+        name: "python",
+        version: "3"
+      }
+    },
+    nbformat: 4,
+    nbformat_minor: 5
+  };
+}
+
 async function fetchJson(path) {
   const response = await fetch(`${path}?v=${CONTENT_VERSION}`, { cache: "no-store" });
 
@@ -223,7 +289,7 @@ export async function loadPortfolioFiles() {
     evidence: [
       { type: "Project", name: "AdventureWorks Enterprise Data Warehouse", file: "projects/adventureworks-edw.json", skills: ["SQL", "ETL / ELT", "Data Warehousing", "Dimensional Modeling", "SQL Server", "T-SQL"] },
       { type: "Project", name: "E-Commerce Data Engineering Platform", file: "projects/ecommerce-data-engineering-platform.json", skills: ["MySQL", "Docker"] },
-      { type: "Experience", name: "Universidad Tecnológica del Perú", file: "experience.json", skills: ["Python"] },
+      { type: "Experience", name: "Universidad Tecnológica del Perú", file: "experience.ipynb", skills: ["Python"] },
       { type: "Credentials", name: "Professional Certifications", file: "certifications.sql", skills: ["SQL", "ETL / ELT", "Data Warehousing", "SQL Server", "T-SQL", "Apache Airflow"] }
     ]
   };
@@ -250,9 +316,9 @@ export async function loadPortfolioFiles() {
       content: JSON.stringify(aboutModel, null, 2),
       preview: aboutModel
     },
-    "experience.json": {
-      type: "json",
-      content: JSON.stringify(experienceModel, null, 2),
+    "experience.ipynb": {
+      type: "notebook",
+      content: JSON.stringify(formatExperienceNotebook(experienceModel), null, 2),
       preview: experienceModel
     },
     "projects/overview.json": {
