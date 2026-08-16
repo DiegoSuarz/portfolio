@@ -77,7 +77,7 @@ Explorer items and open tabs derive decorative icons from each virtual file exte
 
 Scrollable interface surfaces share a thin dark scrollbar treatment so tabs, Explorer, editor and terminal remain visually consistent across supported browsers.
 
-The Explorer button in the Activity Bar toggles the panel at every viewport size. At mobile widths, the Explorer is hidden by default and becomes an overlay instead of reducing the editor width. Opening a file closes the mobile overlay, while Escape closes it and returns focus to its trigger. A closed Explorer is removed from keyboard navigation so it cannot trap focus outside the visible interface.
+The Activity Bar switches one shared sidebar among Explorer, Search and Source Control. Explorer navigates virtual files; Search performs in-memory, case-insensitive matching against already-loaded file names and contents; Source Control presents reviewed milestone and release links without claiming live Git status. At mobile widths, the sidebar is hidden by default and becomes an overlay instead of reducing the editor width. Opening a file closes the mobile overlay, while Escape closes it and returns focus to the active view trigger. A closed sidebar is removed from keyboard navigation so it cannot trap focus outside the visible interface.
 
 Markdown content wraps within the editor viewport for case-study readability. Code-like JSON content retains horizontal scrolling, and decorative cursor animation respects the user's reduced-motion preference.
 
@@ -178,9 +178,11 @@ New directories and modules should continue to be introduced only when they have
 
 ### app.js
 
-Application entry point. Initializes the interface, coordinates application state, and manages Explorer, Editor and Tabs interactions.
+Application entry point. Initializes the interface, coordinates application state, and manages Activity Bar, sidebar, Editor and Tabs interactions.
 
 The Explorer derives its hierarchy from slash-delimited virtual file paths. Folders are presentation state rather than content domains: they can be expanded or collapsed, while leaf nodes retain the complete virtual path used to open a file.
+
+Search results are created through text-safe DOM APIs from content already held in memory and open only known virtual paths. Source Control content is an explicit portfolio-progress summary with fixed HTTPS repository destinations; it never invokes Git commands or infers unpublished repository state.
 
 ### about-viewer.js
 

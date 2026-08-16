@@ -1,7 +1,7 @@
 import { loadPortfolioFiles } from "./content-loader.js?v=21";
 import { createCommandDispatcher } from "./commands.js?v=4";
 import { createTerminal } from "./terminal.js?v=3";
-import { createMenuBar } from "./menu-bar.js?v=2";
+import { createMenuBar } from "./menu-bar.js?v=3";
 import { createPanelTabs } from "./panel-tabs.js";
 import { createLayoutResizers } from "./layout-resizer.js";
 import { createCommandPalette } from "./command-palette.js?v=2";
@@ -33,6 +33,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   let files = {};
   let activeFile = null;
   let desktopExplorerOpen = true;
+  let activeSidebarView = "explorer";
   let jsonViewMode = "preview";
   let jsonWrap = true;
   let jsonMinimap = true;
@@ -49,6 +50,9 @@ document.addEventListener("DOMContentLoaded", async () => {
   const editor = document.getElementById("editor");
   const explorer = document.getElementById("portfolio-explorer");
   const explorerToggle = document.getElementById("explorer-toggle");
+  const searchToggle = document.getElementById("search-toggle");
+  const sourceControlToggle = document.getElementById("source-control-toggle");
+  const searchInput = document.getElementById("portfolio-search-input");
   const mobileViewport = window.matchMedia("(max-width: 600px)");
   const statusLeft = document.getElementById("status-position");
   const jsonToolbar = document.getElementById("json-toolbar");
@@ -183,6 +187,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     { label: "Files: Open Education", action: () => openFile(EDUCATION_FILE) },
     { label: "Files: Open Contact", action: () => openFile(CONTACT_FILE) },
     { label: "View: Toggle Explorer", action: toggleExplorer },
+    { label: "View: Search Portfolio Content", action: () => showSidebarView("search") },
+    { label: "View: Show Source Control", action: () => showSidebarView("source-control") },
     { label: "View: Toggle Terminal", action: toggleTerminal },
     { label: "Terminal: New Terminal", action: newTerminal },
     { label: "Terminal: Show Available Commands", action: showTerminalHelp },
@@ -245,7 +251,9 @@ document.addEventListener("DOMContentLoaded", async () => {
       focusEditor: () => editor.focus(),
       selectEditor: selectEditorContent,
       clearSelection: () => window.getSelection()?.removeAllRanges(),
-      toggleExplorer,
+      showExplorer: () => showSidebarView("explorer"),
+      showSearch: () => showSidebarView("search"),
+      showSourceControl: () => showSidebarView("source-control"),
       toggleTerminal,
       openCommandPalette: commandPalette.open,
       openExperience: () => openFile(EXPERIENCE_FILE),
@@ -264,9 +272,18 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   syncExplorerWithViewport();
   explorerToggle.addEventListener("click", toggleExplorer);
+  searchToggle.addEventListener("click", () => toggleSidebarView("search"));
+  sourceControlToggle.addEventListener("click", () => toggleSidebarView("source-control"));
+  searchInput.addEventListener("input", () => renderSearchResults(searchInput.value));
   document.getElementById("panel-close").addEventListener("click", hideTerminal);
   mobileViewport.addEventListener("change", syncExplorerWithViewport);
   document.addEventListener("keydown", event => {
+    if (event.ctrlKey && event.shiftKey && ["e", "f", "g"].includes(event.key.toLowerCase())) {
+      event.preventDefault();
+      const view = { e: "explorer", f: "search", g: "source-control" }[event.key.toLowerCase()];
+      toggleSidebarView(view);
+      return;
+    }
     if (event.key === "Escape" && mobileViewport.matches && explorer.classList.contains("is-open")) {
       closeMobileExplorer(true);
     }
@@ -290,14 +307,28 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   function toggleExplorer() {
+    toggleSidebarView("explorer");
+  }
+
+  function toggleSidebarView(view) {
+    const switchingView = activeSidebarView !== view;
+    activeSidebarView = view;
+    syncSidebarView();
+
+    if (switchingView) {
+      openSidebar();
+      focusActiveSidebarView();
+      return;
+    }
+
     if (mobileViewport.matches) {
       const shouldOpen = !explorer.classList.contains("is-open");
       explorer.classList.toggle("is-open", shouldOpen);
       explorer.inert = !shouldOpen;
-      explorerToggle.setAttribute("aria-expanded", String(shouldOpen));
+      syncActivityBar(shouldOpen);
 
       if (shouldOpen) {
-        explorer.querySelector("button")?.focus();
+        focusActiveSidebarView();
       }
 
       return;
@@ -306,17 +337,71 @@ document.addEventListener("DOMContentLoaded", async () => {
     desktopExplorerOpen = !desktopExplorerOpen;
     explorer.classList.toggle("is-collapsed", !desktopExplorerOpen);
     explorer.inert = !desktopExplorerOpen;
-    explorerToggle.setAttribute("aria-expanded", String(desktopExplorerOpen));
+    syncActivityBar(desktopExplorerOpen);
     document.getElementById("sidebar-resizer").hidden = !desktopExplorerOpen;
+  }
+
+  function showSidebarView(view) {
+    activeSidebarView = view;
+    syncSidebarView();
+    openSidebar();
+    focusActiveSidebarView();
+  }
+
+  function openSidebar() {
+    if (mobileViewport.matches) {
+      explorer.classList.add("is-open");
+      explorer.inert = false;
+      syncActivityBar(true);
+      return;
+    }
+
+    desktopExplorerOpen = true;
+    explorer.classList.remove("is-collapsed");
+    explorer.inert = false;
+    document.getElementById("sidebar-resizer").hidden = false;
+    syncActivityBar(true);
+  }
+
+  function syncSidebarView() {
+    const titles = { explorer: "EXPLORER", search: "SEARCH", "source-control": "SOURCE CONTROL" };
+    document.getElementById("sidebar-title").textContent = titles[activeSidebarView];
+    explorer.setAttribute("aria-label", `${titles[activeSidebarView]} sidebar`);
+    document.getElementById("explorer-view").hidden = activeSidebarView !== "explorer";
+    document.getElementById("search-view").hidden = activeSidebarView !== "search";
+    document.getElementById("source-control-view").hidden = activeSidebarView !== "source-control";
+    syncActivityBar(mobileViewport.matches ? explorer.classList.contains("is-open") : desktopExplorerOpen);
+  }
+
+  function syncActivityBar(sidebarOpen) {
+    const buttons = { explorer: explorerToggle, search: searchToggle, "source-control": sourceControlToggle };
+    Object.entries(buttons).forEach(([view, button]) => {
+      const active = view === activeSidebarView;
+      button.classList.toggle("active", active);
+      button.setAttribute("aria-expanded", String(active && sidebarOpen));
+    });
+  }
+
+  function focusActiveSidebarView() {
+    if (activeSidebarView === "search") {
+      searchInput.focus();
+      return;
+    }
+    if (activeSidebarView === "source-control") {
+      sourceControlToggle.focus();
+      return;
+    }
+    explorer.querySelector(".sidebar-view:not([hidden]) button, .sidebar-view:not([hidden]) a")?.focus();
   }
 
   function closeMobileExplorer(returnFocus = false) {
     explorer.classList.remove("is-open");
     explorer.inert = true;
-    explorerToggle.setAttribute("aria-expanded", "false");
+    syncActivityBar(false);
 
     if (returnFocus) {
-      explorerToggle.focus();
+      const buttons = { explorer: explorerToggle, search: searchToggle, "source-control": sourceControlToggle };
+      buttons[activeSidebarView].focus();
     }
   }
 
@@ -329,8 +414,63 @@ document.addEventListener("DOMContentLoaded", async () => {
     explorer.classList.remove("is-open");
     explorer.classList.toggle("is-collapsed", !desktopExplorerOpen);
     explorer.inert = !desktopExplorerOpen;
-    explorerToggle.setAttribute("aria-expanded", String(desktopExplorerOpen));
+    syncSidebarView();
     document.getElementById("sidebar-resizer").hidden = !desktopExplorerOpen;
+  }
+
+  function renderSearchResults(rawQuery) {
+    const results = document.getElementById("search-results");
+    const summary = document.getElementById("search-summary");
+    const query = rawQuery.trim().toLowerCase();
+    results.replaceChildren();
+
+    if (query.length < 2) {
+      summary.textContent = "Search skills, projects, experience and credentials.";
+      return;
+    }
+
+    const matches = Object.entries(files).map(([path, file]) => {
+      const searchable = `${path}\n${file.content ?? ""}`;
+      const lower = searchable.toLowerCase();
+      let count = 0;
+      let cursor = 0;
+      while ((cursor = lower.indexOf(query, cursor)) !== -1) {
+        count += 1;
+        cursor += query.length;
+      }
+      if (!count) return null;
+      const first = lower.indexOf(query);
+      const start = Math.max(0, first - 38);
+      const snippet = searchable.slice(start, first + query.length + 58).replace(/\s+/g, " ").trim();
+      return { path, count, snippet };
+    }).filter(Boolean).sort((first, second) => second.count - first.count || first.path.localeCompare(second.path));
+
+    summary.textContent = matches.length === 1 ? "1 matching file" : `${matches.length} matching files`;
+    matches.forEach(match => {
+      const button = document.createElement("button");
+      button.className = "search-result";
+      button.type = "button";
+      const heading = document.createElement("span");
+      heading.className = "search-result-heading";
+      const fileName = document.createElement("strong");
+      fileName.textContent = match.path;
+      const count = document.createElement("span");
+      count.textContent = String(match.count);
+      const snippet = document.createElement("span");
+      snippet.className = "search-result-snippet";
+      snippet.textContent = match.snippet;
+      heading.append(fileName, count);
+      button.append(heading, snippet);
+      button.addEventListener("click", () => openFile(match.path));
+      results.appendChild(button);
+    });
+
+    if (!matches.length) {
+      const empty = document.createElement("p");
+      empty.className = "search-empty";
+      empty.textContent = `No portfolio content matches “${rawQuery.trim()}”.`;
+      results.appendChild(empty);
+    }
   }
 
   function getFileType(path) {

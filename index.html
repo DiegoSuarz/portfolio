@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Diego | VS Code Portfolio</title>
-  <link rel="stylesheet" href="src/css/style.css?v=13">
+  <link rel="stylesheet" href="src/css/style.css?v=14">
 </head>
 <body>
 
@@ -24,18 +24,51 @@
     <button class="activity active" id="explorer-toggle" type="button" aria-label="Toggle Portfolio Explorer" aria-controls="portfolio-explorer" aria-expanded="true" data-tooltip="Explorer (Ctrl+Shift+E)">
       <span class="activity-icon activity-icon--files" aria-hidden="true"></span>
     </button>
-    <div class="activity" aria-hidden="true" data-tooltip="Search">
+    <button class="activity" id="search-toggle" type="button" aria-label="Search portfolio content" aria-controls="portfolio-explorer" aria-expanded="false" data-tooltip="Search (Ctrl+Shift+F)">
       <span class="activity-icon activity-icon--search"></span>
-    </div>
-    <div class="activity" aria-hidden="true" data-tooltip="Source Control">
+    </button>
+    <button class="activity" id="source-control-toggle" type="button" aria-label="Show portfolio source control" aria-controls="portfolio-explorer" aria-expanded="false" data-tooltip="Source Control (Ctrl+Shift+G)">
       <span class="activity-icon activity-icon--source"></span>
-    </div>
+    </button>
   </nav>
 
   <!-- Sidebar -->
   <aside class="sidebar" id="portfolio-explorer" aria-label="Portfolio Explorer">
-    <div class="sidebar-title">EXPLORER</div>
-    <ul id="file-tree" aria-label="Portfolio files"></ul>
+    <div class="sidebar-title" id="sidebar-title">EXPLORER</div>
+    <section class="sidebar-view" id="explorer-view" aria-label="Portfolio files">
+      <ul id="file-tree" aria-label="Portfolio files"></ul>
+    </section>
+    <section class="sidebar-view search-view" id="search-view" aria-label="Search portfolio content" hidden>
+      <label class="sr-only" for="portfolio-search-input">Search portfolio content</label>
+      <input class="sidebar-search-input" id="portfolio-search-input" type="search" autocomplete="off" spellcheck="false" placeholder="Search portfolio">
+      <p class="sidebar-search-help" id="search-summary">Search skills, projects, experience and credentials.</p>
+      <div class="sidebar-search-results" id="search-results" aria-live="polite"></div>
+    </section>
+    <section class="sidebar-view source-control-view" id="source-control-view" aria-label="Portfolio source control" hidden>
+      <div class="source-section">
+        <p class="source-label">BRANCH</p>
+        <p class="source-branch"><span aria-hidden="true">⑂</span> feature/recruiter-visual-experience</p>
+      </div>
+      <div class="source-section">
+        <p class="source-label">PORTFOLIO EVOLUTION</p>
+        <ol class="source-milestones">
+          <li><span aria-hidden="true">✓</span><span><strong>M1</strong> Foundations</span></li>
+          <li><span aria-hidden="true">✓</span><span><strong>M2</strong> Professional Content</span></li>
+          <li><span aria-hidden="true">✓</span><span><strong>M3</strong> Project Showcase</span></li>
+          <li><span aria-hidden="true">✓</span><span><strong>M4</strong> Interactive Terminal</span></li>
+          <li><span aria-hidden="true">✓</span><span><strong>M5</strong> Recruiter Visual Experience</span></li>
+        </ol>
+      </div>
+      <div class="source-section source-release">
+        <p class="source-label">LATEST PUBLISHED RELEASE</p>
+        <p><strong>v0.3.0</strong><span>Project Showcase</span></p>
+      </div>
+      <div class="source-actions">
+        <a href="https://github.com/DiegoSuarz/portfolio" target="_blank" rel="noopener noreferrer">Open Repository</a>
+        <a href="https://github.com/DiegoSuarz/portfolio/releases" target="_blank" rel="noopener noreferrer">View Releases</a>
+      </div>
+      <p class="source-note">This view summarizes published repository history; it does not simulate uncommitted changes.</p>
+    </section>
   </aside>
 
   <div class="resize-handle resize-handle--sidebar" id="sidebar-resizer" role="separator" aria-label="Resize Explorer" aria-orientation="vertical" aria-valuemin="180" aria-valuemax="420" aria-valuenow="240" tabindex="0"></div>
@@ -186,6 +219,6 @@
   <div class="status-group status-group--right"><span>UTF-8</span><span>LF</span><span>{ }</span><span id="lang">Plain Text</span><span aria-label="Notifications">◯</span></div>
 </footer>
 
-<script type="module" src="src/js/app.js?v=40"></script>
+<script type="module" src="src/js/app.js?v=41"></script>
 </body>
 </html>
