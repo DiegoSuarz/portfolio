@@ -1,5 +1,7 @@
 export function createAboutViewer({ editor, actions }) {
   function show(model) {
+    const buildAreas = model.profile.buildAreas ?? [];
+    const coreStack = model.profile.coreStack ?? [];
     editor.replaceChildren();
     editor.classList.add("about-preview");
 
@@ -8,7 +10,7 @@ export function createAboutViewer({ editor, actions }) {
     const name = element("h1", "about-name", model.profile.name);
     const role = element("p", "about-role", model.profile.headline);
     const location = element("p", "about-location", `⌖ ${model.profile.location}`);
-    const tagline = element("p", "about-tagline", model.profile.tagline);
+    const tagline = element("p", "about-tagline", model.profile.tagline ?? model.profile.headline);
     const summary = element("p", "about-summary", model.profile.summary);
     const actionsBar = element("div", "about-actions");
 
@@ -22,7 +24,7 @@ export function createAboutViewer({ editor, actions }) {
 
     const buildSection = section("What I Build", "Professional focus supported by current projects and continued technical development.");
     const buildGrid = element("div", "about-build-grid");
-    model.profile.buildAreas.forEach((area, index) => {
+    buildAreas.forEach((area, index) => {
       const card = element("article", "about-build-card");
       card.append(
         element("span", "about-card-index", String(index + 1).padStart(2, "0")),
@@ -35,7 +37,7 @@ export function createAboutViewer({ editor, actions }) {
 
     const stackSection = section("Core Stack", "A concise view of the tools most relevant to my target Data Engineering role.");
     const stack = element("div", "about-stack");
-    model.profile.coreStack.forEach(item => stack.appendChild(element("span", "about-stack-item", item)));
+    coreStack.forEach(item => stack.appendChild(element("span", "about-stack-item", item)));
     stackSection.appendChild(stack);
 
     const evidenceSection = section("Featured Evidence", "Explore the work and learning records behind this profile.");

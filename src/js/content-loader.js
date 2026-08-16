@@ -8,8 +8,10 @@ const CONTENT_PATHS = {
   cv: "data/cv.json"
 };
 
+const CONTENT_VERSION = "m5-about-preview-2";
+
 async function fetchJson(path) {
-  const response = await fetch(path);
+  const response = await fetch(`${path}?v=${CONTENT_VERSION}`, { cache: "no-store" });
 
   if (!response.ok) {
     throw new Error(`Unable to load ${path} (${response.status})`);
@@ -30,23 +32,27 @@ function formatDate(value) {
 }
 
 function formatProfile(profile) {
+  const buildAreas = profile.buildAreas ?? [];
+  const coreStack = profile.coreStack ?? [];
+  const focusAreas = profile.focusAreas ?? [];
+
   return [
     `# ${profile.name}`,
     "",
     profile.headline,
     profile.location,
-    profile.tagline,
+    profile.tagline ?? "",
     "",
     profile.summary,
     "",
     "## What I Build",
-    ...profile.buildAreas.map(area => `- ${area.title}: ${area.description}`),
+    ...buildAreas.map(area => `- ${area.title}: ${area.description}`),
     "",
     "## Core Stack",
-    profile.coreStack.join(" · "),
+    coreStack.join(" · "),
     "",
     "## Focus Areas",
-    ...profile.focusAreas.map(area => `- ${area}`)
+    ...focusAreas.map(area => `- ${area}`)
   ].join("\n");
 }
 

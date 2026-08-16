@@ -1,4 +1,4 @@
-import { loadPortfolioFiles } from "./content-loader.js?v=2";
+import { loadPortfolioFiles } from "./content-loader.js?v=3";
 import { createCommandDispatcher } from "./commands.js";
 import { createTerminal } from "./terminal.js?v=3";
 import { createMenuBar } from "./menu-bar.js?v=2";
@@ -6,7 +6,7 @@ import { createPanelTabs } from "./panel-tabs.js";
 import { createLayoutResizers } from "./layout-resizer.js";
 import { createCommandPalette } from "./command-palette.js";
 import { createJsonViewer } from "./json-viewer.js";
-import { createAboutViewer } from "./about-viewer.js?v=2";
+import { createAboutViewer } from "./about-viewer.js?v=3";
 
 document.addEventListener("DOMContentLoaded", async () => {
   let files = {};
