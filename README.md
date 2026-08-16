@@ -134,6 +134,8 @@ open <path>          Open a virtual file
 projects             Open the project showcase
 contact              Open professional contact details
 cv                   Download the public CV
+about.json           Open a virtual file directly by name
+projects/overview.json  Open a virtual file directly by path
 clear                Clear terminal output
 ```
 

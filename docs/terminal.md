@@ -13,11 +13,14 @@ Unknown commands return a concise error followed by a suggestion to run `help`.
 ## 3. Command Grammar
 
 ```text
-command := name [argument]
+command := name [argument] | file
 name    := help | ls | open | projects | contact | cv | clear
+file    := virtual-path | unique-file-name
 ```
 
 Command names are case-insensitive. Leading and trailing whitespace is ignored, and repeated internal whitespace is treated as a single separator.
+
+An existing virtual file may also be entered directly without the `open` command. Full paths such as `projects/adventureworks-edw.json` always resolve directly; a filename such as `adventureworks-edw.json` resolves when it is unique within the virtual workspace.
 
 ## 4. Commands
 
@@ -32,6 +35,10 @@ Lists the virtual files at the root or inside a virtual directory such as `proje
 ### `open <path>`
 
 Opens an existing virtual file through the same application function used by the Explorer. A missing path or unknown file returns usage guidance without changing the active file.
+
+### `<file>`
+
+Entering a virtual path or unique filename directly opens that item through the same navigation flow. Examples include `about.json`, `contact.json`, `cv.docx` and `projects/adventureworks-edw.json`. Direct matching is case-insensitive and does not execute arbitrary input.
 
 ### `projects`
 
