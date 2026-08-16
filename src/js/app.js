@@ -1,5 +1,5 @@
-import { loadPortfolioFiles } from "./content-loader.js?v=17";
-import { createCommandDispatcher } from "./commands.js?v=3";
+import { loadPortfolioFiles } from "./content-loader.js?v=18";
+import { createCommandDispatcher } from "./commands.js?v=4";
 import { createTerminal } from "./terminal.js?v=3";
 import { createMenuBar } from "./menu-bar.js?v=2";
 import { createPanelTabs } from "./panel-tabs.js";
@@ -25,7 +25,7 @@ const CASE_STUDY_FILES = new Set([ADVENTUREWORKS_FILE, ECOMMERCE_FILE]);
 const SKILLS_FILE = "skills.py";
 const EDUCATION_FILE = "education.json";
 const CERTIFICATIONS_FILE = "certifications.sql";
-const CONTACT_FILE = "contact.json";
+const CONTACT_FILE = "contact.sh";
 const README_FILE = "README.md";
 
 document.addEventListener("DOMContentLoaded", async () => {
@@ -64,7 +64,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   const educationCodeOptions = document.getElementById("education-code-options");
   const certificationsToolbar = document.getElementById("certifications-toolbar");
   const contactToolbar = document.getElementById("contact-toolbar");
-  const contactCodeOptions = document.getElementById("contact-code-options");
   const readmeToolbar = document.getElementById("readme-toolbar");
   const jsonViewer = createJsonViewer({
     editor,
@@ -226,12 +225,12 @@ document.addEventListener("DOMContentLoaded", async () => {
   readmeToolbar.querySelectorAll("[data-readme-view]").forEach(button => {
     button.addEventListener("click", () => setReadmeView(button.dataset.readmeView));
   });
-  [document.getElementById("json-wrap-toggle"), document.getElementById("about-wrap-toggle"), document.getElementById("experience-wrap-toggle"), document.getElementById("projects-wrap-toggle"), document.getElementById("case-study-wrap-toggle"), document.getElementById("education-wrap-toggle"), document.getElementById("contact-wrap-toggle")].forEach(button => button.addEventListener("click", () => {
+  [document.getElementById("json-wrap-toggle"), document.getElementById("about-wrap-toggle"), document.getElementById("experience-wrap-toggle"), document.getElementById("projects-wrap-toggle"), document.getElementById("case-study-wrap-toggle"), document.getElementById("education-wrap-toggle")].forEach(button => button.addEventListener("click", () => {
     jsonWrap = !jsonWrap;
     syncStructuredPreferences();
     jsonViewer.setWrap(jsonWrap);
   }));
-  [document.getElementById("json-minimap-toggle"), document.getElementById("about-minimap-toggle"), document.getElementById("experience-minimap-toggle"), document.getElementById("projects-minimap-toggle"), document.getElementById("case-study-minimap-toggle"), document.getElementById("education-minimap-toggle"), document.getElementById("contact-minimap-toggle")].forEach(button => button.addEventListener("click", () => {
+  [document.getElementById("json-minimap-toggle"), document.getElementById("about-minimap-toggle"), document.getElementById("experience-minimap-toggle"), document.getElementById("projects-minimap-toggle"), document.getElementById("case-study-minimap-toggle"), document.getElementById("education-minimap-toggle")].forEach(button => button.addEventListener("click", () => {
     jsonMinimap = !jsonMinimap;
     syncStructuredPreferences();
     jsonViewer.setMinimap(jsonMinimap, activeStructuredMode());
@@ -336,7 +335,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   function getFileType(path) {
     const extension = path.split(".").pop()?.toLowerCase();
-    const types = { md: "markdown", json: "json", py: "python", ipynb: "notebook", sql: "sql", txt: "text", docx: "word" };
+    const types = { md: "markdown", json: "json", py: "python", ipynb: "notebook", sql: "sql", sh: "shell", txt: "text", docx: "word" };
     return types[extension] ?? "file";
   }
 
@@ -544,8 +543,12 @@ document.addEventListener("DOMContentLoaded", async () => {
     } else if (name === CONTACT_FILE) {
       contactViewMode = file.preview ? "preview" : "code";
       syncContactToolbar();
-      if (file.preview) contactViewer.show(file.preview);
-      else jsonViewer.show(file.content, "code");
+      if (file.preview) {
+        document.getElementById("lines").hidden = true;
+        contactViewer.show(file.preview);
+      } else {
+        editor.innerHTML = highlight(file.content, "shell");
+      }
     } else if (name === README_FILE) {
       readmeViewMode = file.defaultView ?? "code";
       syncReadmeToolbar();
@@ -561,6 +564,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     editor.classList.toggle("is-markdown", file.type === "markdown");
     editor.classList.toggle("is-python", file.type === "python");
     editor.classList.toggle("is-sql", file.type === "sql");
+    editor.classList.toggle("is-shell", file.type === "shell");
     document.getElementById("lang").textContent = file.type;
 
     if (file.type !== "json") renderLines(file.content);
@@ -788,14 +792,18 @@ document.addEventListener("DOMContentLoaded", async () => {
     syncContactToolbar();
     editor.className = "code";
     editor.replaceChildren();
-    document.getElementById("lines").hidden = true;
     if (mode === "preview") {
+      document.getElementById("lines").hidden = true;
       document.getElementById("json-minimap").hidden = true;
       contactViewer.show(files[activeFile].preview);
     } else {
-      jsonViewer.show(files[activeFile].content, "code");
+      editor.classList.add("is-shell");
+      document.getElementById("lines").hidden = false;
+      document.getElementById("json-minimap").hidden = true;
+      editor.innerHTML = highlight(files[activeFile].content, "shell");
+      renderLines(files[activeFile].content);
     }
-    document.getElementById("lang").textContent = "json";
+    document.getElementById("lang").textContent = "shell";
     updateBreadcrumbs(activeFile);
   }
 
@@ -805,8 +813,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       button.classList.toggle("active", active);
       button.setAttribute("aria-pressed", String(active));
     });
-    contactCodeOptions.hidden = contactViewMode !== "code";
-    syncStructuredPreferences();
   }
 
   function setReadmeView(mode) {
@@ -842,16 +848,15 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (activeFile === PROJECTS_OVERVIEW_FILE) return projectsViewMode;
     if (CASE_STUDY_FILES.has(activeFile)) return caseStudyViewMode;
     if (activeFile === EDUCATION_FILE) return educationViewMode;
-    if (activeFile === CONTACT_FILE) return contactViewMode;
     return jsonViewMode;
   }
 
   function syncStructuredPreferences() {
-    [document.getElementById("json-wrap-toggle"), document.getElementById("about-wrap-toggle"), document.getElementById("experience-wrap-toggle"), document.getElementById("projects-wrap-toggle"), document.getElementById("case-study-wrap-toggle"), document.getElementById("education-wrap-toggle"), document.getElementById("contact-wrap-toggle")].forEach(button => {
+    [document.getElementById("json-wrap-toggle"), document.getElementById("about-wrap-toggle"), document.getElementById("experience-wrap-toggle"), document.getElementById("projects-wrap-toggle"), document.getElementById("case-study-wrap-toggle"), document.getElementById("education-wrap-toggle")].forEach(button => {
       button.classList.toggle("active", jsonWrap);
       button.setAttribute("aria-pressed", String(jsonWrap));
     });
-    [document.getElementById("json-minimap-toggle"), document.getElementById("about-minimap-toggle"), document.getElementById("experience-minimap-toggle"), document.getElementById("projects-minimap-toggle"), document.getElementById("case-study-minimap-toggle"), document.getElementById("education-minimap-toggle"), document.getElementById("contact-minimap-toggle")].forEach(button => {
+    [document.getElementById("json-minimap-toggle"), document.getElementById("about-minimap-toggle"), document.getElementById("experience-minimap-toggle"), document.getElementById("projects-minimap-toggle"), document.getElementById("case-study-minimap-toggle"), document.getElementById("education-minimap-toggle")].forEach(button => {
       button.classList.toggle("active", jsonMinimap);
       button.setAttribute("aria-pressed", String(jsonMinimap));
     });
@@ -1084,6 +1089,29 @@ document.addEventListener("DOMContentLoaded", async () => {
           .replace(/\b(\d+)\b/g, '<span class="sql-number">$1</span>');
         strings.forEach((value, index) => {
           safeLine = safeLine.replaceAll(String.fromCharCode(0xe000 + index), `<span class="sql-string">${value}</span>`);
+        });
+        return safeLine;
+      }).join("\n");
+    }
+
+    if (type === "shell") {
+      return content.split("\n").map(line => {
+        if (line.trimStart().startsWith("#")) {
+          return `<span class="shell-comment">${escapeHtml(line)}</span>`;
+        }
+
+        const strings = [];
+        let safeLine = line.replace(/"(?:\\.|[^"\\])*"|'[^']*'/g, value => {
+          strings.push(escapeHtml(value));
+          return String.fromCharCode(0xe000 + strings.length - 1);
+        });
+        safeLine = escapeHtml(safeLine)
+          .replace(/\b(set|case|in|esac|if|then|else|fi|for|do|done)\b/g, '<span class="shell-keyword">$1</span>')
+          .replace(/\b(printf)\b/g, '<span class="shell-command">$1</span>')
+          .replace(/^([A-Z][A-Z0-9_]*)(=)/, '<span class="shell-variable">$1</span>$2')
+          .replace(/(\$\{?[A-Za-z0-9_:-]+\}?)/g, '<span class="shell-variable">$1</span>');
+        strings.forEach((value, index) => {
+          safeLine = safeLine.replaceAll(String.fromCharCode(0xe000 + index), `<span class="shell-string">${value}</span>`);
         });
         return safeLine;
       }).join("\n");

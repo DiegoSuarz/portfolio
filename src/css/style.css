@@ -1128,6 +1128,24 @@ body {
 .sql-number { color: #b5cea8; }
 .sql-comment { color: #6a9955; }
 
+.file-icon[data-file-type="shell"]::before {
+  content: ">_";
+  color: #89d185;
+  font-family: Consolas, monospace;
+  font-size: 9px;
+  font-weight: 700;
+}
+
+.code.is-shell {
+  white-space: pre;
+}
+
+.shell-keyword { color: #c586c0; }
+.shell-command { color: #dcdcaa; }
+.shell-string { color: #ce9178; }
+.shell-variable { color: #9cdcfe; }
+.shell-comment { color: #6a9955; }
+
 .file-icon[data-file-type="text"] {
   width: 13px;
   height: 12px;
@@ -1383,7 +1401,7 @@ body {
   .about-toolbar, .experience-toolbar, .projects-toolbar, .case-study-toolbar, .skills-toolbar, .education-toolbar, .certifications-toolbar, .contact-toolbar, .readme-toolbar { padding-inline: 5px; }
   .json-view-options { gap: 1px; }
   .json-tool { padding-inline: 6px; font-size: 11px; }
-  #json-minimap-toggle, #about-minimap-toggle, #experience-minimap-toggle, #projects-minimap-toggle, #case-study-minimap-toggle, #education-minimap-toggle, #contact-minimap-toggle { display: none; }
+  #json-minimap-toggle, #about-minimap-toggle, #experience-minimap-toggle, #projects-minimap-toggle, #case-study-minimap-toggle, #education-minimap-toggle { display: none; }
   .json-minimap { display: none; }
   .json-line { padding-right: 8px; padding-left: calc(43px + var(--json-depth) * 14px); }
   .json-fold { left: calc(30px + var(--json-depth) * 14px); }

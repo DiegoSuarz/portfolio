@@ -38,7 +38,7 @@ Opens an existing virtual file through the same application function used by the
 
 ### `<file>`
 
-Entering a virtual path or unique filename directly opens that item through the same navigation flow. Examples include `about.json`, `contact.json`, `cv.docx` and `projects/adventureworks-edw.json`. Direct matching is case-insensitive and does not execute arbitrary input.
+Entering a virtual path or unique filename directly opens that item through the same navigation flow. Examples include `about.json`, `contact.sh`, `cv.docx` and `projects/adventureworks-edw.json`. Direct matching is case-insensitive and does not execute arbitrary input.
 
 ### `projects`
 
@@ -46,7 +46,7 @@ Opens `projects/overview.json` as a discoverable shortcut.
 
 ### `contact`
 
-Opens `contact.json` as a discoverable shortcut.
+Opens `contact.sh` as a discoverable shortcut.
 
 ### `cv`
 

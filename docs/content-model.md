@@ -53,7 +53,7 @@ The profile model stores identity and professional positioning information that 
 
 The profile model is also the single source of truth for public contact information. Contact views should reuse `email` and `links` instead of copying those values into a separate content file. Phone numbers and other personal details should not be published unless they are deliberately added to this contract.
 
-The virtual `contact.json` file contains a deliberately restricted Profile projection (`name`, `headline`, `location`, `email` and professional `links`) plus the public CV metadata. Preview and Code consume this identical structured model. It must not introduce availability claims, telephone numbers or private contact details that are absent from the source models.
+The virtual `contact.sh` file contains a deliberately restricted Profile projection (`name`, `headline`, `location`, `email` and professional `links`) plus the public CV metadata. Preview consumes this model directly, while Code derives Bash variables and symbolic functions for displaying contact information and exposing the existing email, professional-profile and CV destinations. The script is not executed. It must not introduce availability claims, telephone numbers or private contact details that are absent from the source models.
 
 ## 4. Skills Model
 

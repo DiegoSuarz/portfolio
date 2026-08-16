@@ -166,6 +166,47 @@ function formatExperienceNotebook(model) {
   };
 }
 
+function shellString(value) {
+  return `"${String(value)
+    .replaceAll("\\", "\\\\")
+    .replaceAll('"', '\\"')
+    .replaceAll("$", "\\$")
+    .replaceAll("`", "\\`")}"`;
+}
+
+function formatContactShell(model) {
+  return [
+    "#!/usr/bin/env bash",
+    "set -euo pipefail",
+    "",
+    `NAME=${shellString(model.profile.name)}`,
+    `HEADLINE=${shellString(model.profile.headline)}`,
+    `LOCATION=${shellString(model.profile.location)}`,
+    `EMAIL=${shellString(model.profile.email)}`,
+    `GITHUB_URL=${shellString(model.profile.links.github)}`,
+    `LINKEDIN_URL=${shellString(model.profile.links.linkedin)}`,
+    `CV_PATH=${shellString(model.cv.downloadPath)}`,
+    "",
+    "show_contact() {",
+    "  printf '%s\\n' \"$NAME\" \"$HEADLINE\" \"$LOCATION\" \"$EMAIL\"",
+    "}",
+    "",
+    "open_email() { printf 'mailto:%s\\n' \"$EMAIL\"; }",
+    "open_github() { printf '%s\\n' \"$GITHUB_URL\"; }",
+    "open_linkedin() { printf '%s\\n' \"$LINKEDIN_URL\"; }",
+    "download_cv() { printf '%s\\n' \"$CV_PATH\"; }",
+    "",
+    "case \"${1:-show}\" in",
+    "  show) show_contact ;;",
+    "  email) open_email ;;",
+    "  github) open_github ;;",
+    "  linkedin) open_linkedin ;;",
+    "  cv) download_cv ;;",
+    "  *) printf 'Usage: %s {show|email|github|linkedin|cv}\\n' \"$0\" ;;",
+    "esac"
+  ].join("\n");
+}
+
 async function fetchJson(path) {
   const response = await fetch(`${path}?v=${CONTENT_VERSION}`, { cache: "no-store" });
 
@@ -254,7 +295,7 @@ function formatRepositoryReadme(content) {
     "```text",
     "projects/overview.json",
     "skills.py",
-    "contact.json",
+    "contact.sh",
     "```",
     "",
     `Repositorio mantenido por [DiegoSuarz](${content.profile.links.github}).`
@@ -358,9 +399,9 @@ export async function loadPortfolioFiles() {
       content: formatCertificationsSql(content.certifications),
       preview: content.certifications
     },
-    "contact.json": {
-      type: "json",
-      content: JSON.stringify(contactModel, null, 2),
+    "contact.sh": {
+      type: "shell",
+      content: formatContactShell(contactModel),
       preview: contactModel
     },
     "cv.docx": {

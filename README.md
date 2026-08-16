@@ -219,7 +219,7 @@ Formal education is exposed as `education.json` with a recruiter-oriented timeli
 
 Certifications use an explicit relevance priority from `data/certifications.json`. The virtual `certifications.sql` file keeps Preview as the default, leading with the three credentials most directly aligned to Data Engineering before complementary architecture and distributed-processing breadth. Code derives normalized `CREATE TABLE` and `INSERT INTO` statements from that same collection. The SQL is a presentation artifact and is not executed by the portfolio.
 
-`contact.json` opens with a recruiter-oriented Preview that provides direct email, GitHub, LinkedIn and CV actions using the Profile and CV source models. Code exposes the same restricted public-contact model with structured folding, breadcrumbs and minimap behavior, while the preview explicitly limits itself to intentionally public professional information.
+The virtual `contact.sh` file opens with a recruiter-oriented Preview that provides direct email, GitHub, LinkedIn and CV actions using the Profile and CV source models. Code derives a readable Bash script with public variables and symbolic contact functions from the same restricted model. The script is not executed, and the preview explicitly limits itself to intentionally public professional information.
 
 The downloadable Spanish CV is synchronized with the portfolio's curated profile, reverse-chronological experience, current project scope, prioritized skills, formal education and five verified credentials. Its ATS-friendly structure avoids layout tables, exposes clickable professional links and omits unprioritized technologies and exam-preparation courses.
 
