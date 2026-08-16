@@ -92,7 +92,9 @@ Skills should be concise, factual, and verifiable. Closely related tools may be 
 
 Self-assessed proficiency levels are intentionally excluded. A skill should be added only when it is supported by experience, an active project, or another portfolio artifact; brief exposure alone is not enough.
 
-The virtual `skills.json` file enriches this source model with a derived `evidence` collection. Each entry contains a source `type`, display `name`, virtual `file` and the subset of `skills` supported by that artifact. Evidence mappings are assembled by the content layer from existing portfolio projects, experience and credentials; they do not introduce proficiency scores or new technical claims into `data/skills.json`.
+The virtual `skills.py` file enriches this source model with a derived `evidence` collection. Each entry contains a source `type`, display `name`, virtual `file` and the subset of `skills` supported by that artifact. Evidence mappings are assembled by the content layer from existing portfolio projects, experience and credentials; they do not introduce proficiency scores or new technical claims into `data/skills.json`.
+
+Preview remains the default recruiter-facing representation. Code derives Python dictionaries, typed evidence objects and a `render_skill_groups` call from the same model. The displayed `portfolio_ui` and `portfolio_evidence` imports are intentionally symbolic and are not executable application dependencies or separate sources of professional data.
 
 ## 5. Experience Model
 

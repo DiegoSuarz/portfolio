@@ -211,9 +211,9 @@ The flagship AdventureWorks case study is exposed as `projects/adventureworks-ed
 
 The E-Commerce case study follows the same contract through `projects/ecommerce-data-engineering-platform.json`. Its preview focuses on the implemented MySQL operational source, reproducible Docker environment, repeatable initialization and documented sample data. Future pipeline, warehouse, orchestration, analytics and processing modules remain explicitly labeled as planned evolution.
 
-JSON portfolio files open by default in a responsive `Preview` that presents the factual data as readable cards and tags, including `skills.json`. The technical `Code` view remains available with type-aware syntax colors, indentation guides, foldable objects and arrays, structural breadcrumbs, word wrapping and a minimap.
+Structured JSON portfolio files open by default in a responsive `Preview` that presents factual data as readable cards and tags. Their technical `Code` views remain available with type-aware syntax colors, folding, structural breadcrumbs, word wrapping and a minimap.
 
-The Skills preview prioritizes core Data Engineering capabilities before platforms and supporting tools, excludes subjective proficiency percentages, and links skill groups to existing project, experience and credential evidence. Its Code view exposes the same curated categories and evidence mapping.
+The virtual `skills.py` file keeps the Skills preview as its default view. It prioritizes core Data Engineering capabilities before platforms and supporting tools, excludes subjective proficiency percentages, and links skill groups to existing project, experience and credential evidence. Its Code view expresses that same model as readable Python dictionaries, evidence objects and a symbolic render call. The displayed imports describe the portfolio presentation concept; they are not runtime dependencies.
 
 Formal education is exposed as `education.json` with a recruiter-oriented timeline, explicit completion status and dates derived from the structured source model. The preview deliberately keeps the university degree separate from certifications and project evidence, while Code exposes the same education object.
 

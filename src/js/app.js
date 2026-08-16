@@ -1,4 +1,4 @@
-import { loadPortfolioFiles } from "./content-loader.js?v=14";
+import { loadPortfolioFiles } from "./content-loader.js?v=15";
 import { createCommandDispatcher } from "./commands.js?v=3";
 import { createTerminal } from "./terminal.js?v=3";
 import { createMenuBar } from "./menu-bar.js?v=2";
@@ -22,7 +22,7 @@ const PROJECTS_OVERVIEW_FILE = "projects/overview.json";
 const ADVENTUREWORKS_FILE = "projects/adventureworks-edw.json";
 const ECOMMERCE_FILE = "projects/ecommerce-data-engineering-platform.json";
 const CASE_STUDY_FILES = new Set([ADVENTUREWORKS_FILE, ECOMMERCE_FILE]);
-const SKILLS_FILE = "skills.json";
+const SKILLS_FILE = "skills.py";
 const EDUCATION_FILE = "education.json";
 const CERTIFICATIONS_FILE = "certifications.json";
 const CONTACT_FILE = "contact.json";
@@ -60,7 +60,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   const caseStudyToolbar = document.getElementById("case-study-toolbar");
   const caseStudyCodeOptions = document.getElementById("case-study-code-options");
   const skillsToolbar = document.getElementById("skills-toolbar");
-  const skillsCodeOptions = document.getElementById("skills-code-options");
   const educationToolbar = document.getElementById("education-toolbar");
   const educationCodeOptions = document.getElementById("education-code-options");
   const certificationsToolbar = document.getElementById("certifications-toolbar");
@@ -86,7 +85,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const experienceViewer = createExperienceViewer({
     editor,
     actions: {
-      openSkills: () => openFile("skills.json"),
+      openSkills: () => openFile(SKILLS_FILE),
       openProjects: () => openFile(PROJECTS_OVERVIEW_FILE),
       openContact: () => openFile(CONTACT_FILE)
     }
@@ -99,7 +98,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         openFile(files[jsonPath] ? jsonPath : `projects/${id}.md`);
       },
       openExternal: url => window.open(url, "_blank", "noopener,noreferrer"),
-      openSkills: () => openFile("skills.json"),
+      openSkills: () => openFile(SKILLS_FILE),
       openExperience: () => openFile(EXPERIENCE_FILE),
       openContact: () => openFile(CONTACT_FILE)
     }
@@ -110,7 +109,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       openExternal: url => window.open(url, "_blank", "noopener,noreferrer"),
       openOverview: () => openFile(PROJECTS_OVERVIEW_FILE),
       openNextProject: projectId => openFile(projectId === "adventureworks-edw" ? ECOMMERCE_FILE : ADVENTUREWORKS_FILE),
-      openSkills: () => openFile("skills.json"),
+      openSkills: () => openFile(SKILLS_FILE),
       openContact: () => openFile(CONTACT_FILE)
     }
   });
@@ -182,7 +181,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     { label: "Files: Open Professional Profile", action: () => openFile(ABOUT_FILE) },
     { label: "Files: Open Project Overview", action: () => openFile(PROJECTS_OVERVIEW_FILE) },
     { label: "Files: Open Experience", action: () => openFile(EXPERIENCE_FILE) },
-    { label: "Files: Open Skills", action: () => openFile("skills.json") },
+    { label: "Files: Open Skills", action: () => openFile(SKILLS_FILE) },
     { label: "Files: Open Education", action: () => openFile(EDUCATION_FILE) },
     { label: "Files: Open Contact", action: () => openFile(CONTACT_FILE) },
     { label: "View: Toggle Explorer", action: toggleExplorer },
@@ -228,12 +227,12 @@ document.addEventListener("DOMContentLoaded", async () => {
   readmeToolbar.querySelectorAll("[data-readme-view]").forEach(button => {
     button.addEventListener("click", () => setReadmeView(button.dataset.readmeView));
   });
-  [document.getElementById("json-wrap-toggle"), document.getElementById("about-wrap-toggle"), document.getElementById("experience-wrap-toggle"), document.getElementById("projects-wrap-toggle"), document.getElementById("case-study-wrap-toggle"), document.getElementById("skills-wrap-toggle"), document.getElementById("education-wrap-toggle"), document.getElementById("certifications-wrap-toggle"), document.getElementById("contact-wrap-toggle")].forEach(button => button.addEventListener("click", () => {
+  [document.getElementById("json-wrap-toggle"), document.getElementById("about-wrap-toggle"), document.getElementById("experience-wrap-toggle"), document.getElementById("projects-wrap-toggle"), document.getElementById("case-study-wrap-toggle"), document.getElementById("education-wrap-toggle"), document.getElementById("certifications-wrap-toggle"), document.getElementById("contact-wrap-toggle")].forEach(button => button.addEventListener("click", () => {
     jsonWrap = !jsonWrap;
     syncStructuredPreferences();
     jsonViewer.setWrap(jsonWrap);
   }));
-  [document.getElementById("json-minimap-toggle"), document.getElementById("about-minimap-toggle"), document.getElementById("experience-minimap-toggle"), document.getElementById("projects-minimap-toggle"), document.getElementById("case-study-minimap-toggle"), document.getElementById("skills-minimap-toggle"), document.getElementById("education-minimap-toggle"), document.getElementById("certifications-minimap-toggle"), document.getElementById("contact-minimap-toggle")].forEach(button => button.addEventListener("click", () => {
+  [document.getElementById("json-minimap-toggle"), document.getElementById("about-minimap-toggle"), document.getElementById("experience-minimap-toggle"), document.getElementById("projects-minimap-toggle"), document.getElementById("case-study-minimap-toggle"), document.getElementById("education-minimap-toggle"), document.getElementById("certifications-minimap-toggle"), document.getElementById("contact-minimap-toggle")].forEach(button => button.addEventListener("click", () => {
     jsonMinimap = !jsonMinimap;
     syncStructuredPreferences();
     jsonViewer.setMinimap(jsonMinimap, activeStructuredMode());
@@ -252,7 +251,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       toggleTerminal,
       openCommandPalette: commandPalette.open,
       openExperience: () => openFile(EXPERIENCE_FILE),
-      openSkills: () => openFile("skills.json"),
+      openSkills: () => openFile(SKILLS_FILE),
       openEducation: () => openFile(EDUCATION_FILE),
       openContact: () => openFile(CONTACT_FILE),
       focusTerminal,
@@ -338,7 +337,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   function getFileType(path) {
     const extension = path.split(".").pop()?.toLowerCase();
-    const types = { md: "markdown", json: "json", txt: "text", docx: "word" };
+    const types = { md: "markdown", json: "json", py: "python", txt: "text", docx: "word" };
     return types[extension] ?? "file";
   }
 
@@ -522,8 +521,12 @@ document.addEventListener("DOMContentLoaded", async () => {
     } else if (name === SKILLS_FILE) {
       skillsViewMode = file.preview ? "preview" : "code";
       syncSkillsToolbar();
-      if (file.preview) skillsViewer.show(file.preview);
-      else jsonViewer.show(file.content, "code");
+      if (file.preview) {
+        document.getElementById("lines").hidden = true;
+        skillsViewer.show(file.preview);
+      } else {
+        editor.innerHTML = highlight(file.content, "python");
+      }
     } else if (name === EDUCATION_FILE) {
       educationViewMode = file.preview ? "preview" : "code";
       syncEducationToolbar();
@@ -552,6 +555,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       document.getElementById("json-minimap").hidden = true;
     }
     editor.classList.toggle("is-markdown", file.type === "markdown");
+    editor.classList.toggle("is-python", file.type === "python");
     document.getElementById("lang").textContent = file.type;
 
     if (file.type !== "json") renderLines(file.content);
@@ -691,14 +695,18 @@ document.addEventListener("DOMContentLoaded", async () => {
     syncSkillsToolbar();
     editor.className = "code";
     editor.replaceChildren();
-    document.getElementById("lines").hidden = true;
     if (mode === "preview") {
+      document.getElementById("lines").hidden = true;
       document.getElementById("json-minimap").hidden = true;
       skillsViewer.show(files[activeFile].preview);
     } else {
-      jsonViewer.show(files[activeFile].content, "code");
+      editor.classList.add("is-python");
+      document.getElementById("lines").hidden = false;
+      document.getElementById("json-minimap").hidden = true;
+      editor.innerHTML = highlight(files[activeFile].content, "python");
+      renderLines(files[activeFile].content);
     }
-    document.getElementById("lang").textContent = "json";
+    document.getElementById("lang").textContent = "python";
     updateBreadcrumbs(activeFile);
   }
 
@@ -708,8 +716,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       button.classList.toggle("active", active);
       button.setAttribute("aria-pressed", String(active));
     });
-    skillsCodeOptions.hidden = skillsViewMode !== "code";
-    syncStructuredPreferences();
   }
 
   function setEducationView(mode) {
@@ -828,7 +834,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (activeFile === EXPERIENCE_FILE) return experienceViewMode;
     if (activeFile === PROJECTS_OVERVIEW_FILE) return projectsViewMode;
     if (CASE_STUDY_FILES.has(activeFile)) return caseStudyViewMode;
-    if (activeFile === SKILLS_FILE) return skillsViewMode;
     if (activeFile === EDUCATION_FILE) return educationViewMode;
     if (activeFile === CERTIFICATIONS_FILE) return certificationsViewMode;
     if (activeFile === CONTACT_FILE) return contactViewMode;
@@ -836,11 +841,11 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   function syncStructuredPreferences() {
-    [document.getElementById("json-wrap-toggle"), document.getElementById("about-wrap-toggle"), document.getElementById("experience-wrap-toggle"), document.getElementById("projects-wrap-toggle"), document.getElementById("case-study-wrap-toggle"), document.getElementById("skills-wrap-toggle"), document.getElementById("education-wrap-toggle"), document.getElementById("certifications-wrap-toggle"), document.getElementById("contact-wrap-toggle")].forEach(button => {
+    [document.getElementById("json-wrap-toggle"), document.getElementById("about-wrap-toggle"), document.getElementById("experience-wrap-toggle"), document.getElementById("projects-wrap-toggle"), document.getElementById("case-study-wrap-toggle"), document.getElementById("education-wrap-toggle"), document.getElementById("certifications-wrap-toggle"), document.getElementById("contact-wrap-toggle")].forEach(button => {
       button.classList.toggle("active", jsonWrap);
       button.setAttribute("aria-pressed", String(jsonWrap));
     });
-    [document.getElementById("json-minimap-toggle"), document.getElementById("about-minimap-toggle"), document.getElementById("experience-minimap-toggle"), document.getElementById("projects-minimap-toggle"), document.getElementById("case-study-minimap-toggle"), document.getElementById("skills-minimap-toggle"), document.getElementById("education-minimap-toggle"), document.getElementById("certifications-minimap-toggle"), document.getElementById("contact-minimap-toggle")].forEach(button => {
+    [document.getElementById("json-minimap-toggle"), document.getElementById("about-minimap-toggle"), document.getElementById("experience-minimap-toggle"), document.getElementById("projects-minimap-toggle"), document.getElementById("case-study-minimap-toggle"), document.getElementById("education-minimap-toggle"), document.getElementById("certifications-minimap-toggle"), document.getElementById("contact-minimap-toggle")].forEach(button => {
       button.classList.toggle("active", jsonMinimap);
       button.setAttribute("aria-pressed", String(jsonMinimap));
     });
@@ -1031,6 +1036,26 @@ document.addEventListener("DOMContentLoaded", async () => {
         )
         .replace(/^(#{1,2} .*)$/gm, '<span class="md-title">$1</span>')
         .replace(/^(- .*)$/gm, '<span class="comment">$1</span>');
+    }
+
+    if (type === "python") {
+      return content.split("\n").map(line => {
+        if (line.trimStart().startsWith("#")) {
+          return `<span class="python-comment">${escapeHtml(line)}</span>`;
+        }
+
+        const strings = [];
+        let safeLine = line.replace(/"(?:\\.|[^"\\])*"/g, value => {
+          strings.push(escapeHtml(value));
+          return `\u0000${strings.length - 1}\u0000`;
+        });
+        safeLine = escapeHtml(safeLine);
+        safeLine = safeLine
+          .replace(/\b(from|import|as|True|False|None)\b/g, '<span class="python-keyword">$1</span>')
+          .replace(/^(\s*)([A-Z][A-Z0-9_]*)(\s*=)/, '$1<span class="python-constant">$2</span>$3')
+          .replace(/\b(\d+)\b/g, '<span class="python-number">$1</span>');
+        return safeLine.replace(/\u0000(\d+)\u0000/g, (_, index) => `<span class="python-string">${strings[Number(index)]}</span>`);
+      }).join("\n");
     }
 
     return safeContent;

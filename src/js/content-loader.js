@@ -10,6 +10,47 @@ const CONTENT_PATHS = {
 
 const CONTENT_VERSION = "m5-readme-preview-1";
 
+function formatPythonList(items, indent = "        ") {
+  if (!items.length) return "[]";
+  return `[\n${items.map(item => `${indent}${JSON.stringify(item)},`).join("\n")}\n${indent.slice(0, -4)}]`;
+}
+
+function formatSkillsPython(model) {
+  const evidenceClass = {
+    Project: "ProjectEvidence",
+    Experience: "ExperienceEvidence",
+    Credentials: "CredentialEvidence"
+  };
+  const categories = model.categories.map(category => [
+    `    ${JSON.stringify(category.id)}: [`,
+    ...category.items.map(skill => `        ${JSON.stringify(skill.name)},`),
+    "    ],"
+  ].join("\n"));
+  const evidence = model.evidence.map(item => [
+    `    ${evidenceClass[item.type]}(`,
+    `        name=${JSON.stringify(item.name)},`,
+    `        file=${JSON.stringify(item.file)},`,
+    `        skills=${formatPythonList(item.skills, "            ")},`,
+    "    ),"
+  ].join("\n"));
+
+  return [
+    "from portfolio_ui import render_skill_groups",
+    "from portfolio_evidence import ProjectEvidence, ExperienceEvidence, CredentialEvidence",
+    "",
+    "",
+    "SKILLS = {",
+    ...categories,
+    "}",
+    "",
+    "EVIDENCE = [",
+    ...evidence,
+    "]",
+    "",
+    "render_skill_groups(SKILLS, evidence=EVIDENCE)"
+  ].join("\n");
+}
+
 async function fetchJson(path) {
   const response = await fetch(`${path}?v=${CONTENT_VERSION}`, { cache: "no-store" });
 
@@ -97,7 +138,7 @@ function formatRepositoryReadme(content) {
     "",
     "```text",
     "projects/overview.json",
-    "skills.json",
+    "skills.py",
     "contact.json",
     "```",
     "",
@@ -187,9 +228,9 @@ export async function loadPortfolioFiles() {
         content: formatProjectCaseStudy(project)
       }
     ])),
-    "skills.json": {
-      type: "json",
-      content: JSON.stringify(skillsModel, null, 2),
+    "skills.py": {
+      type: "python",
+      content: formatSkillsPython(skillsModel),
       preview: skillsModel
     },
     "education.json": {

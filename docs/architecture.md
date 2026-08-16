@@ -216,7 +216,7 @@ Owns the recruiter-oriented project catalogue. It renders derived portfolio coun
 
 ### skills-viewer.js
 
-Owns the recruiter-oriented skills preview. It preserves source ordering as professional priority, avoids subjective proficiency meters, and groups capabilities into primary, applied, continued-development and workflow contexts. Evidence cards link each supported subset to an existing project, experience or credential file. The paired Code view exposes the same categories and derived evidence model through `json-viewer.js`.
+Owns the recruiter-oriented skills preview. It preserves source ordering as professional priority, avoids subjective proficiency meters, and groups capabilities into primary, applied, continued-development and workflow contexts. Evidence cards link each supported subset to an existing project, experience or credential file. The paired `skills.py` Code view is generated from the same categories and evidence, then displayed by the editor with Python syntax highlighting. Its imports and render call are presentation metaphors, not runtime Python integration.
 
 ### content-loader.js
 
