@@ -1,4 +1,4 @@
-import { loadPortfolioFiles } from "./content-loader.js?v=20";
+import { loadPortfolioFiles } from "./content-loader.js?v=21";
 import { createCommandDispatcher } from "./commands.js?v=4";
 import { createTerminal } from "./terminal.js?v=3";
 import { createMenuBar } from "./menu-bar.js?v=2";
@@ -27,6 +27,7 @@ const EDUCATION_FILE = "education.yaml";
 const CERTIFICATIONS_FILE = "certifications.sql";
 const CONTACT_FILE = "contact.sh";
 const README_FILE = "README.md";
+const GITIGNORE_FILE = ".gitignore";
 
 document.addEventListener("DOMContentLoaded", async () => {
   let files = {};
@@ -63,6 +64,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const certificationsToolbar = document.getElementById("certifications-toolbar");
   const contactToolbar = document.getElementById("contact-toolbar");
   const readmeToolbar = document.getElementById("readme-toolbar");
+  const gitignoreToolbar = document.getElementById("gitignore-toolbar");
   const jsonViewer = createJsonViewer({
     editor,
     minimap: document.getElementById("json-minimap"),
@@ -333,7 +335,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   function getFileType(path) {
     const extension = path.split(".").pop()?.toLowerCase();
-    const types = { md: "markdown", json: "json", py: "python", ipynb: "notebook", sql: "sql", sh: "shell", yaml: "yaml", yml: "yaml", toml: "toml", txt: "text", docx: "word" };
+    const types = { md: "markdown", json: "json", py: "python", ipynb: "notebook", sql: "sql", sh: "shell", yaml: "yaml", yml: "yaml", toml: "toml", gitignore: "gitignore", txt: "text", docx: "word" };
     return types[extension] ?? "file";
   }
 
@@ -488,6 +490,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     certificationsToolbar.hidden = name !== CERTIFICATIONS_FILE;
     contactToolbar.hidden = name !== CONTACT_FILE;
     readmeToolbar.hidden = name !== README_FILE;
+    gitignoreToolbar.hidden = name !== GITIGNORE_FILE;
     document.getElementById("lines").hidden = file.type === "json" || name === ABOUT_FILE;
     document.getElementById("json-minimap").hidden = true;
 
@@ -569,6 +572,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     editor.classList.toggle("is-shell", file.type === "shell");
     editor.classList.toggle("is-yaml", file.type === "yaml");
     editor.classList.toggle("is-toml", file.type === "toml");
+    editor.classList.toggle("is-gitignore", file.type === "gitignore");
     document.getElementById("lang").textContent = file.type;
 
     if (file.type !== "json") renderLines(file.content);
@@ -1157,6 +1161,18 @@ document.addEventListener("DOMContentLoaded", async () => {
           safeLine = safeLine.replaceAll(String.fromCharCode(0xe000 + index), `<span class="toml-string">${value}</span>`);
         });
         return safeLine;
+      }).join("\n");
+    }
+
+    if (type === "gitignore") {
+      return content.split("\n").map(line => {
+        if (line.trimStart().startsWith("#")) {
+          return `<span class="gitignore-comment">${escapeHtml(line)}</span>`;
+        }
+        if (line.startsWith("!")) {
+          return `<span class="gitignore-negation">${escapeHtml(line)}</span>`;
+        }
+        return `<span class="gitignore-pattern">${escapeHtml(line)}</span>`;
       }).join("\n");
     }
 

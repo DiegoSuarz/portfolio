@@ -10,6 +10,37 @@ const CONTENT_PATHS = {
 
 const CONTENT_VERSION = "m5-readme-preview-1";
 
+const GITIGNORE_CONTENT = [
+  "# Environment and local configuration",
+  ".env",
+  ".env.*",
+  "!.env.example",
+  "",
+  "# Dependencies and virtual environments",
+  "node_modules/",
+  ".venv/",
+  "venv/",
+  "__pycache__/",
+  "*.py[cod]",
+  "",
+  "# Build, coverage and cache output",
+  "dist/",
+  "build/",
+  "coverage/",
+  ".cache/",
+  "",
+  "# Logs and temporary files",
+  "*.log",
+  "*.tmp",
+  "*.temp",
+  "",
+  "# Editor and operating-system files",
+  ".vscode/",
+  ".idea/",
+  ".DS_Store",
+  "Thumbs.db"
+].join("\n");
+
 function formatPythonList(items, indent = "        ") {
   if (!items.length) return "[]";
   return `[\n${items.map(item => `${indent}${JSON.stringify(item)},`).join("\n")}\n${indent.slice(0, -4)}]`;
@@ -395,6 +426,11 @@ export async function loadPortfolioFiles() {
   const repositoryReadme = formatRepositoryReadme(content);
 
   return {
+    ".gitignore": {
+      type: "gitignore",
+      content: GITIGNORE_CONTENT,
+      defaultView: "code"
+    },
     "README.md": {
       type: "markdown",
       content: repositoryReadme,

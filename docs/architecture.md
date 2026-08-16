@@ -222,6 +222,8 @@ Owns the recruiter-oriented skills preview. It preserves source ordering as prof
 
 Loads the structured content domains and maps them to the virtual files displayed by the VS Code-inspired interface. It owns content formatting but does not manipulate the DOM.
 
+Repository-support artifacts may also be exposed as virtual files without becoming professional content domains. `.gitignore` uses a Code-only presentation and mirrors the repository's reviewed ignore policy; it has no Preview model or executable behavior.
+
 Project content is exposed as a virtual `projects/` directory with an overview and source-backed JSON case studies. The loader builds every preview model from `data/projects.json` and remains responsible for deciding the virtual path; the Explorer only renders that path as a hierarchy.
 
 Markdown links are converted to anchors only after the source content is HTML-escaped and only when the URL uses HTTPS. External project links open in a separate browsing context with opener access disabled.

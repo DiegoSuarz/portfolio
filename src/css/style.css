@@ -448,8 +448,8 @@ body {
 .breadcrumb-separator { color: #707070; }
 .breadcrumb-structure { overflow: hidden; color: #9cdcfe; text-overflow: ellipsis; }
 
-.about-toolbar, .experience-toolbar, .projects-toolbar, .case-study-toolbar, .skills-toolbar, .education-toolbar, .certifications-toolbar, .contact-toolbar, .readme-toolbar { display: flex; min-height: 34px; align-items: center; justify-content: space-between; gap: 12px; border-bottom: 1px solid #2b2b2b; padding: 3px 10px; background: #181818; }
-.about-toolbar[hidden], .experience-toolbar[hidden], .projects-toolbar[hidden], .case-study-toolbar[hidden], .skills-toolbar[hidden], .education-toolbar[hidden], .certifications-toolbar[hidden], .contact-toolbar[hidden], .readme-toolbar[hidden], .about-toolbar [hidden], .experience-toolbar [hidden], .projects-toolbar [hidden], .case-study-toolbar [hidden], .skills-toolbar [hidden], .education-toolbar [hidden], .certifications-toolbar [hidden], .contact-toolbar [hidden], .readme-toolbar [hidden] { display: none; }
+.about-toolbar, .experience-toolbar, .projects-toolbar, .case-study-toolbar, .skills-toolbar, .education-toolbar, .certifications-toolbar, .contact-toolbar, .readme-toolbar, .gitignore-toolbar { display: flex; min-height: 34px; align-items: center; justify-content: space-between; gap: 12px; border-bottom: 1px solid #2b2b2b; padding: 3px 10px; background: #181818; }
+.about-toolbar[hidden], .experience-toolbar[hidden], .projects-toolbar[hidden], .case-study-toolbar[hidden], .skills-toolbar[hidden], .education-toolbar[hidden], .certifications-toolbar[hidden], .contact-toolbar[hidden], .readme-toolbar[hidden], .gitignore-toolbar[hidden], .about-toolbar [hidden], .experience-toolbar [hidden], .projects-toolbar [hidden], .case-study-toolbar [hidden], .skills-toolbar [hidden], .education-toolbar [hidden], .certifications-toolbar [hidden], .contact-toolbar [hidden], .readme-toolbar [hidden], .gitignore-toolbar [hidden] { display: none; }
 
 .json-toolbar { display: flex; min-height: 34px; align-items: center; justify-content: space-between; gap: 12px; border-bottom: 1px solid #2b2b2b; padding: 3px 10px; background: #181818; }
 .json-toolbar[hidden] { display: none; }
@@ -1182,6 +1182,22 @@ body {
 .toml-number { color: #b5cea8; }
 .toml-comment { color: #6a9955; }
 
+.file-icon[data-file-type="gitignore"]::before {
+  content: "G";
+  color: #f05032;
+  font-family: Arial, sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.code.is-gitignore {
+  white-space: pre;
+}
+
+.gitignore-comment { color: #6a9955; }
+.gitignore-negation { color: #dcdcaa; }
+.gitignore-pattern { color: #ce9178; }
+
 .file-icon[data-file-type="text"] {
   width: 13px;
   height: 12px;
@@ -1434,7 +1450,7 @@ body {
   .breadcrumbs { min-height: 26px; padding-inline: 7px; }
 
   .json-toolbar { padding-inline: 5px; }
-  .about-toolbar, .experience-toolbar, .projects-toolbar, .case-study-toolbar, .skills-toolbar, .education-toolbar, .certifications-toolbar, .contact-toolbar, .readme-toolbar { padding-inline: 5px; }
+  .about-toolbar, .experience-toolbar, .projects-toolbar, .case-study-toolbar, .skills-toolbar, .education-toolbar, .certifications-toolbar, .contact-toolbar, .readme-toolbar, .gitignore-toolbar { padding-inline: 5px; }
   .json-view-options { gap: 1px; }
   .json-tool { padding-inline: 6px; font-size: 11px; }
   #json-minimap-toggle, #experience-minimap-toggle, #projects-minimap-toggle, #case-study-minimap-toggle { display: none; }

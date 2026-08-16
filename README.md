@@ -89,6 +89,7 @@ portfolio/
 |       |-- panel-tabs.js
 |       `-- terminal.js
 |
+|-- .gitignore
 |-- CONTRIBUTING.md
 |-- index.html
 `-- README.md
@@ -224,6 +225,8 @@ The virtual `contact.sh` file opens with a recruiter-oriented Preview that provi
 The downloadable Spanish CV is synchronized with the portfolio's curated profile, reverse-chronological experience, current project scope, prioritized skills, formal education and five verified credentials. Its ATS-friendly structure avoids layout tables, exposes clickable professional links and omits unprioritized technologies and exam-preparation courses.
 
 The Explorer also exposes a concise virtual `README.md` generated from the repository's structured content. It opens in Markdown Code by default and offers a safe rendered Preview with headings, lists, code blocks and professional links.
+
+The repository `.gitignore` is also exposed in the Explorer with a Code-only view. It documents the local environment, dependency, build, cache, log, editor and operating-system artifacts that should remain outside version control, while preserving `.env.example` as a safe configuration template.
 
 ## Engineering Principles
 
