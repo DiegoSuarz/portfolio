@@ -156,6 +156,7 @@ portfolio/
 |       |-- menu-bar.js
 |       |-- panel-tabs.js
 |       |-- projects-overview-viewer.js
+|       |-- skills-viewer.js
 |       `-- terminal.js
 |
 |-- docs/
@@ -192,6 +193,10 @@ Owns the recruiter-oriented experience timeline. It receives experience entries 
 ### projects-overview-viewer.js
 
 Owns the recruiter-oriented project catalogue. It renders derived portfolio counts, featured project cards, current architecture flows, planned evolution, implemented evidence, safe external navigation and a responsive comparison table. Current and planned scope remain visually distinct, and individual case-study navigation is delegated to predefined application callbacks. Its paired Code view delegates the identical overview model to `json-viewer.js`.
+
+### skills-viewer.js
+
+Owns the recruiter-oriented skills preview. It preserves source ordering as professional priority, avoids subjective proficiency meters, and groups capabilities into primary, applied, continued-development and workflow contexts. Evidence cards link each supported subset to an existing project, experience or credential file. The paired Code view exposes the same categories and derived evidence model through `json-viewer.js`.
 
 ### content-loader.js
 

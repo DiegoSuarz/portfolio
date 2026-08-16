@@ -440,8 +440,8 @@ body {
 .breadcrumb-separator { color: #707070; }
 .breadcrumb-structure { overflow: hidden; color: #9cdcfe; text-overflow: ellipsis; }
 
-.about-toolbar, .experience-toolbar, .projects-toolbar, .case-study-toolbar { display: flex; min-height: 34px; align-items: center; justify-content: space-between; gap: 12px; border-bottom: 1px solid #2b2b2b; padding: 3px 10px; background: #181818; }
-.about-toolbar[hidden], .experience-toolbar[hidden], .projects-toolbar[hidden], .case-study-toolbar[hidden], .about-toolbar [hidden], .experience-toolbar [hidden], .projects-toolbar [hidden], .case-study-toolbar [hidden] { display: none; }
+.about-toolbar, .experience-toolbar, .projects-toolbar, .case-study-toolbar, .skills-toolbar { display: flex; min-height: 34px; align-items: center; justify-content: space-between; gap: 12px; border-bottom: 1px solid #2b2b2b; padding: 3px 10px; background: #181818; }
+.about-toolbar[hidden], .experience-toolbar[hidden], .projects-toolbar[hidden], .case-study-toolbar[hidden], .skills-toolbar[hidden], .about-toolbar [hidden], .experience-toolbar [hidden], .projects-toolbar [hidden], .case-study-toolbar [hidden], .skills-toolbar [hidden] { display: none; }
 
 .json-toolbar { display: flex; min-height: 34px; align-items: center; justify-content: space-between; gap: 12px; border-bottom: 1px solid #2b2b2b; padding: 3px 10px; background: #181818; }
 .json-toolbar[hidden] { display: none; }
@@ -755,6 +755,40 @@ body {
 .case-study-planned-list li { border: 1px dashed #665b3d; border-radius: 5px; padding: 10px; background: #2c291f; color: #d7ba7d; font-family: system-ui, sans-serif; font-size: 11px; }
 .case-study-planned-list li::before { content: "○ "; }
 .case-study-related { max-width: 1050px; margin-top: 28px; border-top: 1px solid #343434; padding-top: 20px; }
+
+.code.skills-preview { padding: clamp(20px, 4vw, 44px); white-space: normal; overflow: auto; }
+.skills-preview::after { display: none; }
+.skills-header { max-width: 940px; margin-bottom: 25px; }
+.skills-eyebrow { margin: 0 0 5px; color: #4ec9b0; font-size: 12px; letter-spacing: .12em; text-transform: uppercase; }
+.skills-header h1 { margin: 0; color: #f0f0f0; font-size: clamp(28px, 4vw, 42px); }
+.skills-intro { max-width: 790px; margin: 10px 0 17px; color: #bdbdbd; font-family: system-ui, sans-serif; font-size: 14px; line-height: 1.65; }
+.skills-metric { display: inline-flex; align-items: center; gap: 7px; margin: 0 7px 7px 0; border: 1px solid #3b3b3b; border-radius: 6px; padding: 7px 10px; background: #252526; }
+.skills-metric strong { color: #4ec9b0; font-size: 18px; }
+.skills-metric span { color: #bdbdbd; font-size: 11px; }
+.skills-categories { display: grid; max-width: 1050px; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.skills-category { border: 1px solid #3b3b3b; border-radius: 7px; padding: 16px; background: #252526; }
+.skills-category-heading { display: grid; grid-template-columns: auto 1fr; column-gap: 10px; }
+.skills-index { grid-row: 1 / 4; color: #569cd6; font-size: 10px; }
+.skills-priority { margin: 0; color: #d7ba7d; font-size: 10px; text-transform: uppercase; letter-spacing: .06em; }
+.skills-category h2 { margin: 3px 0 5px; color: #f0f0f0; font-size: 16px; }
+.skills-description { margin: 0; color: #a9a9a9; font-family: system-ui, sans-serif; font-size: 11px; line-height: 1.5; }
+.skills-list { display: flex; flex-wrap: wrap; gap: 6px; margin: 15px 0 0; padding: 0; list-style: none; }
+.skills-item { display: flex; align-items: center; gap: 5px; border: 1px solid #3f566b; border-radius: 12px; padding: 4px 8px; background: #1f3345; color: #c8e6ff; font-size: 11px; }
+.skills-check { color: #4ec9b0; }
+.skills-evidence { max-width: 1050px; padding-top: 30px; }
+.skills-evidence h2 { margin: 0; color: #f0f0f0; font-size: 18px; }
+.skills-section-intro { margin: 5px 0 14px; color: #9d9d9d; font-family: system-ui, sans-serif; font-size: 12px; }
+.skills-evidence-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.skills-evidence-card { border: 1px solid #383838; border-radius: 6px; padding: 14px; background: #202020; }
+.skills-evidence-type { margin: 0 0 4px; color: #569cd6; font-size: 10px; text-transform: uppercase; letter-spacing: .07em; }
+.skills-evidence-card h3 { margin: 0 0 10px; color: #d4d4d4; font-size: 13px; }
+.skills-evidence-tags { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 12px; }
+.skills-evidence-tags span { border-radius: 9px; padding: 2px 6px; background: #333333; color: #bdbdbd; font-size: 10px; }
+.skills-related { display: flex; flex-wrap: wrap; gap: 8px; max-width: 1050px; margin-top: 27px; border-top: 1px solid #343434; padding-top: 20px; }
+.skills-action { min-height: 34px; border: 1px solid #4b4b4b; border-radius: 4px; padding: 6px 12px; background: #2d2d2d; color: #e8e8e8; font: inherit; font-size: 11px; cursor: pointer; }
+.skills-action:hover { border-color: #007acc; background: #37373d; }
+.skills-action--primary { border-color: #007acc; background: #0e639c; color: #fff; }
+.skills-action:focus-visible { outline: 2px solid #007fd4; outline-offset: 2px; }
 
 .status-group { display: flex; min-width: 0; align-items: center; gap: 12px; white-space: nowrap; }
 .status-group--right { justify-content: flex-end; }
@@ -1166,10 +1200,10 @@ body {
   .breadcrumbs { min-height: 26px; padding-inline: 7px; }
 
   .json-toolbar { padding-inline: 5px; }
-  .about-toolbar, .experience-toolbar, .projects-toolbar, .case-study-toolbar { padding-inline: 5px; }
+  .about-toolbar, .experience-toolbar, .projects-toolbar, .case-study-toolbar, .skills-toolbar { padding-inline: 5px; }
   .json-view-options { gap: 1px; }
   .json-tool { padding-inline: 6px; font-size: 11px; }
-  #json-minimap-toggle, #about-minimap-toggle, #experience-minimap-toggle, #projects-minimap-toggle, #case-study-minimap-toggle { display: none; }
+  #json-minimap-toggle, #about-minimap-toggle, #experience-minimap-toggle, #projects-minimap-toggle, #case-study-minimap-toggle, #skills-minimap-toggle { display: none; }
   .json-minimap { display: none; }
   .json-line { padding-right: 8px; padding-left: calc(43px + var(--json-depth) * 14px); }
   .json-fold { left: calc(30px + var(--json-depth) * 14px); }
@@ -1201,6 +1235,9 @@ body {
   .case-study-component:not(:last-child)::after { top: auto; right: 50%; bottom: -16px; transform: translateX(50%) rotate(90deg); }
   .case-study-scope-grid, .case-study-planned-list { grid-template-columns: 1fr; }
   .case-study-action { flex: 1 1 calc(50% - 7px); }
+  .code.skills-preview { padding: 20px 12px 30px; }
+  .skills-categories, .skills-evidence-grid { grid-template-columns: 1fr; }
+  .skills-action { flex: 1 1 calc(50% - 7px); }
 
   .sidebar.is-collapsed {
     width: min(300px, calc(100vw - 36px));

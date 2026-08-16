@@ -211,6 +211,8 @@ The E-Commerce case study follows the same contract through `projects/ecommerce-
 
 JSON portfolio files open by default in a responsive `Preview` that presents the factual data as readable cards and tags, including `skills.json`. The technical `Code` view remains available with type-aware syntax colors, indentation guides, foldable objects and arrays, structural breadcrumbs, word wrapping and a minimap.
 
+The Skills preview prioritizes core Data Engineering capabilities before platforms and supporting tools, excludes subjective proficiency percentages, and links skill groups to existing project, experience and credential evidence. Its Code view exposes the same curated categories and evidence mapping.
+
 ## Engineering Principles
 
 - Separation of concerns

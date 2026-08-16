@@ -1,4 +1,4 @@
-import { loadPortfolioFiles } from "./content-loader.js?v=8";
+import { loadPortfolioFiles } from "./content-loader.js?v=9";
 import { createCommandDispatcher } from "./commands.js?v=2";
 import { createTerminal } from "./terminal.js?v=3";
 import { createMenuBar } from "./menu-bar.js?v=2";
@@ -10,6 +10,7 @@ import { createAboutViewer } from "./about-viewer.js?v=3";
 import { createExperienceViewer } from "./experience-viewer.js?v=1";
 import { createProjectsOverviewViewer } from "./projects-overview-viewer.js?v=1";
 import { createProjectCaseStudyViewer } from "./adventureworks-viewer.js?v=2";
+import { createSkillsViewer } from "./skills-viewer.js?v=1";
 
 const ABOUT_FILE = "about.json";
 const EXPERIENCE_FILE = "experience.json";
@@ -17,6 +18,7 @@ const PROJECTS_OVERVIEW_FILE = "projects/overview.json";
 const ADVENTUREWORKS_FILE = "projects/adventureworks-edw.json";
 const ECOMMERCE_FILE = "projects/ecommerce-data-engineering-platform.json";
 const CASE_STUDY_FILES = new Set([ADVENTUREWORKS_FILE, ECOMMERCE_FILE]);
+const SKILLS_FILE = "skills.json";
 
 document.addEventListener("DOMContentLoaded", async () => {
   let files = {};
@@ -29,6 +31,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   let experienceViewMode = "preview";
   let projectsViewMode = "preview";
   let caseStudyViewMode = "preview";
+  let skillsViewMode = "preview";
 
   const editor = document.getElementById("editor");
   const explorer = document.getElementById("portfolio-explorer");
@@ -44,6 +47,8 @@ document.addEventListener("DOMContentLoaded", async () => {
   const projectsCodeOptions = document.getElementById("projects-code-options");
   const caseStudyToolbar = document.getElementById("case-study-toolbar");
   const caseStudyCodeOptions = document.getElementById("case-study-code-options");
+  const skillsToolbar = document.getElementById("skills-toolbar");
+  const skillsCodeOptions = document.getElementById("skills-code-options");
   const jsonViewer = createJsonViewer({
     editor,
     minimap: document.getElementById("json-minimap"),
@@ -87,6 +92,16 @@ document.addEventListener("DOMContentLoaded", async () => {
       openOverview: () => openFile(PROJECTS_OVERVIEW_FILE),
       openNextProject: projectId => openFile(projectId === "adventureworks-edw" ? ECOMMERCE_FILE : ADVENTUREWORKS_FILE),
       openSkills: () => openFile("skills.json"),
+      openContact: () => openFile("contact.txt")
+    }
+  });
+  const skillsViewer = createSkillsViewer({
+    editor,
+    actions: {
+      openEvidence: openFile,
+      openProjects: () => openFile(PROJECTS_OVERVIEW_FILE),
+      openExperience: () => openFile(EXPERIENCE_FILE),
+      openCertifications: () => openFile("certifications.json"),
       openContact: () => openFile("contact.txt")
     }
   });
@@ -148,12 +163,15 @@ document.addEventListener("DOMContentLoaded", async () => {
   caseStudyToolbar.querySelectorAll("[data-case-study-view]").forEach(button => {
     button.addEventListener("click", () => setCaseStudyView(button.dataset.caseStudyView));
   });
-  [document.getElementById("json-wrap-toggle"), document.getElementById("about-wrap-toggle"), document.getElementById("experience-wrap-toggle"), document.getElementById("projects-wrap-toggle"), document.getElementById("case-study-wrap-toggle")].forEach(button => button.addEventListener("click", () => {
+  skillsToolbar.querySelectorAll("[data-skills-view]").forEach(button => {
+    button.addEventListener("click", () => setSkillsView(button.dataset.skillsView));
+  });
+  [document.getElementById("json-wrap-toggle"), document.getElementById("about-wrap-toggle"), document.getElementById("experience-wrap-toggle"), document.getElementById("projects-wrap-toggle"), document.getElementById("case-study-wrap-toggle"), document.getElementById("skills-wrap-toggle")].forEach(button => button.addEventListener("click", () => {
     jsonWrap = !jsonWrap;
     syncStructuredPreferences();
     jsonViewer.setWrap(jsonWrap);
   }));
-  [document.getElementById("json-minimap-toggle"), document.getElementById("about-minimap-toggle"), document.getElementById("experience-minimap-toggle"), document.getElementById("projects-minimap-toggle"), document.getElementById("case-study-minimap-toggle")].forEach(button => button.addEventListener("click", () => {
+  [document.getElementById("json-minimap-toggle"), document.getElementById("about-minimap-toggle"), document.getElementById("experience-minimap-toggle"), document.getElementById("projects-minimap-toggle"), document.getElementById("case-study-minimap-toggle"), document.getElementById("skills-minimap-toggle")].forEach(button => button.addEventListener("click", () => {
     jsonMinimap = !jsonMinimap;
     syncStructuredPreferences();
     jsonViewer.setMinimap(jsonMinimap, activeStructuredMode());
@@ -403,11 +421,12 @@ document.addEventListener("DOMContentLoaded", async () => {
     activeFile = name;
     editor.className = "code";
     editor.replaceChildren();
-    jsonToolbar.hidden = file.type !== "json" || name === ABOUT_FILE || name === EXPERIENCE_FILE || name === PROJECTS_OVERVIEW_FILE || CASE_STUDY_FILES.has(name);
+    jsonToolbar.hidden = file.type !== "json" || name === ABOUT_FILE || name === EXPERIENCE_FILE || name === PROJECTS_OVERVIEW_FILE || name === SKILLS_FILE || CASE_STUDY_FILES.has(name);
     aboutToolbar.hidden = name !== ABOUT_FILE;
     experienceToolbar.hidden = name !== EXPERIENCE_FILE;
     projectsToolbar.hidden = name !== PROJECTS_OVERVIEW_FILE;
     caseStudyToolbar.hidden = !CASE_STUDY_FILES.has(name);
+    skillsToolbar.hidden = name !== SKILLS_FILE;
     document.getElementById("lines").hidden = file.type === "json" || name === ABOUT_FILE;
     document.getElementById("json-minimap").hidden = true;
 
@@ -433,6 +452,11 @@ document.addEventListener("DOMContentLoaded", async () => {
       caseStudyViewMode = file.preview ? "preview" : "code";
       syncCaseStudyToolbar();
       if (file.preview) projectCaseStudyViewer.show(file.preview);
+      else jsonViewer.show(file.content, "code");
+    } else if (name === SKILLS_FILE) {
+      skillsViewMode = file.preview ? "preview" : "code";
+      syncSkillsToolbar();
+      if (file.preview) skillsViewer.show(file.preview);
       else jsonViewer.show(file.content, "code");
     } else if (file.type === "json") {
       jsonViewMode = "preview";
@@ -575,20 +599,49 @@ document.addEventListener("DOMContentLoaded", async () => {
     syncStructuredPreferences();
   }
 
+  function setSkillsView(mode) {
+    if (activeFile !== SKILLS_FILE) return;
+    if (mode === "preview" && !files[activeFile].preview) mode = "code";
+    skillsViewMode = mode;
+    syncSkillsToolbar();
+    editor.className = "code";
+    editor.replaceChildren();
+    document.getElementById("lines").hidden = true;
+    if (mode === "preview") {
+      document.getElementById("json-minimap").hidden = true;
+      skillsViewer.show(files[activeFile].preview);
+    } else {
+      jsonViewer.show(files[activeFile].content, "code");
+    }
+    document.getElementById("lang").textContent = "json";
+    updateBreadcrumbs(activeFile);
+  }
+
+  function syncSkillsToolbar() {
+    skillsToolbar.querySelectorAll("[data-skills-view]").forEach(button => {
+      const active = button.dataset.skillsView === skillsViewMode;
+      button.classList.toggle("active", active);
+      button.setAttribute("aria-pressed", String(active));
+    });
+    skillsCodeOptions.hidden = skillsViewMode !== "code";
+    syncStructuredPreferences();
+  }
+
   function activeStructuredMode() {
     if (activeFile === ABOUT_FILE) return aboutViewMode;
     if (activeFile === EXPERIENCE_FILE) return experienceViewMode;
     if (activeFile === PROJECTS_OVERVIEW_FILE) return projectsViewMode;
     if (CASE_STUDY_FILES.has(activeFile)) return caseStudyViewMode;
+    if (activeFile === SKILLS_FILE) return skillsViewMode;
     return jsonViewMode;
   }
 
   function syncStructuredPreferences() {
-    [document.getElementById("json-wrap-toggle"), document.getElementById("about-wrap-toggle"), document.getElementById("experience-wrap-toggle"), document.getElementById("projects-wrap-toggle"), document.getElementById("case-study-wrap-toggle")].forEach(button => {
+    [document.getElementById("json-wrap-toggle"), document.getElementById("about-wrap-toggle"), document.getElementById("experience-wrap-toggle"), document.getElementById("projects-wrap-toggle"), document.getElementById("case-study-wrap-toggle"), document.getElementById("skills-wrap-toggle")].forEach(button => {
       button.classList.toggle("active", jsonWrap);
       button.setAttribute("aria-pressed", String(jsonWrap));
     });
-    [document.getElementById("json-minimap-toggle"), document.getElementById("about-minimap-toggle"), document.getElementById("experience-minimap-toggle"), document.getElementById("projects-minimap-toggle"), document.getElementById("case-study-minimap-toggle")].forEach(button => {
+    [document.getElementById("json-minimap-toggle"), document.getElementById("about-minimap-toggle"), document.getElementById("experience-minimap-toggle"), document.getElementById("projects-minimap-toggle"), document.getElementById("case-study-minimap-toggle"), document.getElementById("skills-minimap-toggle")].forEach(button => {
       button.classList.toggle("active", jsonMinimap);
       button.setAttribute("aria-pressed", String(jsonMinimap));
     });
