@@ -8,7 +8,7 @@ const CONTENT_PATHS = {
   cv: "data/cv.json"
 };
 
-const CONTENT_VERSION = "m5-adventureworks-json-1";
+const CONTENT_VERSION = "m5-project-case-studies-json-1";
 
 async function fetchJson(path) {
   const response = await fetch(`${path}?v=${CONTENT_VERSION}`, { cache: "no-store" });
@@ -118,6 +118,9 @@ export async function loadPortfolioFiles() {
   const adventureWorksModel = {
     project: content.projects.projects.find(project => project.id === "adventureworks-edw")
   };
+  const ecommerceModel = {
+    project: content.projects.projects.find(project => project.id === "ecommerce-data-engineering-platform")
+  };
 
   return {
     "about.json": {
@@ -140,7 +143,12 @@ export async function loadPortfolioFiles() {
       content: JSON.stringify(adventureWorksModel, null, 2),
       preview: adventureWorksModel
     },
-    ...Object.fromEntries(content.projects.projects.filter(project => project.id !== "adventureworks-edw").map(project => [
+    "projects/ecommerce-data-engineering-platform.json": {
+      type: "json",
+      content: JSON.stringify(ecommerceModel, null, 2),
+      preview: ecommerceModel
+    },
+    ...Object.fromEntries(content.projects.projects.filter(project => !["adventureworks-edw", "ecommerce-data-engineering-platform"].includes(project.id)).map(project => [
       `projects/${project.id}.md`,
       {
         type: "markdown",

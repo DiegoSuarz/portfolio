@@ -183,7 +183,7 @@ Owns the recruiter-oriented About preview. It receives profile content and deriv
 
 ### adventureworks-viewer.js
 
-Owns the flagship AdventureWorks case-study preview. It presents only the current architecture, technologies, highlights and links already present in the project model. Stable presentation labels group the four documented highlights into dimensional modeling, ETL reliability, historical tracking and observability; they do not add capabilities beyond the source statements. Planned evolution is visually and semantically separated from implemented scope, and the paired Code view delegates the identical project object to `json-viewer.js`.
+Owns the shared project case-study preview for AdventureWorks and E-Commerce. It presents only the current architecture, technologies, highlights and links already present in each project model. Project-specific presentation labels organize documented highlights without adding capabilities beyond their source statements. Planned evolution is visually and semantically separated from implemented scope, and each paired Code view delegates the identical project object to `json-viewer.js`.
 
 ### experience-viewer.js
 
@@ -197,7 +197,7 @@ Owns the recruiter-oriented project catalogue. It renders derived portfolio coun
 
 Loads the structured content domains and maps them to the virtual files displayed by the VS Code-inspired interface. It owns content formatting but does not manipulate the DOM.
 
-Project content is exposed as a virtual `projects/` directory with an overview and one source-backed Markdown case study per project. The loader formats each case study from structured JSON and remains responsible for deciding the virtual path; the Explorer only renders that path as a hierarchy.
+Project content is exposed as a virtual `projects/` directory with an overview and source-backed JSON case studies. The loader builds every preview model from `data/projects.json` and remains responsible for deciding the virtual path; the Explorer only renders that path as a hierarchy.
 
 Markdown links are converted to anchors only after the source content is HTML-escaped and only when the URL uses HTTPS. External project links open in a separate browsing context with opener access disabled.
 

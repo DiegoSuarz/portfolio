@@ -207,6 +207,8 @@ The project catalogue is exposed as `projects/overview.json`. Preview derives pr
 
 The flagship AdventureWorks case study is exposed as `projects/adventureworks-edw.json`. Its preview organizes the current architecture and documented implementation into dimensional modeling, ETL reliability, historical tracking and observability, while planned work remains explicitly separated. Code exposes the same project object without adding unverified technical claims.
 
+The E-Commerce case study follows the same contract through `projects/ecommerce-data-engineering-platform.json`. Its preview focuses on the implemented MySQL operational source, reproducible Docker environment, repeatable initialization and documented sample data. Future pipeline, warehouse, orchestration, analytics and processing modules remain explicitly labeled as planned evolution.
+
 JSON portfolio files open by default in a responsive `Preview` that presents the factual data as readable cards and tags, including `skills.json`. The technical `Code` view remains available with type-aware syntax colors, indentation guides, foldable objects and arrays, structural breadcrumbs, word wrapping and a minimap.
 
 ## Engineering Principles

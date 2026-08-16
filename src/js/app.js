@@ -1,4 +1,4 @@
-import { loadPortfolioFiles } from "./content-loader.js?v=7";
+import { loadPortfolioFiles } from "./content-loader.js?v=8";
 import { createCommandDispatcher } from "./commands.js?v=2";
 import { createTerminal } from "./terminal.js?v=3";
 import { createMenuBar } from "./menu-bar.js?v=2";
@@ -9,12 +9,14 @@ import { createJsonViewer } from "./json-viewer.js";
 import { createAboutViewer } from "./about-viewer.js?v=3";
 import { createExperienceViewer } from "./experience-viewer.js?v=1";
 import { createProjectsOverviewViewer } from "./projects-overview-viewer.js?v=1";
-import { createAdventureWorksViewer } from "./adventureworks-viewer.js?v=1";
+import { createProjectCaseStudyViewer } from "./adventureworks-viewer.js?v=2";
 
 const ABOUT_FILE = "about.json";
 const EXPERIENCE_FILE = "experience.json";
 const PROJECTS_OVERVIEW_FILE = "projects/overview.json";
 const ADVENTUREWORKS_FILE = "projects/adventureworks-edw.json";
+const ECOMMERCE_FILE = "projects/ecommerce-data-engineering-platform.json";
+const CASE_STUDY_FILES = new Set([ADVENTUREWORKS_FILE, ECOMMERCE_FILE]);
 
 document.addEventListener("DOMContentLoaded", async () => {
   let files = {};
@@ -78,12 +80,12 @@ document.addEventListener("DOMContentLoaded", async () => {
       openContact: () => openFile("contact.txt")
     }
   });
-  const adventureWorksViewer = createAdventureWorksViewer({
+  const projectCaseStudyViewer = createProjectCaseStudyViewer({
     editor,
     actions: {
       openExternal: url => window.open(url, "_blank", "noopener,noreferrer"),
       openOverview: () => openFile(PROJECTS_OVERVIEW_FILE),
-      openNextProject: () => openFile("projects/ecommerce-data-engineering-platform.md"),
+      openNextProject: projectId => openFile(projectId === "adventureworks-edw" ? ECOMMERCE_FILE : ADVENTUREWORKS_FILE),
       openSkills: () => openFile("skills.json"),
       openContact: () => openFile("contact.txt")
     }
@@ -401,11 +403,11 @@ document.addEventListener("DOMContentLoaded", async () => {
     activeFile = name;
     editor.className = "code";
     editor.replaceChildren();
-    jsonToolbar.hidden = file.type !== "json" || name === ABOUT_FILE || name === EXPERIENCE_FILE || name === PROJECTS_OVERVIEW_FILE || name === ADVENTUREWORKS_FILE;
+    jsonToolbar.hidden = file.type !== "json" || name === ABOUT_FILE || name === EXPERIENCE_FILE || name === PROJECTS_OVERVIEW_FILE || CASE_STUDY_FILES.has(name);
     aboutToolbar.hidden = name !== ABOUT_FILE;
     experienceToolbar.hidden = name !== EXPERIENCE_FILE;
     projectsToolbar.hidden = name !== PROJECTS_OVERVIEW_FILE;
-    caseStudyToolbar.hidden = name !== ADVENTUREWORKS_FILE;
+    caseStudyToolbar.hidden = !CASE_STUDY_FILES.has(name);
     document.getElementById("lines").hidden = file.type === "json" || name === ABOUT_FILE;
     document.getElementById("json-minimap").hidden = true;
 
@@ -427,10 +429,10 @@ document.addEventListener("DOMContentLoaded", async () => {
       syncProjectsToolbar();
       if (file.preview) projectsOverviewViewer.show(file.preview);
       else jsonViewer.show(file.content, "code");
-    } else if (name === ADVENTUREWORKS_FILE) {
+    } else if (CASE_STUDY_FILES.has(name)) {
       caseStudyViewMode = file.preview ? "preview" : "code";
       syncCaseStudyToolbar();
-      if (file.preview) adventureWorksViewer.show(file.preview);
+      if (file.preview) projectCaseStudyViewer.show(file.preview);
       else jsonViewer.show(file.content, "code");
     } else if (file.type === "json") {
       jsonViewMode = "preview";
@@ -546,7 +548,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   function setCaseStudyView(mode) {
-    if (activeFile !== ADVENTUREWORKS_FILE) return;
+    if (!CASE_STUDY_FILES.has(activeFile)) return;
     if (mode === "preview" && !files[activeFile].preview) mode = "code";
     caseStudyViewMode = mode;
     syncCaseStudyToolbar();
@@ -555,7 +557,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     document.getElementById("lines").hidden = true;
     if (mode === "preview") {
       document.getElementById("json-minimap").hidden = true;
-      adventureWorksViewer.show(files[activeFile].preview);
+      projectCaseStudyViewer.show(files[activeFile].preview);
     } else {
       jsonViewer.show(files[activeFile].content, "code");
     }
@@ -577,7 +579,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (activeFile === ABOUT_FILE) return aboutViewMode;
     if (activeFile === EXPERIENCE_FILE) return experienceViewMode;
     if (activeFile === PROJECTS_OVERVIEW_FILE) return projectsViewMode;
-    if (activeFile === ADVENTUREWORKS_FILE) return caseStudyViewMode;
+    if (CASE_STUDY_FILES.has(activeFile)) return caseStudyViewMode;
     return jsonViewMode;
   }
 
