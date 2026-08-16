@@ -196,7 +196,7 @@ Owns the recruiter-oriented experience timeline. It receives experience entries 
 
 ### education-viewer.js
 
-Owns the formal education preview. It derives the display period and duration from structured dates, makes completion status explicit, and keeps academic education distinct from technical credentials and project evidence. Related-navigation controls receive predefined callbacks from `app.js`, while Code exposes the identical education model through `json-viewer.js`.
+Owns the formal education preview. It derives the display period and duration from structured dates, makes completion status explicit, and keeps academic education distinct from technical credentials and project evidence. Related-navigation controls receive predefined callbacks from `app.js`, while the paired `education.yaml` Code view is generated from the identical model and displayed with YAML syntax highlighting.
 
 ### certifications-viewer.js
 

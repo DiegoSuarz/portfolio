@@ -215,7 +215,7 @@ Structured JSON portfolio files open by default in a responsive `Preview` that p
 
 The virtual `skills.py` file keeps the Skills preview as its default view. It prioritizes core Data Engineering capabilities before platforms and supporting tools, excludes subjective proficiency percentages, and links skill groups to existing project, experience and credential evidence. Its Code view expresses that same model as readable Python dictionaries, evidence objects and a symbolic render call. The displayed imports describe the portfolio presentation concept; they are not runtime dependencies.
 
-Formal education is exposed as `education.json` with a recruiter-oriented timeline, explicit completion status and dates derived from the structured source model. The preview deliberately keeps the university degree separate from certifications and project evidence, while Code exposes the same education object.
+Formal education is exposed through the virtual `education.yaml` file with a recruiter-oriented timeline, explicit completion status and dates derived from `data/education.json`. Preview deliberately keeps the university degree separate from certifications and project evidence, while Code presents the same record as readable declarative YAML.
 
 Certifications use an explicit relevance priority from `data/certifications.json`. The virtual `certifications.sql` file keeps Preview as the default, leading with the three credentials most directly aligned to Data Engineering before complementary architecture and distributed-processing breadth. Code derives normalized `CREATE TABLE` and `INSERT INTO` statements from that same collection. The SQL is a presentation artifact and is not executed by the portfolio.
 

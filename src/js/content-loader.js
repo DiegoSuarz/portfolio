@@ -207,6 +207,20 @@ function formatContactShell(model) {
   ].join("\n");
 }
 
+function formatEducationYaml(model) {
+  const entries = model.education.flatMap(entry => [
+    `  - id: ${JSON.stringify(entry.id)}`,
+    `    institution: ${JSON.stringify(entry.institution)}`,
+    `    degree: ${JSON.stringify(entry.degree)}`,
+    "    period:",
+    `      start: ${JSON.stringify(entry.startDate)}`,
+    `      end: ${entry.endDate ? JSON.stringify(entry.endDate) : "null"}`,
+    `    completed: ${String(entry.completed)}`
+  ]);
+
+  return ["education:", ...entries].join("\n");
+}
+
 async function fetchJson(path) {
   const response = await fetch(`${path}?v=${CONTENT_VERSION}`, { cache: "no-store" });
 
@@ -389,9 +403,9 @@ export async function loadPortfolioFiles() {
       content: formatSkillsPython(skillsModel),
       preview: skillsModel
     },
-    "education.json": {
-      type: "json",
-      content: JSON.stringify(content.education, null, 2),
+    "education.yaml": {
+      type: "yaml",
+      content: formatEducationYaml(content.education),
       preview: content.education
     },
     "certifications.sql": {
