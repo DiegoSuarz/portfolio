@@ -8,7 +8,7 @@ const CONTENT_PATHS = {
   cv: "data/cv.json"
 };
 
-const CONTENT_VERSION = "m5-about-preview-2";
+const CONTENT_VERSION = "m5-about-json-1";
 
 async function fetchJson(path) {
   const response = await fetch(`${path}?v=${CONTENT_VERSION}`, { cache: "no-store" });
@@ -29,31 +29,6 @@ function formatDate(value) {
     year: "numeric",
     timeZone: "UTC"
   }).format(date);
-}
-
-function formatProfile(profile) {
-  const buildAreas = profile.buildAreas ?? [];
-  const coreStack = profile.coreStack ?? [];
-  const focusAreas = profile.focusAreas ?? [];
-
-  return [
-    `# ${profile.name}`,
-    "",
-    profile.headline,
-    profile.location,
-    profile.tagline ?? "",
-    "",
-    profile.summary,
-    "",
-    "## What I Build",
-    ...buildAreas.map(area => `- ${area.title}: ${area.description}`),
-    "",
-    "## Core Stack",
-    coreStack.join(" · "),
-    "",
-    "## Focus Areas",
-    ...focusAreas.map(area => `- ${area}`)
-  ].join("\n");
 }
 
 function formatExperience(entries) {
@@ -161,16 +136,17 @@ export async function loadPortfolioFiles() {
   const keys = Object.keys(CONTENT_PATHS);
   const values = await Promise.all(keys.map(key => fetchJson(CONTENT_PATHS[key])));
   const content = Object.fromEntries(keys.map((key, index) => [key, values[index]]));
+  const aboutModel = {
+    profile: content.profile,
+    projectCount: content.projects.projects.length,
+    certificationCount: content.certifications.certifications.length
+  };
 
   return {
-    "about.md": {
-      type: "markdown",
-      content: formatProfile(content.profile),
-      preview: {
-        profile: content.profile,
-        projectCount: content.projects.projects.length,
-        certificationCount: content.certifications.certifications.length
-      }
+    "about.json": {
+      type: "json",
+      content: JSON.stringify(aboutModel, null, 2),
+      preview: aboutModel
     },
     "experience.md": {
       type: "markdown",

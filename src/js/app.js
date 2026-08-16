@@ -1,4 +1,4 @@
-import { loadPortfolioFiles } from "./content-loader.js?v=3";
+import { loadPortfolioFiles } from "./content-loader.js?v=4";
 import { createCommandDispatcher } from "./commands.js";
 import { createTerminal } from "./terminal.js?v=3";
 import { createMenuBar } from "./menu-bar.js?v=2";
@@ -7,6 +7,8 @@ import { createLayoutResizers } from "./layout-resizer.js";
 import { createCommandPalette } from "./command-palette.js";
 import { createJsonViewer } from "./json-viewer.js";
 import { createAboutViewer } from "./about-viewer.js?v=3";
+
+const ABOUT_FILE = "about.json";
 
 document.addEventListener("DOMContentLoaded", async () => {
   let files = {};
@@ -64,7 +66,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   });
 
   const paletteCommands = [
-    { label: "Files: Open Professional Profile", action: () => openFile("about.md") },
+    { label: "Files: Open Professional Profile", action: () => openFile(ABOUT_FILE) },
     { label: "Files: Open Project Overview", action: () => openFile("projects/overview.md") },
     { label: "Files: Open Experience", action: () => openFile("experience.md") },
     { label: "Files: Open Skills", action: () => openFile("skills.json") },
@@ -97,13 +99,13 @@ document.addEventListener("DOMContentLoaded", async () => {
   [document.getElementById("json-minimap-toggle"), document.getElementById("about-minimap-toggle")].forEach(button => button.addEventListener("click", () => {
     jsonMinimap = !jsonMinimap;
     syncStructuredPreferences();
-    jsonViewer.setMinimap(jsonMinimap, activeFile === "about.md" ? aboutViewMode : jsonViewMode);
+    jsonViewer.setMinimap(jsonMinimap, activeFile === ABOUT_FILE ? aboutViewMode : jsonViewMode);
   }));
 
   createMenuBar({
     container: document.getElementById("menu-bar"),
     actions: {
-      openAbout: () => openFile("about.md"),
+      openAbout: () => openFile(ABOUT_FILE),
       openProjects: () => openFile("projects/overview.md"),
       downloadCv: () => openFile("cv.docx"),
       focusEditor: () => editor.focus(),
@@ -139,7 +141,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   try {
     files = await loadPortfolioFiles();
     buildExplorer();
-    openFile("about.md");
+    openFile(ABOUT_FILE);
     terminalController.write("Portfolio content loaded successfully.\nType help to list available commands.");
   } catch (error) {
     showLoadError(error);
@@ -344,21 +346,18 @@ document.addEventListener("DOMContentLoaded", async () => {
     activeFile = name;
     editor.className = "code";
     editor.replaceChildren();
-    jsonToolbar.hidden = file.type !== "json";
-    aboutToolbar.hidden = name !== "about.md";
-    document.getElementById("lines").hidden = file.type === "json" || name === "about.md";
+    jsonToolbar.hidden = file.type !== "json" || name === ABOUT_FILE;
+    aboutToolbar.hidden = name !== ABOUT_FILE;
+    document.getElementById("lines").hidden = file.type === "json" || name === ABOUT_FILE;
     document.getElementById("json-minimap").hidden = true;
 
-    if (name === "about.md") {
+    if (name === ABOUT_FILE) {
       aboutViewMode = file.preview ? "preview" : "code";
       syncAboutToolbar();
       if (file.preview) {
         aboutViewer.show(file.preview);
       } else {
-        document.getElementById("lines").hidden = false;
-        editor.innerHTML = highlight(file.content, "markdown");
-        editor.classList.add("is-markdown");
-        renderLines(file.content);
+        jsonViewer.show(file.content, "code");
       }
     } else if (file.type === "json") {
       jsonViewMode = "preview";
@@ -368,10 +367,10 @@ document.addEventListener("DOMContentLoaded", async () => {
       editor.innerHTML = highlight(file.content, file.type);
       document.getElementById("json-minimap").hidden = true;
     }
-    editor.classList.toggle("is-markdown", file.type === "markdown" && name !== "about.md");
+    editor.classList.toggle("is-markdown", file.type === "markdown");
     document.getElementById("lang").textContent = file.type;
 
-    if (file.type !== "json" && name !== "about.md") renderLines(file.content);
+    if (file.type !== "json") renderLines(file.content);
     updateTabs(name);
     updateBreadcrumbs(name);
     updateActiveExplorerItem();
@@ -382,7 +381,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   function setAboutView(mode) {
-    if (activeFile !== "about.md") return;
+    if (activeFile !== ABOUT_FILE) return;
     if (mode === "preview" && !files[activeFile].preview) mode = "code";
     aboutViewMode = mode;
     syncAboutToolbar();
@@ -392,18 +391,16 @@ document.addEventListener("DOMContentLoaded", async () => {
       document.getElementById("lines").hidden = true;
       document.getElementById("json-minimap").hidden = true;
       aboutViewer.show(files[activeFile].preview);
-      document.getElementById("lang").textContent = "markdown";
+      document.getElementById("lang").textContent = "json";
     } else {
       if (files[activeFile].preview) {
         document.getElementById("lines").hidden = true;
         jsonViewer.show(JSON.stringify(files[activeFile].preview, null, 2), "code");
         document.getElementById("lang").textContent = "json";
       } else {
-        document.getElementById("lines").hidden = false;
-        editor.innerHTML = highlight(files[activeFile].content, "markdown");
-        editor.classList.add("is-markdown");
-        renderLines(files[activeFile].content);
-        document.getElementById("lang").textContent = "markdown";
+        document.getElementById("lines").hidden = true;
+        jsonViewer.show(files[activeFile].content, "code");
+        document.getElementById("lang").textContent = "json";
       }
     }
     updateBreadcrumbs(activeFile);
@@ -561,7 +558,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   function updateJsonBreadcrumb(path) {
-    const isStructuredView = files[activeFile]?.type === "json" || (activeFile === "about.md" && aboutViewMode === "code");
+    const isStructuredView = files[activeFile]?.type === "json";
     if (!activeFile || !isStructuredView) return;
     updateBreadcrumbs(activeFile);
     const breadcrumbs = document.getElementById("breadcrumbs");
