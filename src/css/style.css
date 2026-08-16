@@ -440,8 +440,9 @@ body {
 .breadcrumb-separator { color: #707070; }
 .breadcrumb-structure { overflow: hidden; color: #9cdcfe; text-overflow: ellipsis; }
 
-.about-toolbar { display: flex; min-height: 34px; align-items: center; gap: 3px; border-bottom: 1px solid #2b2b2b; padding: 3px 10px; background: #181818; }
+.about-toolbar { display: flex; min-height: 34px; align-items: center; justify-content: space-between; gap: 12px; border-bottom: 1px solid #2b2b2b; padding: 3px 10px; background: #181818; }
 .about-toolbar[hidden] { display: none; }
+.about-toolbar [hidden] { display: none; }
 
 .json-toolbar { display: flex; min-height: 34px; align-items: center; justify-content: space-between; gap: 12px; border-bottom: 1px solid #2b2b2b; padding: 3px 10px; background: #181818; }
 .json-toolbar[hidden] { display: none; }
@@ -1059,7 +1060,7 @@ body {
   .about-toolbar { padding-inline: 5px; }
   .json-view-options { gap: 1px; }
   .json-tool { padding-inline: 6px; font-size: 11px; }
-  #json-minimap-toggle { display: none; }
+  #json-minimap-toggle, #about-minimap-toggle { display: none; }
   .json-minimap { display: none; }
   .json-line { padding-right: 8px; padding-left: calc(43px + var(--json-depth) * 14px); background-position: calc(39px + var(--json-depth) * 14px) 0; background-size: calc(var(--json-depth) * 14px) 100%; }
   .json-fold { left: calc(30px + var(--json-depth) * 14px); }

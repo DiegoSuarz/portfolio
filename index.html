@@ -46,8 +46,14 @@
     <nav class="breadcrumbs" id="breadcrumbs" aria-label="Current file path"></nav>
 
     <div class="about-toolbar" id="about-toolbar" aria-label="About view controls" hidden>
-      <button class="json-tool active" type="button" data-about-view="preview" aria-pressed="true">Preview</button>
-      <button class="json-tool" type="button" data-about-view="code" aria-pressed="false">Code</button>
+      <div class="json-view-switch" role="group" aria-label="About display mode">
+        <button class="json-tool active" type="button" data-about-view="preview" aria-pressed="true">Preview</button>
+        <button class="json-tool" type="button" data-about-view="code" aria-pressed="false">Code</button>
+      </div>
+      <div class="json-view-options" id="about-code-options" hidden>
+        <button class="json-tool active" id="about-wrap-toggle" type="button" aria-pressed="true">Word Wrap</button>
+        <button class="json-tool active" id="about-minimap-toggle" type="button" aria-pressed="true">Minimap</button>
+      </div>
     </div>
 
     <div class="json-toolbar" id="json-toolbar" aria-label="JSON view controls" hidden>
@@ -109,6 +115,6 @@
   <div class="status-group status-group--right"><span>UTF-8</span><span>LF</span><span>{ }</span><span id="lang">Plain Text</span><span aria-label="Notifications">◯</span></div>
 </footer>
 
-<script type="module" src="src/js/app.js?v=18"></script>
+<script type="module" src="src/js/app.js?v=19"></script>
 </body>
 </html>

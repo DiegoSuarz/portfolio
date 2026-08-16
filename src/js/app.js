@@ -24,6 +24,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const statusLeft = document.getElementById("status-position");
   const jsonToolbar = document.getElementById("json-toolbar");
   const aboutToolbar = document.getElementById("about-toolbar");
+  const aboutCodeOptions = document.getElementById("about-code-options");
   const jsonViewer = createJsonViewer({
     editor,
     minimap: document.getElementById("json-minimap"),
@@ -88,18 +89,16 @@ document.addEventListener("DOMContentLoaded", async () => {
   aboutToolbar.querySelectorAll("[data-about-view]").forEach(button => {
     button.addEventListener("click", () => setAboutView(button.dataset.aboutView));
   });
-  document.getElementById("json-wrap-toggle").addEventListener("click", event => {
+  [document.getElementById("json-wrap-toggle"), document.getElementById("about-wrap-toggle")].forEach(button => button.addEventListener("click", () => {
     jsonWrap = !jsonWrap;
-    event.currentTarget.classList.toggle("active", jsonWrap);
-    event.currentTarget.setAttribute("aria-pressed", String(jsonWrap));
+    syncStructuredPreferences();
     jsonViewer.setWrap(jsonWrap);
-  });
-  document.getElementById("json-minimap-toggle").addEventListener("click", event => {
+  }));
+  [document.getElementById("json-minimap-toggle"), document.getElementById("about-minimap-toggle")].forEach(button => button.addEventListener("click", () => {
     jsonMinimap = !jsonMinimap;
-    event.currentTarget.classList.toggle("active", jsonMinimap);
-    event.currentTarget.setAttribute("aria-pressed", String(jsonMinimap));
-    jsonViewer.setMinimap(jsonMinimap, jsonViewMode);
-  });
+    syncStructuredPreferences();
+    jsonViewer.setMinimap(jsonMinimap, activeFile === "about.md" ? aboutViewMode : jsonViewMode);
+  }));
 
   createMenuBar({
     container: document.getElementById("menu-bar"),
@@ -391,13 +390,23 @@ document.addEventListener("DOMContentLoaded", async () => {
     editor.replaceChildren();
     if (mode === "preview") {
       document.getElementById("lines").hidden = true;
+      document.getElementById("json-minimap").hidden = true;
       aboutViewer.show(files[activeFile].preview);
+      document.getElementById("lang").textContent = "markdown";
     } else {
-      document.getElementById("lines").hidden = false;
-      editor.innerHTML = highlight(files[activeFile].content, "markdown");
-      editor.classList.add("is-markdown");
-      renderLines(files[activeFile].content);
+      if (files[activeFile].preview) {
+        document.getElementById("lines").hidden = true;
+        jsonViewer.show(JSON.stringify(files[activeFile].preview, null, 2), "code");
+        document.getElementById("lang").textContent = "json";
+      } else {
+        document.getElementById("lines").hidden = false;
+        editor.innerHTML = highlight(files[activeFile].content, "markdown");
+        editor.classList.add("is-markdown");
+        renderLines(files[activeFile].content);
+        document.getElementById("lang").textContent = "markdown";
+      }
     }
+    updateBreadcrumbs(activeFile);
   }
 
   function syncAboutToolbar() {
@@ -405,6 +414,19 @@ document.addEventListener("DOMContentLoaded", async () => {
       const active = button.dataset.aboutView === aboutViewMode;
       button.classList.toggle("active", active);
       button.setAttribute("aria-pressed", String(active));
+    });
+    aboutCodeOptions.hidden = aboutViewMode !== "code";
+    syncStructuredPreferences();
+  }
+
+  function syncStructuredPreferences() {
+    [document.getElementById("json-wrap-toggle"), document.getElementById("about-wrap-toggle")].forEach(button => {
+      button.classList.toggle("active", jsonWrap);
+      button.setAttribute("aria-pressed", String(jsonWrap));
+    });
+    [document.getElementById("json-minimap-toggle"), document.getElementById("about-minimap-toggle")].forEach(button => {
+      button.classList.toggle("active", jsonMinimap);
+      button.setAttribute("aria-pressed", String(jsonMinimap));
     });
   }
 
@@ -422,6 +444,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       button.classList.toggle("active", active);
       button.setAttribute("aria-pressed", String(active));
     });
+    syncStructuredPreferences();
     jsonViewer.setWrap(jsonWrap);
     jsonViewer.setMinimap(jsonMinimap, jsonViewMode);
   }
@@ -538,7 +561,8 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   function updateJsonBreadcrumb(path) {
-    if (!activeFile || files[activeFile]?.type !== "json") return;
+    const isStructuredView = files[activeFile]?.type === "json" || (activeFile === "about.md" && aboutViewMode === "code");
+    if (!activeFile || !isStructuredView) return;
     updateBreadcrumbs(activeFile);
     const breadcrumbs = document.getElementById("breadcrumbs");
     path.forEach(segment => {
