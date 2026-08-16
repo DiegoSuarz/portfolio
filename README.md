@@ -202,6 +202,8 @@ The Recruiter Visual Experience milestone improves information hierarchy and rea
 
 Its VS Code-inspired workspace now includes a searchable Command Palette (`Ctrl+Shift+P`), a centered Command Center, active-file breadcrumbs, descriptive Activity Bar tooltips, a richer status bar and keyboard-accessible panel resizing on desktop. These controls provide real navigation and layout behavior rather than decorative imitation.
 
+Typography follows the native VS Code hierarchy: Segoe WPC/Segoe UI for application chrome and recruiter-facing previews, with Cascadia Code/Cascadia Mono/Consolas for source files and the terminal. Local system fallbacks keep the interface readable without loading third-party web fonts.
+
 The virtual `about.toml` file opens as a recruiter-oriented professional overview with direct portfolio actions, concise focus areas, a prioritized core stack and evidence counts derived from the project and certification collections. Its Code view presents the same model through TOML profile, link, build-area and portfolio sections, while `data/profile.json` remains the source of truth.
 
 Experience follows the same `Preview | Code` contract through the virtual `experience.ipynb` notebook. Its default timeline orders roles by recency, calculates display periods and durations from structured dates, and separates factual contributions from transferable Data Engineering relevance. Code exposes a valid Jupyter notebook with descriptive Markdown and symbolic Python cells derived from `data/experience.json`; no cell is executed and no output is fabricated.

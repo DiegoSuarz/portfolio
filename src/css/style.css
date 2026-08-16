@@ -1,13 +1,15 @@
 :root {
   --sidebar-width: 240px;
   --panel-height: 160px;
+  --vscode-ui-font: "Segoe WPC", "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  --vscode-editor-font: "Cascadia Code", "Cascadia Mono", Consolas, "Courier New", monospace;
 }
 
 * { box-sizing: border-box; }
 
 body {
   margin: 0;
-  font-family: "Cascadia Code", Consolas, monospace;
+  font-family: var(--vscode-ui-font);
   font-size: 15px;
   line-height: 1.5;
   background: #1e1e1e;
@@ -478,6 +480,8 @@ body {
   padding: 10px;
   text-align: right;
   color: #858585;
+  font-family: var(--vscode-editor-font);
+  font-variant-ligatures: none;
   user-select: none;
   white-space: pre;
 }
@@ -486,6 +490,8 @@ body {
   flex: 1;
   min-width: 0;
   padding: 10px;
+  font-family: var(--vscode-editor-font);
+  font-variant-ligatures: none;
   font-size: 15px;
   line-height: 1.55;
   white-space: pre;
@@ -866,6 +872,18 @@ body {
 .certifications-related .certification-action { margin-top: 0; }
 
 .code.contact-preview { padding: clamp(20px, 4vw, 44px); white-space: normal; overflow: auto; }
+.code.about-preview,
+.code.experience-preview,
+.code.projects-preview,
+.code.case-study-preview,
+.code.skills-preview,
+.code.education-preview,
+.code.certifications-preview,
+.code.contact-preview,
+.code.markdown-preview {
+  font-family: var(--vscode-ui-font);
+  font-variant-ligatures: normal;
+}
 .contact-preview::after { display: none; }
 .contact-header { max-width: 900px; margin-bottom: 25px; }
 .contact-eyebrow { margin: 0 0 5px; color: #4ec9b0; font-size: 12px; letter-spacing: .12em; text-transform: uppercase; }
@@ -899,7 +917,7 @@ body {
 .contact-related { display: flex; flex-wrap: wrap; gap: 8px; max-width: 1050px; margin-top: 25px; border-top: 1px solid #343434; padding-top: 20px; }
 .contact-related .contact-action { margin-top: 0; }
 
-.code.markdown-preview { max-width: none; padding: clamp(24px, 5vw, 52px); white-space: normal; overflow: auto; color: #d4d4d4; font-family: system-ui, sans-serif; }
+.code.markdown-preview { max-width: none; padding: clamp(24px, 5vw, 52px); white-space: normal; overflow: auto; color: #d4d4d4; font-family: var(--vscode-ui-font); }
 .markdown-preview::after { display: none; }
 .markdown-preview > * { max-width: 920px; }
 .markdown-preview h1 { margin: 0 0 18px; padding-bottom: 12px; border-bottom: 1px solid #3b3b3b; color: #f0f0f0; font-size: clamp(28px, 4vw, 42px); line-height: 1.2; }
@@ -913,6 +931,15 @@ body {
 .markdown-preview a:hover { text-decoration: underline; }
 .markdown-preview :not(pre) > code { border: 1px solid #444; border-radius: 4px; padding: 2px 5px; background: #2d2d2d; color: #ce9178; font-family: "Cascadia Code", Consolas, monospace; font-size: .9em; }
 .markdown-preview pre { margin: 12px 0 18px; border: 1px solid #3b3b3b; border-radius: 6px; padding: 14px; overflow-x: auto; background: #181818; color: #d4d4d4; font: 12px/1.6 "Cascadia Code", Consolas, monospace; }
+
+:is(.about-preview, .experience-preview, .projects-preview, .case-study-preview, .skills-preview, .education-preview, .certifications-preview, .contact-preview, .markdown-preview) :where(*) {
+  font-family: inherit;
+}
+
+.markdown-preview :where(code, pre) {
+  font-family: var(--vscode-editor-font);
+  font-variant-ligatures: none;
+}
 
 .status-group { display: flex; min-width: 0; align-items: center; gap: 12px; white-space: nowrap; }
 .status-group--right { justify-content: flex-end; }
@@ -982,6 +1009,8 @@ body {
   border-top: 1px solid #333;
   font-size: 14px;
   line-height: 1.45;
+  font-family: var(--vscode-editor-font);
+  font-variant-ligatures: none;
 }
 
 .command-palette-backdrop {
@@ -1312,7 +1341,7 @@ body {
   padding: 10px;
   overflow: auto;
   color: #cccccc;
-  font-family: Consolas, monospace;
+  font-family: var(--vscode-editor-font);
   white-space: pre-wrap;
 }
 
