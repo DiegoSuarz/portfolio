@@ -213,6 +213,8 @@ JSON portfolio files open by default in a responsive `Preview` that presents the
 
 The Skills preview prioritizes core Data Engineering capabilities before platforms and supporting tools, excludes subjective proficiency percentages, and links skill groups to existing project, experience and credential evidence. Its Code view exposes the same curated categories and evidence mapping.
 
+Formal education is exposed as `education.json` with a recruiter-oriented timeline, explicit completion status and dates derived from the structured source model. The preview deliberately keeps the university degree separate from certifications and project evidence, while Code exposes the same education object.
+
 ## Engineering Principles
 
 - Separation of concerns

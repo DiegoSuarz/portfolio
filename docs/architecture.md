@@ -150,6 +150,7 @@ portfolio/
 |       |-- command-palette.js
 |       |-- commands.js
 |       |-- content-loader.js
+|       |-- education-viewer.js
 |       |-- experience-viewer.js
 |       |-- json-viewer.js
 |       |-- layout-resizer.js
@@ -189,6 +190,10 @@ Owns the shared project case-study preview for AdventureWorks and E-Commerce. It
 ### experience-viewer.js
 
 Owns the recruiter-oriented experience timeline. It receives experience entries already ordered by the content layer, derives human-readable periods and durations from structured dates, and keeps factual contributions visually separate from `dataEngineeringRelevance`. Related-navigation controls receive predefined callbacks from `app.js`; the paired Code view delegates the identical model to `json-viewer.js`.
+
+### education-viewer.js
+
+Owns the formal education preview. It derives the display period and duration from structured dates, makes completion status explicit, and keeps academic education distinct from technical credentials and project evidence. Related-navigation controls receive predefined callbacks from `app.js`, while Code exposes the identical education model through `json-viewer.js`.
 
 ### projects-overview-viewer.js
 

@@ -100,6 +100,17 @@
       </div>
     </div>
 
+    <div class="education-toolbar" id="education-toolbar" aria-label="Education view controls" hidden>
+      <div class="json-view-switch" role="group" aria-label="Education display mode">
+        <button class="json-tool active" type="button" data-education-view="preview" aria-pressed="true">Preview</button>
+        <button class="json-tool" type="button" data-education-view="code" aria-pressed="false">Code</button>
+      </div>
+      <div class="json-view-options" id="education-code-options" hidden>
+        <button class="json-tool active" id="education-wrap-toggle" type="button" aria-pressed="true">Word Wrap</button>
+        <button class="json-tool active" id="education-minimap-toggle" type="button" aria-pressed="true">Minimap</button>
+      </div>
+    </div>
+
     <div class="json-toolbar" id="json-toolbar" aria-label="JSON view controls" hidden>
       <div class="json-view-switch" role="group" aria-label="JSON display mode">
         <button class="json-tool" type="button" data-json-view="code" aria-pressed="false">Code</button>
@@ -159,6 +170,6 @@
   <div class="status-group status-group--right"><span>UTF-8</span><span>LF</span><span>{ }</span><span id="lang">Plain Text</span><span aria-label="Notifications">◯</span></div>
 </footer>
 
-<script type="module" src="src/js/app.js?v=25"></script>
+<script type="module" src="src/js/app.js?v=26"></script>
 </body>
 </html>

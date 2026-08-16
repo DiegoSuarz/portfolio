@@ -203,6 +203,8 @@ File: `data/education.json`
 
 The education model stores formal academic education. Dates use the same machine-friendly format as professional experience, and `completed` must reflect the actual program status.
 
+The application exposes this model as the virtual `education.json` file. Preview derives only display values such as the formatted period and duration; Code retains the exact structured education object. Certifications and project evidence remain separate domains and must not be presented as part of the degree.
+
 ## 8. Certifications Model
 
 File: `data/certifications.json`

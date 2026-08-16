@@ -8,7 +8,7 @@ const CONTENT_PATHS = {
   cv: "data/cv.json"
 };
 
-const CONTENT_VERSION = "m5-skills-preview-1";
+const CONTENT_VERSION = "m5-education-preview-1";
 
 async function fetchJson(path) {
   const response = await fetch(`${path}?v=${CONTENT_VERSION}`, { cache: "no-store" });
@@ -18,28 +18,6 @@ async function fetchJson(path) {
   }
 
   return response.json();
-}
-
-function formatDate(value) {
-  const [year, month] = value.split("-").map(Number);
-  const date = new Date(Date.UTC(year, month - 1, 1));
-
-  return new Intl.DateTimeFormat("en-US", {
-    month: "short",
-    year: "numeric",
-    timeZone: "UTC"
-  }).format(date);
-}
-
-function formatEducation(entries) {
-  const sections = entries.map(entry => [
-    `## ${entry.degree}`,
-    entry.institution,
-    `${formatDate(entry.startDate)} - ${formatDate(entry.endDate)}`,
-    entry.completed ? "Completed" : "In progress"
-  ].join("\n"));
-
-  return ["# Education", "", ...sections].join("\n\n");
 }
 
 function formatContact(profile) {
@@ -169,9 +147,10 @@ export async function loadPortfolioFiles() {
       content: JSON.stringify(skillsModel, null, 2),
       preview: skillsModel
     },
-    "education.md": {
-      type: "markdown",
-      content: formatEducation(content.education.education)
+    "education.json": {
+      type: "json",
+      content: JSON.stringify(content.education, null, 2),
+      preview: content.education
     },
     "certifications.json": {
       type: "json",
