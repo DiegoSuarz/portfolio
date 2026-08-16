@@ -215,6 +215,8 @@ The Skills preview prioritizes core Data Engineering capabilities before platfor
 
 Formal education is exposed as `education.json` with a recruiter-oriented timeline, explicit completion status and dates derived from the structured source model. The preview deliberately keeps the university degree separate from certifications and project evidence, while Code exposes the same education object.
 
+Certifications use an explicit relevance priority in `certifications.json`. Preview leads with the three credentials most directly aligned to Data Engineering, then presents complementary architecture and distributed-processing breadth. Every card preserves the published credential name, issuer, technical focus and public verification link; Code exposes the same collection.
+
 ## Engineering Principles
 
 - Separation of concerns

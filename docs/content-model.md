@@ -216,6 +216,7 @@ File: `data/certifications.json`
       "id": "string",
       "name": "string",
       "issuer": "string",
+      "priority": "primary|supporting",
       "credentialUrl": "string",
       "focusAreas": ["string"]
     }
@@ -226,6 +227,8 @@ File: `data/certifications.json`
 The certifications model stores a curated selection of completed credentials that reinforce the target Data Engineering profile.
 
 `credentialUrl` must point to a public or shareable credential. `focusAreas` summarizes the credential scope using concise, verifiable concepts rather than promotional descriptions or self-assessed proficiency.
+
+`priority` communicates relevance to the target role rather than credential difficulty or skill level. `primary` is reserved for credentials directly focused on Data Engineering, relational databases, pipelines or data warehousing; `supporting` covers complementary architecture and distributed-processing breadth. Source order remains the display order within each priority group.
 
 Exam preparation programs must not be presented as official vendor certifications. Overlapping introductory credentials may be omitted when a broader professional certificate already provides stronger evidence of the same capabilities.
 

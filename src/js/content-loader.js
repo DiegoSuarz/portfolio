@@ -8,7 +8,7 @@ const CONTENT_PATHS = {
   cv: "data/cv.json"
 };
 
-const CONTENT_VERSION = "m5-education-preview-1";
+const CONTENT_VERSION = "m5-certifications-preview-1";
 
 async function fetchJson(path) {
   const response = await fetch(`${path}?v=${CONTENT_VERSION}`, { cache: "no-store" });
@@ -154,7 +154,8 @@ export async function loadPortfolioFiles() {
     },
     "certifications.json": {
       type: "json",
-      content: JSON.stringify(content.certifications, null, 2)
+      content: JSON.stringify(content.certifications, null, 2),
+      preview: content.certifications
     },
     "contact.txt": {
       type: "text",

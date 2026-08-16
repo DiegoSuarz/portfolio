@@ -149,6 +149,7 @@ portfolio/
 |       |-- adventureworks-viewer.js
 |       |-- command-palette.js
 |       |-- commands.js
+|       |-- certifications-viewer.js
 |       |-- content-loader.js
 |       |-- education-viewer.js
 |       |-- experience-viewer.js
@@ -194,6 +195,10 @@ Owns the recruiter-oriented experience timeline. It receives experience entries 
 ### education-viewer.js
 
 Owns the formal education preview. It derives the display period and duration from structured dates, makes completion status explicit, and keeps academic education distinct from technical credentials and project evidence. Related-navigation controls receive predefined callbacks from `app.js`, while Code exposes the identical education model through `json-viewer.js`.
+
+### certifications-viewer.js
+
+Owns the recruiter-oriented credentials preview. It separates primary Data Engineering credentials from supporting technical breadth using the source `priority`, presents issuer and focus areas, and opens only the public verification URL supplied by the model. The transparency note avoids equating course credentials with vendor certification exams, and Code exposes the identical certification collection through `json-viewer.js`.
 
 ### projects-overview-viewer.js
 
