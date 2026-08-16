@@ -236,6 +236,8 @@ The certifications model stores a curated selection of completed credentials tha
 
 Exam preparation programs must not be presented as official vendor certifications. Overlapping introductory credentials may be omitted when a broader professional certificate already provides stronger evidence of the same capabilities.
 
+The application exposes this source as the virtual `certifications.sql` file. Preview consumes the original certification collection. Code derives a normalized `certifications` table, a related `certification_focus_areas` table and their `INSERT INTO` statements from that identical model. This SQL is symbolic portfolio presentation: it is not executed and does not become a second source of credential data.
+
 ## 9. CV Model
 
 File: `data/cv.json`

@@ -1,4 +1,4 @@
-import { loadPortfolioFiles } from "./content-loader.js?v=15";
+import { loadPortfolioFiles } from "./content-loader.js?v=16";
 import { createCommandDispatcher } from "./commands.js?v=3";
 import { createTerminal } from "./terminal.js?v=3";
 import { createMenuBar } from "./menu-bar.js?v=2";
@@ -24,7 +24,7 @@ const ECOMMERCE_FILE = "projects/ecommerce-data-engineering-platform.json";
 const CASE_STUDY_FILES = new Set([ADVENTUREWORKS_FILE, ECOMMERCE_FILE]);
 const SKILLS_FILE = "skills.py";
 const EDUCATION_FILE = "education.json";
-const CERTIFICATIONS_FILE = "certifications.json";
+const CERTIFICATIONS_FILE = "certifications.sql";
 const CONTACT_FILE = "contact.json";
 const README_FILE = "README.md";
 
@@ -63,7 +63,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   const educationToolbar = document.getElementById("education-toolbar");
   const educationCodeOptions = document.getElementById("education-code-options");
   const certificationsToolbar = document.getElementById("certifications-toolbar");
-  const certificationsCodeOptions = document.getElementById("certifications-code-options");
   const contactToolbar = document.getElementById("contact-toolbar");
   const contactCodeOptions = document.getElementById("contact-code-options");
   const readmeToolbar = document.getElementById("readme-toolbar");
@@ -79,7 +78,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       downloadCv: () => openFile("cv.docx"),
       openLinkedin: url => window.open(url, "_blank", "noopener,noreferrer"),
       openContact: () => openFile(CONTACT_FILE),
-      openCertifications: () => openFile("certifications.json")
+      openCertifications: () => openFile(CERTIFICATIONS_FILE)
     }
   });
   const experienceViewer = createExperienceViewer({
@@ -119,7 +118,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       openEvidence: openFile,
       openProjects: () => openFile(PROJECTS_OVERVIEW_FILE),
       openExperience: () => openFile(EXPERIENCE_FILE),
-      openCertifications: () => openFile("certifications.json"),
+      openCertifications: () => openFile(CERTIFICATIONS_FILE),
       openContact: () => openFile(CONTACT_FILE)
     }
   });
@@ -227,12 +226,12 @@ document.addEventListener("DOMContentLoaded", async () => {
   readmeToolbar.querySelectorAll("[data-readme-view]").forEach(button => {
     button.addEventListener("click", () => setReadmeView(button.dataset.readmeView));
   });
-  [document.getElementById("json-wrap-toggle"), document.getElementById("about-wrap-toggle"), document.getElementById("experience-wrap-toggle"), document.getElementById("projects-wrap-toggle"), document.getElementById("case-study-wrap-toggle"), document.getElementById("education-wrap-toggle"), document.getElementById("certifications-wrap-toggle"), document.getElementById("contact-wrap-toggle")].forEach(button => button.addEventListener("click", () => {
+  [document.getElementById("json-wrap-toggle"), document.getElementById("about-wrap-toggle"), document.getElementById("experience-wrap-toggle"), document.getElementById("projects-wrap-toggle"), document.getElementById("case-study-wrap-toggle"), document.getElementById("education-wrap-toggle"), document.getElementById("contact-wrap-toggle")].forEach(button => button.addEventListener("click", () => {
     jsonWrap = !jsonWrap;
     syncStructuredPreferences();
     jsonViewer.setWrap(jsonWrap);
   }));
-  [document.getElementById("json-minimap-toggle"), document.getElementById("about-minimap-toggle"), document.getElementById("experience-minimap-toggle"), document.getElementById("projects-minimap-toggle"), document.getElementById("case-study-minimap-toggle"), document.getElementById("education-minimap-toggle"), document.getElementById("certifications-minimap-toggle"), document.getElementById("contact-minimap-toggle")].forEach(button => button.addEventListener("click", () => {
+  [document.getElementById("json-minimap-toggle"), document.getElementById("about-minimap-toggle"), document.getElementById("experience-minimap-toggle"), document.getElementById("projects-minimap-toggle"), document.getElementById("case-study-minimap-toggle"), document.getElementById("education-minimap-toggle"), document.getElementById("contact-minimap-toggle")].forEach(button => button.addEventListener("click", () => {
     jsonMinimap = !jsonMinimap;
     syncStructuredPreferences();
     jsonViewer.setMinimap(jsonMinimap, activeStructuredMode());
@@ -337,7 +336,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   function getFileType(path) {
     const extension = path.split(".").pop()?.toLowerCase();
-    const types = { md: "markdown", json: "json", py: "python", txt: "text", docx: "word" };
+    const types = { md: "markdown", json: "json", py: "python", sql: "sql", txt: "text", docx: "word" };
     return types[extension] ?? "file";
   }
 
@@ -535,8 +534,12 @@ document.addEventListener("DOMContentLoaded", async () => {
     } else if (name === CERTIFICATIONS_FILE) {
       certificationsViewMode = file.preview ? "preview" : "code";
       syncCertificationsToolbar();
-      if (file.preview) certificationsViewer.show(file.preview);
-      else jsonViewer.show(file.content, "code");
+      if (file.preview) {
+        document.getElementById("lines").hidden = true;
+        certificationsViewer.show(file.preview);
+      } else {
+        editor.innerHTML = highlight(file.content, "sql");
+      }
     } else if (name === CONTACT_FILE) {
       contactViewMode = file.preview ? "preview" : "code";
       syncContactToolbar();
@@ -556,6 +559,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
     editor.classList.toggle("is-markdown", file.type === "markdown");
     editor.classList.toggle("is-python", file.type === "python");
+    editor.classList.toggle("is-sql", file.type === "sql");
     document.getElementById("lang").textContent = file.type;
 
     if (file.type !== "json") renderLines(file.content);
@@ -753,14 +757,18 @@ document.addEventListener("DOMContentLoaded", async () => {
     syncCertificationsToolbar();
     editor.className = "code";
     editor.replaceChildren();
-    document.getElementById("lines").hidden = true;
     if (mode === "preview") {
+      document.getElementById("lines").hidden = true;
       document.getElementById("json-minimap").hidden = true;
       certificationsViewer.show(files[activeFile].preview);
     } else {
-      jsonViewer.show(files[activeFile].content, "code");
+      editor.classList.add("is-sql");
+      document.getElementById("lines").hidden = false;
+      document.getElementById("json-minimap").hidden = true;
+      editor.innerHTML = highlight(files[activeFile].content, "sql");
+      renderLines(files[activeFile].content);
     }
-    document.getElementById("lang").textContent = "json";
+    document.getElementById("lang").textContent = "sql";
     updateBreadcrumbs(activeFile);
   }
 
@@ -770,8 +778,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       button.classList.toggle("active", active);
       button.setAttribute("aria-pressed", String(active));
     });
-    certificationsCodeOptions.hidden = certificationsViewMode !== "code";
-    syncStructuredPreferences();
   }
 
   function setContactView(mode) {
@@ -835,17 +841,16 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (activeFile === PROJECTS_OVERVIEW_FILE) return projectsViewMode;
     if (CASE_STUDY_FILES.has(activeFile)) return caseStudyViewMode;
     if (activeFile === EDUCATION_FILE) return educationViewMode;
-    if (activeFile === CERTIFICATIONS_FILE) return certificationsViewMode;
     if (activeFile === CONTACT_FILE) return contactViewMode;
     return jsonViewMode;
   }
 
   function syncStructuredPreferences() {
-    [document.getElementById("json-wrap-toggle"), document.getElementById("about-wrap-toggle"), document.getElementById("experience-wrap-toggle"), document.getElementById("projects-wrap-toggle"), document.getElementById("case-study-wrap-toggle"), document.getElementById("education-wrap-toggle"), document.getElementById("certifications-wrap-toggle"), document.getElementById("contact-wrap-toggle")].forEach(button => {
+    [document.getElementById("json-wrap-toggle"), document.getElementById("about-wrap-toggle"), document.getElementById("experience-wrap-toggle"), document.getElementById("projects-wrap-toggle"), document.getElementById("case-study-wrap-toggle"), document.getElementById("education-wrap-toggle"), document.getElementById("contact-wrap-toggle")].forEach(button => {
       button.classList.toggle("active", jsonWrap);
       button.setAttribute("aria-pressed", String(jsonWrap));
     });
-    [document.getElementById("json-minimap-toggle"), document.getElementById("about-minimap-toggle"), document.getElementById("experience-minimap-toggle"), document.getElementById("projects-minimap-toggle"), document.getElementById("case-study-minimap-toggle"), document.getElementById("education-minimap-toggle"), document.getElementById("certifications-minimap-toggle"), document.getElementById("contact-minimap-toggle")].forEach(button => {
+    [document.getElementById("json-minimap-toggle"), document.getElementById("about-minimap-toggle"), document.getElementById("experience-minimap-toggle"), document.getElementById("projects-minimap-toggle"), document.getElementById("case-study-minimap-toggle"), document.getElementById("education-minimap-toggle"), document.getElementById("contact-minimap-toggle")].forEach(button => {
       button.classList.toggle("active", jsonMinimap);
       button.setAttribute("aria-pressed", String(jsonMinimap));
     });
@@ -1056,6 +1061,28 @@ document.addEventListener("DOMContentLoaded", async () => {
           .replace(/\b(\d+)\b/g, '<span class="python-number">$1</span>');
         strings.forEach((value, index) => {
           safeLine = safeLine.replaceAll(String.fromCharCode(0xe000 + index), `<span class="python-string">${value}</span>`);
+        });
+        return safeLine;
+      }).join("\n");
+    }
+
+    if (type === "sql") {
+      return content.split("\n").map(line => {
+        if (line.trimStart().startsWith("--")) {
+          return `<span class="sql-comment">${escapeHtml(line)}</span>`;
+        }
+
+        const strings = [];
+        let safeLine = line.replace(/'(?:''|[^'])*'/g, value => {
+          strings.push(escapeHtml(value));
+          return String.fromCharCode(0xe000 + strings.length - 1);
+        });
+        safeLine = escapeHtml(safeLine)
+          .replace(/\b(CREATE|TABLE|PRIMARY|KEY|NOT|NULL|FOREIGN|REFERENCES|INSERT|INTO|VALUES)\b/gi, '<span class="sql-keyword">$1</span>')
+          .replace(/\b(VARCHAR|INTEGER)\b/gi, '<span class="sql-type">$1</span>')
+          .replace(/\b(\d+)\b/g, '<span class="sql-number">$1</span>');
+        strings.forEach((value, index) => {
+          safeLine = safeLine.replaceAll(String.fromCharCode(0xe000 + index), `<span class="sql-string">${value}</span>`);
         });
         return safeLine;
       }).join("\n");

@@ -200,7 +200,7 @@ Owns the formal education preview. It derives the display period and duration fr
 
 ### certifications-viewer.js
 
-Owns the recruiter-oriented credentials preview. It separates primary Data Engineering credentials from supporting technical breadth using the source `priority`, presents issuer and focus areas, and opens only the public verification URL supplied by the model. The transparency note avoids equating course credentials with vendor certification exams, and Code exposes the identical certification collection through `json-viewer.js`.
+Owns the recruiter-oriented credentials preview. It separates primary Data Engineering credentials from supporting technical breadth using the source `priority`, presents issuer and focus areas, and opens only the public verification URL supplied by the model. The transparency note avoids equating course credentials with vendor certification exams. The paired `certifications.sql` Code view is generated from the identical collection and displayed by the editor with SQL syntax highlighting; it is not executed or stored in a database.
 
 ### contact-viewer.js
 

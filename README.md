@@ -217,7 +217,7 @@ The virtual `skills.py` file keeps the Skills preview as its default view. It pr
 
 Formal education is exposed as `education.json` with a recruiter-oriented timeline, explicit completion status and dates derived from the structured source model. The preview deliberately keeps the university degree separate from certifications and project evidence, while Code exposes the same education object.
 
-Certifications use an explicit relevance priority in `certifications.json`. Preview leads with the three credentials most directly aligned to Data Engineering, then presents complementary architecture and distributed-processing breadth. Every card preserves the published credential name, issuer, technical focus and public verification link; Code exposes the same collection.
+Certifications use an explicit relevance priority from `data/certifications.json`. The virtual `certifications.sql` file keeps Preview as the default, leading with the three credentials most directly aligned to Data Engineering before complementary architecture and distributed-processing breadth. Code derives normalized `CREATE TABLE` and `INSERT INTO` statements from that same collection. The SQL is a presentation artifact and is not executed by the portfolio.
 
 `contact.json` opens with a recruiter-oriented Preview that provides direct email, GitHub, LinkedIn and CV actions using the Profile and CV source models. Code exposes the same restricted public-contact model with structured folding, breadcrumbs and minimap behavior, while the preview explicitly limits itself to intentionally public professional information.
 

@@ -51,6 +51,55 @@ function formatSkillsPython(model) {
   ].join("\n");
 }
 
+function sqlString(value) {
+  return `'${String(value).replaceAll("'", "''")}'`;
+}
+
+function formatCertificationsSql(model) {
+  const certifications = model.certifications.map(certification =>
+    `    (${[
+      certification.id,
+      certification.name,
+      certification.issuer,
+      certification.priority,
+      certification.credentialUrl
+    ].map(sqlString).join(", ")})`
+  );
+  const focusAreas = model.certifications.flatMap(certification =>
+    certification.focusAreas.map((focusArea, index) =>
+      `    (${sqlString(certification.id)}, ${index + 1}, ${sqlString(focusArea)})`
+    )
+  );
+
+  return [
+    "CREATE TABLE certifications (",
+    "    certification_id VARCHAR(120) PRIMARY KEY,",
+    "    certification_name VARCHAR(200) NOT NULL,",
+    "    issuer VARCHAR(100) NOT NULL,",
+    "    relevance_priority VARCHAR(20) NOT NULL,",
+    "    credential_url VARCHAR(500) NOT NULL",
+    ");",
+    "",
+    "CREATE TABLE certification_focus_areas (",
+    "    certification_id VARCHAR(120) NOT NULL,",
+    "    display_order INTEGER NOT NULL,",
+    "    focus_area VARCHAR(160) NOT NULL,",
+    "    PRIMARY KEY (certification_id, display_order),",
+    "    FOREIGN KEY (certification_id) REFERENCES certifications(certification_id)",
+    ");",
+    "",
+    "INSERT INTO certifications (",
+    "    certification_id, certification_name, issuer, relevance_priority, credential_url",
+    ") VALUES",
+    `${certifications.join(",\n")};`,
+    "",
+    "INSERT INTO certification_focus_areas (",
+    "    certification_id, display_order, focus_area",
+    ") VALUES",
+    `${focusAreas.join(",\n")};`
+  ].join("\n");
+}
+
 async function fetchJson(path) {
   const response = await fetch(`${path}?v=${CONTENT_VERSION}`, { cache: "no-store" });
 
@@ -175,7 +224,7 @@ export async function loadPortfolioFiles() {
       { type: "Project", name: "AdventureWorks Enterprise Data Warehouse", file: "projects/adventureworks-edw.json", skills: ["SQL", "ETL / ELT", "Data Warehousing", "Dimensional Modeling", "SQL Server", "T-SQL"] },
       { type: "Project", name: "E-Commerce Data Engineering Platform", file: "projects/ecommerce-data-engineering-platform.json", skills: ["MySQL", "Docker"] },
       { type: "Experience", name: "Universidad Tecnológica del Perú", file: "experience.json", skills: ["Python"] },
-      { type: "Credentials", name: "Professional Certifications", file: "certifications.json", skills: ["SQL", "ETL / ELT", "Data Warehousing", "SQL Server", "T-SQL", "Apache Airflow"] }
+      { type: "Credentials", name: "Professional Certifications", file: "certifications.sql", skills: ["SQL", "ETL / ELT", "Data Warehousing", "SQL Server", "T-SQL", "Apache Airflow"] }
     ]
   };
   const contactModel = {
@@ -238,9 +287,9 @@ export async function loadPortfolioFiles() {
       content: JSON.stringify(content.education, null, 2),
       preview: content.education
     },
-    "certifications.json": {
-      type: "json",
-      content: JSON.stringify(content.certifications, null, 2),
+    "certifications.sql": {
+      type: "sql",
+      content: formatCertificationsSql(content.certifications),
       preview: content.certifications
     },
     "contact.json": {
