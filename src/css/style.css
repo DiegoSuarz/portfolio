@@ -440,8 +440,8 @@ body {
 .breadcrumb-separator { color: #707070; }
 .breadcrumb-structure { overflow: hidden; color: #9cdcfe; text-overflow: ellipsis; }
 
-.about-toolbar, .experience-toolbar, .projects-toolbar, .case-study-toolbar, .skills-toolbar, .education-toolbar, .certifications-toolbar, .contact-toolbar { display: flex; min-height: 34px; align-items: center; justify-content: space-between; gap: 12px; border-bottom: 1px solid #2b2b2b; padding: 3px 10px; background: #181818; }
-.about-toolbar[hidden], .experience-toolbar[hidden], .projects-toolbar[hidden], .case-study-toolbar[hidden], .skills-toolbar[hidden], .education-toolbar[hidden], .certifications-toolbar[hidden], .contact-toolbar[hidden], .about-toolbar [hidden], .experience-toolbar [hidden], .projects-toolbar [hidden], .case-study-toolbar [hidden], .skills-toolbar [hidden], .education-toolbar [hidden], .certifications-toolbar [hidden], .contact-toolbar [hidden] { display: none; }
+.about-toolbar, .experience-toolbar, .projects-toolbar, .case-study-toolbar, .skills-toolbar, .education-toolbar, .certifications-toolbar, .contact-toolbar, .readme-toolbar { display: flex; min-height: 34px; align-items: center; justify-content: space-between; gap: 12px; border-bottom: 1px solid #2b2b2b; padding: 3px 10px; background: #181818; }
+.about-toolbar[hidden], .experience-toolbar[hidden], .projects-toolbar[hidden], .case-study-toolbar[hidden], .skills-toolbar[hidden], .education-toolbar[hidden], .certifications-toolbar[hidden], .contact-toolbar[hidden], .readme-toolbar[hidden], .about-toolbar [hidden], .experience-toolbar [hidden], .projects-toolbar [hidden], .case-study-toolbar [hidden], .skills-toolbar [hidden], .education-toolbar [hidden], .certifications-toolbar [hidden], .contact-toolbar [hidden], .readme-toolbar [hidden] { display: none; }
 
 .json-toolbar { display: flex; min-height: 34px; align-items: center; justify-content: space-between; gap: 12px; border-bottom: 1px solid #2b2b2b; padding: 3px 10px; background: #181818; }
 .json-toolbar[hidden] { display: none; }
@@ -891,6 +891,21 @@ body {
 .contact-related { display: flex; flex-wrap: wrap; gap: 8px; max-width: 1050px; margin-top: 25px; border-top: 1px solid #343434; padding-top: 20px; }
 .contact-related .contact-action { margin-top: 0; }
 
+.code.markdown-preview { max-width: none; padding: clamp(24px, 5vw, 52px); white-space: normal; overflow: auto; color: #d4d4d4; font-family: system-ui, sans-serif; }
+.markdown-preview::after { display: none; }
+.markdown-preview > * { max-width: 920px; }
+.markdown-preview h1 { margin: 0 0 18px; padding-bottom: 12px; border-bottom: 1px solid #3b3b3b; color: #f0f0f0; font-size: clamp(28px, 4vw, 42px); line-height: 1.2; }
+.markdown-preview h2 { margin: 29px 0 9px; padding-bottom: 6px; border-bottom: 1px solid #343434; color: #f0f0f0; font-size: 19px; }
+.markdown-preview h3 { margin: 22px 0 8px; color: #9cdcfe; font-size: 15px; }
+.markdown-preview p { margin: 0 0 13px; color: #c9c9c9; font-size: 14px; line-height: 1.7; }
+.markdown-preview ul { margin: 0 0 16px; padding-left: 24px; color: #c9c9c9; }
+.markdown-preview li { padding: 2px 0; font-size: 13px; line-height: 1.55; }
+.markdown-preview li::marker { color: #4ec9b0; }
+.markdown-preview a { color: #4fc1ff; text-decoration: none; }
+.markdown-preview a:hover { text-decoration: underline; }
+.markdown-preview :not(pre) > code { border: 1px solid #444; border-radius: 4px; padding: 2px 5px; background: #2d2d2d; color: #ce9178; font-family: "Cascadia Code", Consolas, monospace; font-size: .9em; }
+.markdown-preview pre { margin: 12px 0 18px; border: 1px solid #3b3b3b; border-radius: 6px; padding: 14px; overflow-x: auto; background: #181818; color: #d4d4d4; font: 12px/1.6 "Cascadia Code", Consolas, monospace; }
+
 .status-group { display: flex; min-width: 0; align-items: center; gap: 12px; white-space: nowrap; }
 .status-group--right { justify-content: flex-end; }
 .status-branch { overflow: hidden; text-overflow: ellipsis; }
@@ -1301,7 +1316,7 @@ body {
   .breadcrumbs { min-height: 26px; padding-inline: 7px; }
 
   .json-toolbar { padding-inline: 5px; }
-  .about-toolbar, .experience-toolbar, .projects-toolbar, .case-study-toolbar, .skills-toolbar, .education-toolbar, .certifications-toolbar, .contact-toolbar { padding-inline: 5px; }
+  .about-toolbar, .experience-toolbar, .projects-toolbar, .case-study-toolbar, .skills-toolbar, .education-toolbar, .certifications-toolbar, .contact-toolbar, .readme-toolbar { padding-inline: 5px; }
   .json-view-options { gap: 1px; }
   .json-tool { padding-inline: 6px; font-size: 11px; }
   #json-minimap-toggle, #about-minimap-toggle, #experience-minimap-toggle, #projects-minimap-toggle, #case-study-minimap-toggle, #skills-minimap-toggle, #education-minimap-toggle, #certifications-minimap-toggle, #contact-minimap-toggle { display: none; }
@@ -1354,6 +1369,7 @@ body {
   .code.contact-preview { padding: 20px 12px 30px; }
   .contact-primary, .contact-link-grid { grid-template-columns: 1fr; }
   .contact-related .contact-action { flex: 1 1 calc(50% - 7px); }
+  .code.markdown-preview { padding: 22px 14px 32px; }
 
   .sidebar.is-collapsed {
     width: min(300px, calc(100vw - 36px));

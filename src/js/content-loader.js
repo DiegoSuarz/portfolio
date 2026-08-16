@@ -8,7 +8,7 @@ const CONTENT_PATHS = {
   cv: "data/cv.json"
 };
 
-const CONTENT_VERSION = "m5-contact-json-1";
+const CONTENT_VERSION = "m5-readme-preview-1";
 
 async function fetchJson(path) {
   const response = await fetch(`${path}?v=${CONTENT_VERSION}`, { cache: "no-store" });
@@ -68,6 +68,43 @@ function formatProjectCaseStudy(project) {
   ].join("\n");
 }
 
+function formatRepositoryReadme(content) {
+  const projectNames = content.projects.projects.map(project => `- ${project.name}`).join("\n");
+  return [
+    `# ${content.profile.name} — Data Engineering Portfolio`,
+    "",
+    `Portfolio profesional de **${content.profile.headline}** diseñado como un workspace inspirado en Visual Studio Code.`,
+    "",
+    "## Acerca del repositorio",
+    "",
+    "Este repositorio presenta experiencia, proyectos, habilidades, educación y credenciales mediante contenido estructurado y una interfaz estática desplegable en GitHub Pages.",
+    "",
+    "## Contenido principal",
+    "",
+    "- Perfil y experiencia profesional",
+    "- Casos de estudio de Data Engineering",
+    "- Skills priorizadas con evidencia",
+    "- Educación y credenciales verificables",
+    "- Contacto profesional y CV público",
+    "",
+    "## Proyectos destacados",
+    "",
+    projectNames,
+    "",
+    "## Explorar",
+    "",
+    "Usa el Explorer, el buscador o la terminal interactiva. Por ejemplo:",
+    "",
+    "```text",
+    "projects/overview.json",
+    "skills.json",
+    "contact.json",
+    "```",
+    "",
+    `Repositorio mantenido por [DiegoSuarz](${content.profile.links.github}).`
+  ].join("\n");
+}
+
 export async function loadPortfolioFiles() {
   const keys = Object.keys(CONTENT_PATHS);
   const values = await Promise.all(keys.map(key => fetchJson(CONTENT_PATHS[key])));
@@ -110,8 +147,14 @@ export async function loadPortfolioFiles() {
     },
     cv: content.cv.cv
   };
+  const repositoryReadme = formatRepositoryReadme(content);
 
   return {
+    "README.md": {
+      type: "markdown",
+      content: repositoryReadme,
+      defaultView: "code"
+    },
     "about.json": {
       type: "json",
       content: JSON.stringify(aboutModel, null, 2),

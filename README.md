@@ -223,6 +223,8 @@ Certifications use an explicit relevance priority in `certifications.json`. Prev
 
 The downloadable Spanish CV is synchronized with the portfolio's curated profile, reverse-chronological experience, current project scope, prioritized skills, formal education and five verified credentials. Its ATS-friendly structure avoids layout tables, exposes clickable professional links and omits unprioritized technologies and exam-preparation courses.
 
+The Explorer also exposes a concise virtual `README.md` generated from the repository's structured content. It opens in Markdown Code by default and offers a safe rendered Preview with headings, lists, code blocks and professional links.
+
 ## Engineering Principles
 
 - Separation of concerns

@@ -258,6 +258,8 @@ Only a reviewed and intentionally public copy should be referenced. The public a
 
 Additional domains should be introduced only when their corresponding features are implemented.
 
+The virtual `README.md` is a derived repository overview rather than a new professional data domain. The content layer assembles its title, role, project names and GitHub link from existing sources; the Markdown Code and Preview modes consume the same generated string.
+
 This avoids speculative schema design and unnecessary files.
 
 ## 11. Data Ownership

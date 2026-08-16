@@ -1,4 +1,4 @@
-import { loadPortfolioFiles } from "./content-loader.js?v=13";
+import { loadPortfolioFiles } from "./content-loader.js?v=14";
 import { createCommandDispatcher } from "./commands.js?v=3";
 import { createTerminal } from "./terminal.js?v=3";
 import { createMenuBar } from "./menu-bar.js?v=2";
@@ -14,6 +14,7 @@ import { createSkillsViewer } from "./skills-viewer.js?v=1";
 import { createEducationViewer } from "./education-viewer.js?v=1";
 import { createCertificationsViewer } from "./certifications-viewer.js?v=1";
 import { createContactViewer } from "./contact-viewer.js?v=1";
+import { createMarkdownViewer } from "./markdown-viewer.js?v=1";
 
 const ABOUT_FILE = "about.json";
 const EXPERIENCE_FILE = "experience.json";
@@ -25,6 +26,7 @@ const SKILLS_FILE = "skills.json";
 const EDUCATION_FILE = "education.json";
 const CERTIFICATIONS_FILE = "certifications.json";
 const CONTACT_FILE = "contact.json";
+const README_FILE = "README.md";
 
 document.addEventListener("DOMContentLoaded", async () => {
   let files = {};
@@ -41,6 +43,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   let educationViewMode = "preview";
   let certificationsViewMode = "preview";
   let contactViewMode = "preview";
+  let readmeViewMode = "code";
 
   const editor = document.getElementById("editor");
   const explorer = document.getElementById("portfolio-explorer");
@@ -64,6 +67,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const certificationsCodeOptions = document.getElementById("certifications-code-options");
   const contactToolbar = document.getElementById("contact-toolbar");
   const contactCodeOptions = document.getElementById("contact-code-options");
+  const readmeToolbar = document.getElementById("readme-toolbar");
   const jsonViewer = createJsonViewer({
     editor,
     minimap: document.getElementById("json-minimap"),
@@ -150,6 +154,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       openSkills: () => openFile(SKILLS_FILE)
     }
   });
+  const markdownViewer = createMarkdownViewer({ editor });
   let terminalController;
   const executeTerminalCommand = createCommandDispatcher({
     getFiles: () => files,
@@ -219,6 +224,9 @@ document.addEventListener("DOMContentLoaded", async () => {
   });
   contactToolbar.querySelectorAll("[data-contact-view]").forEach(button => {
     button.addEventListener("click", () => setContactView(button.dataset.contactView));
+  });
+  readmeToolbar.querySelectorAll("[data-readme-view]").forEach(button => {
+    button.addEventListener("click", () => setReadmeView(button.dataset.readmeView));
   });
   [document.getElementById("json-wrap-toggle"), document.getElementById("about-wrap-toggle"), document.getElementById("experience-wrap-toggle"), document.getElementById("projects-wrap-toggle"), document.getElementById("case-study-wrap-toggle"), document.getElementById("skills-wrap-toggle"), document.getElementById("education-wrap-toggle"), document.getElementById("certifications-wrap-toggle"), document.getElementById("contact-wrap-toggle")].forEach(button => button.addEventListener("click", () => {
     jsonWrap = !jsonWrap;
@@ -484,6 +492,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     educationToolbar.hidden = name !== EDUCATION_FILE;
     certificationsToolbar.hidden = name !== CERTIFICATIONS_FILE;
     contactToolbar.hidden = name !== CONTACT_FILE;
+    readmeToolbar.hidden = name !== README_FILE;
     document.getElementById("lines").hidden = file.type === "json" || name === ABOUT_FILE;
     document.getElementById("json-minimap").hidden = true;
 
@@ -530,6 +539,10 @@ document.addEventListener("DOMContentLoaded", async () => {
       syncContactToolbar();
       if (file.preview) contactViewer.show(file.preview);
       else jsonViewer.show(file.content, "code");
+    } else if (name === README_FILE) {
+      readmeViewMode = file.defaultView ?? "code";
+      syncReadmeToolbar();
+      editor.innerHTML = highlight(file.content, "markdown");
     } else if (file.type === "json") {
       jsonViewMode = "preview";
       syncJsonToolbar();
@@ -781,6 +794,33 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
     contactCodeOptions.hidden = contactViewMode !== "code";
     syncStructuredPreferences();
+  }
+
+  function setReadmeView(mode) {
+    if (activeFile !== README_FILE) return;
+    readmeViewMode = mode;
+    syncReadmeToolbar();
+    editor.className = "code is-markdown";
+    editor.replaceChildren();
+    document.getElementById("json-minimap").hidden = true;
+    if (mode === "preview") {
+      document.getElementById("lines").hidden = true;
+      markdownViewer.show(files[activeFile].content);
+    } else {
+      document.getElementById("lines").hidden = false;
+      editor.innerHTML = highlight(files[activeFile].content, "markdown");
+      renderLines(files[activeFile].content);
+    }
+    document.getElementById("lang").textContent = "markdown";
+    updateBreadcrumbs(activeFile);
+  }
+
+  function syncReadmeToolbar() {
+    readmeToolbar.querySelectorAll("[data-readme-view]").forEach(button => {
+      const active = button.dataset.readmeView === readmeViewMode;
+      button.classList.toggle("active", active);
+      button.setAttribute("aria-pressed", String(active));
+    });
   }
 
   function activeStructuredMode() {

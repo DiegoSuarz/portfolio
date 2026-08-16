@@ -156,6 +156,7 @@ portfolio/
 |       |-- experience-viewer.js
 |       |-- json-viewer.js
 |       |-- layout-resizer.js
+|       |-- markdown-viewer.js
 |       |-- menu-bar.js
 |       |-- panel-tabs.js
 |       |-- projects-overview-viewer.js
@@ -204,6 +205,10 @@ Owns the recruiter-oriented credentials preview. It separates primary Data Engin
 ### contact-viewer.js
 
 Owns the professional contact preview. It consumes a restricted public Profile projection plus reviewed CV metadata, then exposes predefined email, external-profile, CV-download and internal-navigation actions. It does not accept arbitrary HTML or publish private fields. The paired Code view delegates the identical structured contact model to `json-viewer.js`.
+
+### markdown-viewer.js
+
+Owns safe Markdown preview rendering for the virtual `README.md`. It creates headings, paragraphs, lists, fenced code, inline code, emphasis and HTTPS links through DOM APIs rather than injecting source HTML. Code remains the default README mode and uses the same generated Markdown string, so both representations stay synchronized.
 
 ### projects-overview-viewer.js
 
