@@ -1304,7 +1304,7 @@ body {
   .about-toolbar, .experience-toolbar, .projects-toolbar, .case-study-toolbar, .skills-toolbar, .education-toolbar, .certifications-toolbar, .contact-toolbar { padding-inline: 5px; }
   .json-view-options { gap: 1px; }
   .json-tool { padding-inline: 6px; font-size: 11px; }
-  #json-minimap-toggle, #about-minimap-toggle, #experience-minimap-toggle, #projects-minimap-toggle, #case-study-minimap-toggle, #skills-minimap-toggle, #education-minimap-toggle, #certifications-minimap-toggle { display: none; }
+  #json-minimap-toggle, #about-minimap-toggle, #experience-minimap-toggle, #projects-minimap-toggle, #case-study-minimap-toggle, #skills-minimap-toggle, #education-minimap-toggle, #certifications-minimap-toggle, #contact-minimap-toggle { display: none; }
   .json-minimap { display: none; }
   .json-line { padding-right: 8px; padding-left: calc(43px + var(--json-depth) * 14px); }
   .json-fold { left: calc(30px + var(--json-depth) * 14px); }

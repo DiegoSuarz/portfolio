@@ -39,7 +39,7 @@ Opens `projects/overview.json` as a discoverable shortcut.
 
 ### `contact`
 
-Opens `contact.txt` as a discoverable shortcut.
+Opens `contact.json` as a discoverable shortcut.
 
 ### `cv`
 

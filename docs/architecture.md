@@ -203,7 +203,7 @@ Owns the recruiter-oriented credentials preview. It separates primary Data Engin
 
 ### contact-viewer.js
 
-Owns the professional contact preview. It consumes public identity and contact fields from Profile plus reviewed CV metadata, then exposes predefined email, external-profile, CV-download and internal-navigation actions. It does not accept arbitrary HTML or publish private fields. The paired Text view preserves the compact plain-text contact representation used by terminal discovery.
+Owns the professional contact preview. It consumes a restricted public Profile projection plus reviewed CV metadata, then exposes predefined email, external-profile, CV-download and internal-navigation actions. It does not accept arbitrary HTML or publish private fields. The paired Code view delegates the identical structured contact model to `json-viewer.js`.
 
 ### projects-overview-viewer.js
 

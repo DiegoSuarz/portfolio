@@ -69,7 +69,7 @@ export function createCommandDispatcher({ getFiles, openFile, clearTerminal }) {
       case "projects":
         return openKnownFile("projects/overview.json");
       case "contact":
-        return openKnownFile("contact.txt");
+        return openKnownFile("contact.json");
       case "cv":
         return openKnownFile("cv.docx");
       case "clear":

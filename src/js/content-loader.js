@@ -8,7 +8,7 @@ const CONTENT_PATHS = {
   cv: "data/cv.json"
 };
 
-const CONTENT_VERSION = "m5-contact-preview-1";
+const CONTENT_VERSION = "m5-contact-json-1";
 
 async function fetchJson(path) {
   const response = await fetch(`${path}?v=${CONTENT_VERSION}`, { cache: "no-store" });
@@ -18,14 +18,6 @@ async function fetchJson(path) {
   }
 
   return response.json();
-}
-
-function formatContact(profile) {
-  return [
-    `Email: ${profile.email}`,
-    `GitHub: ${profile.links.github}`,
-    `LinkedIn: ${profile.links.linkedin}`
-  ].join("\n");
 }
 
 function formatProjectStatus(status) {
@@ -108,6 +100,16 @@ export async function loadPortfolioFiles() {
       { type: "Credentials", name: "Professional Certifications", file: "certifications.json", skills: ["SQL", "ETL / ELT", "Data Warehousing", "SQL Server", "T-SQL", "Apache Airflow"] }
     ]
   };
+  const contactModel = {
+    profile: {
+      name: content.profile.name,
+      headline: content.profile.headline,
+      location: content.profile.location,
+      email: content.profile.email,
+      links: content.profile.links
+    },
+    cv: content.cv.cv
+  };
 
   return {
     "about.json": {
@@ -157,10 +159,10 @@ export async function loadPortfolioFiles() {
       content: JSON.stringify(content.certifications, null, 2),
       preview: content.certifications
     },
-    "contact.txt": {
-      type: "text",
-      content: formatContact(content.profile),
-      preview: { profile: content.profile, cv: content.cv.cv }
+    "contact.json": {
+      type: "json",
+      content: JSON.stringify(contactModel, null, 2),
+      preview: contactModel
     },
     "cv.docx": {
       type: "download",
