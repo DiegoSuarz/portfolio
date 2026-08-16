@@ -221,6 +221,40 @@ function formatEducationYaml(model) {
   return ["education:", ...entries].join("\n");
 }
 
+function formatTomlArray(items) {
+  return `[\n${items.map(item => `  ${JSON.stringify(item)},`).join("\n")}\n]`;
+}
+
+function formatAboutToml(model) {
+  const profile = model.profile;
+  const buildAreas = profile.buildAreas.flatMap(area => [
+    "[[build_areas]]",
+    `title = ${JSON.stringify(area.title)}`,
+    `description = ${JSON.stringify(area.description)}`,
+    ""
+  ]);
+
+  return [
+    "[profile]",
+    `name = ${JSON.stringify(profile.name)}`,
+    `headline = ${JSON.stringify(profile.headline)}`,
+    `tagline = ${JSON.stringify(profile.tagline)}`,
+    `location = ${JSON.stringify(profile.location)}`,
+    `summary = ${JSON.stringify(profile.summary)}`,
+    `core_stack = ${formatTomlArray(profile.coreStack)}`,
+    `focus_areas = ${formatTomlArray(profile.focusAreas)}`,
+    "",
+    "[profile.links]",
+    `github = ${JSON.stringify(profile.links.github)}`,
+    `linkedin = ${JSON.stringify(profile.links.linkedin)}`,
+    "",
+    ...buildAreas,
+    "[portfolio]",
+    `project_count = ${model.projectCount}`,
+    `certification_count = ${model.certificationCount}`
+  ].join("\n");
+}
+
 async function fetchJson(path) {
   const response = await fetch(`${path}?v=${CONTENT_VERSION}`, { cache: "no-store" });
 
@@ -366,9 +400,9 @@ export async function loadPortfolioFiles() {
       content: repositoryReadme,
       defaultView: "code"
     },
-    "about.json": {
-      type: "json",
-      content: JSON.stringify(aboutModel, null, 2),
+    "about.toml": {
+      type: "toml",
+      content: formatAboutToml(aboutModel),
       preview: aboutModel
     },
     "experience.ipynb": {

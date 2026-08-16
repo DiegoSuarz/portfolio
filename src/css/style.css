@@ -1163,6 +1163,25 @@ body {
 .yaml-literal { color: #569cd6; }
 .yaml-comment { color: #6a9955; }
 
+.file-icon[data-file-type="toml"]::before {
+  content: "T";
+  color: #9c4221;
+  font-family: Arial, sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.code.is-toml {
+  white-space: pre;
+}
+
+.toml-table { color: #dcdcaa; }
+.toml-key { color: #9cdcfe; }
+.toml-string { color: #ce9178; }
+.toml-literal { color: #569cd6; }
+.toml-number { color: #b5cea8; }
+.toml-comment { color: #6a9955; }
+
 .file-icon[data-file-type="text"] {
   width: 13px;
   height: 12px;
@@ -1418,7 +1437,7 @@ body {
   .about-toolbar, .experience-toolbar, .projects-toolbar, .case-study-toolbar, .skills-toolbar, .education-toolbar, .certifications-toolbar, .contact-toolbar, .readme-toolbar { padding-inline: 5px; }
   .json-view-options { gap: 1px; }
   .json-tool { padding-inline: 6px; font-size: 11px; }
-  #json-minimap-toggle, #about-minimap-toggle, #experience-minimap-toggle, #projects-minimap-toggle, #case-study-minimap-toggle { display: none; }
+  #json-minimap-toggle, #experience-minimap-toggle, #projects-minimap-toggle, #case-study-minimap-toggle { display: none; }
   .json-minimap { display: none; }
   .json-line { padding-right: 8px; padding-left: calc(43px + var(--json-depth) * 14px); }
   .json-fold { left: calc(30px + var(--json-depth) * 14px); }

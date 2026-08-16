@@ -1,4 +1,4 @@
-import { loadPortfolioFiles } from "./content-loader.js?v=19";
+import { loadPortfolioFiles } from "./content-loader.js?v=20";
 import { createCommandDispatcher } from "./commands.js?v=4";
 import { createTerminal } from "./terminal.js?v=3";
 import { createMenuBar } from "./menu-bar.js?v=2";
@@ -16,7 +16,7 @@ import { createCertificationsViewer } from "./certifications-viewer.js?v=1";
 import { createContactViewer } from "./contact-viewer.js?v=1";
 import { createMarkdownViewer } from "./markdown-viewer.js?v=1";
 
-const ABOUT_FILE = "about.json";
+const ABOUT_FILE = "about.toml";
 const EXPERIENCE_FILE = "experience.ipynb";
 const PROJECTS_OVERVIEW_FILE = "projects/overview.json";
 const ADVENTUREWORKS_FILE = "projects/adventureworks-edw.json";
@@ -52,7 +52,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   const statusLeft = document.getElementById("status-position");
   const jsonToolbar = document.getElementById("json-toolbar");
   const aboutToolbar = document.getElementById("about-toolbar");
-  const aboutCodeOptions = document.getElementById("about-code-options");
   const experienceToolbar = document.getElementById("experience-toolbar");
   const experienceCodeOptions = document.getElementById("experience-code-options");
   const projectsToolbar = document.getElementById("projects-toolbar");
@@ -224,12 +223,12 @@ document.addEventListener("DOMContentLoaded", async () => {
   readmeToolbar.querySelectorAll("[data-readme-view]").forEach(button => {
     button.addEventListener("click", () => setReadmeView(button.dataset.readmeView));
   });
-  [document.getElementById("json-wrap-toggle"), document.getElementById("about-wrap-toggle"), document.getElementById("experience-wrap-toggle"), document.getElementById("projects-wrap-toggle"), document.getElementById("case-study-wrap-toggle")].forEach(button => button.addEventListener("click", () => {
+  [document.getElementById("json-wrap-toggle"), document.getElementById("experience-wrap-toggle"), document.getElementById("projects-wrap-toggle"), document.getElementById("case-study-wrap-toggle")].forEach(button => button.addEventListener("click", () => {
     jsonWrap = !jsonWrap;
     syncStructuredPreferences();
     jsonViewer.setWrap(jsonWrap);
   }));
-  [document.getElementById("json-minimap-toggle"), document.getElementById("about-minimap-toggle"), document.getElementById("experience-minimap-toggle"), document.getElementById("projects-minimap-toggle"), document.getElementById("case-study-minimap-toggle")].forEach(button => button.addEventListener("click", () => {
+  [document.getElementById("json-minimap-toggle"), document.getElementById("experience-minimap-toggle"), document.getElementById("projects-minimap-toggle"), document.getElementById("case-study-minimap-toggle")].forEach(button => button.addEventListener("click", () => {
     jsonMinimap = !jsonMinimap;
     syncStructuredPreferences();
     jsonViewer.setMinimap(jsonMinimap, activeStructuredMode());
@@ -334,7 +333,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   function getFileType(path) {
     const extension = path.split(".").pop()?.toLowerCase();
-    const types = { md: "markdown", json: "json", py: "python", ipynb: "notebook", sql: "sql", sh: "shell", yaml: "yaml", yml: "yaml", txt: "text", docx: "word" };
+    const types = { md: "markdown", json: "json", py: "python", ipynb: "notebook", sql: "sql", sh: "shell", yaml: "yaml", yml: "yaml", toml: "toml", txt: "text", docx: "word" };
     return types[extension] ?? "file";
   }
 
@@ -498,7 +497,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       if (file.preview) {
         aboutViewer.show(file.preview);
       } else {
-        jsonViewer.show(file.content, "code");
+        editor.innerHTML = highlight(file.content, "toml");
       }
     } else if (name === EXPERIENCE_FILE) {
       experienceViewMode = file.preview ? "preview" : "code";
@@ -569,6 +568,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     editor.classList.toggle("is-sql", file.type === "sql");
     editor.classList.toggle("is-shell", file.type === "shell");
     editor.classList.toggle("is-yaml", file.type === "yaml");
+    editor.classList.toggle("is-toml", file.type === "toml");
     document.getElementById("lang").textContent = file.type;
 
     if (file.type !== "json") renderLines(file.content);
@@ -592,17 +592,14 @@ document.addEventListener("DOMContentLoaded", async () => {
       document.getElementById("lines").hidden = true;
       document.getElementById("json-minimap").hidden = true;
       aboutViewer.show(files[activeFile].preview);
-      document.getElementById("lang").textContent = "json";
+      document.getElementById("lang").textContent = "toml";
     } else {
-      if (files[activeFile].preview) {
-        document.getElementById("lines").hidden = true;
-        jsonViewer.show(JSON.stringify(files[activeFile].preview, null, 2), "code");
-        document.getElementById("lang").textContent = "json";
-      } else {
-        document.getElementById("lines").hidden = true;
-        jsonViewer.show(files[activeFile].content, "code");
-        document.getElementById("lang").textContent = "json";
-      }
+      editor.classList.add("is-toml");
+      document.getElementById("lines").hidden = false;
+      document.getElementById("json-minimap").hidden = true;
+      editor.innerHTML = highlight(files[activeFile].content, "toml");
+      renderLines(files[activeFile].content);
+      document.getElementById("lang").textContent = "toml";
     }
     updateBreadcrumbs(activeFile);
   }
@@ -613,8 +610,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       button.classList.toggle("active", active);
       button.setAttribute("aria-pressed", String(active));
     });
-    aboutCodeOptions.hidden = aboutViewMode !== "code";
-    syncStructuredPreferences();
   }
 
   function setExperienceView(mode) {
@@ -849,7 +844,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   function activeStructuredMode() {
-    if (activeFile === ABOUT_FILE) return aboutViewMode;
     if (activeFile === EXPERIENCE_FILE) return experienceViewMode;
     if (activeFile === PROJECTS_OVERVIEW_FILE) return projectsViewMode;
     if (CASE_STUDY_FILES.has(activeFile)) return caseStudyViewMode;
@@ -857,11 +851,11 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   function syncStructuredPreferences() {
-    [document.getElementById("json-wrap-toggle"), document.getElementById("about-wrap-toggle"), document.getElementById("experience-wrap-toggle"), document.getElementById("projects-wrap-toggle"), document.getElementById("case-study-wrap-toggle")].forEach(button => {
+    [document.getElementById("json-wrap-toggle"), document.getElementById("experience-wrap-toggle"), document.getElementById("projects-wrap-toggle"), document.getElementById("case-study-wrap-toggle")].forEach(button => {
       button.classList.toggle("active", jsonWrap);
       button.setAttribute("aria-pressed", String(jsonWrap));
     });
-    [document.getElementById("json-minimap-toggle"), document.getElementById("about-minimap-toggle"), document.getElementById("experience-minimap-toggle"), document.getElementById("projects-minimap-toggle"), document.getElementById("case-study-minimap-toggle")].forEach(button => {
+    [document.getElementById("json-minimap-toggle"), document.getElementById("experience-minimap-toggle"), document.getElementById("projects-minimap-toggle"), document.getElementById("case-study-minimap-toggle")].forEach(button => {
       button.classList.toggle("active", jsonMinimap);
       button.setAttribute("aria-pressed", String(jsonMinimap));
     });
@@ -1138,6 +1132,29 @@ document.addEventListener("DOMContentLoaded", async () => {
           .replace(/\b(true|false|null)\b/g, '<span class="yaml-literal">$1</span>');
         strings.forEach((value, index) => {
           safeLine = safeLine.replaceAll(String.fromCharCode(0xe000 + index), `<span class="yaml-string">${value}</span>`);
+        });
+        return safeLine;
+      }).join("\n");
+    }
+
+    if (type === "toml") {
+      return content.split("\n").map(line => {
+        if (line.trimStart().startsWith("#")) {
+          return `<span class="toml-comment">${escapeHtml(line)}</span>`;
+        }
+
+        const strings = [];
+        let safeLine = line.replace(/"(?:\\.|[^"\\])*"|'[^']*'/g, value => {
+          strings.push(escapeHtml(value));
+          return String.fromCharCode(0xe000 + strings.length - 1);
+        });
+        safeLine = escapeHtml(safeLine)
+          .replace(/^(\s*)(\[{1,2}[A-Za-z0-9_.-]+\]{1,2})/, '$1<span class="toml-table">$2</span>')
+          .replace(/^(\s*)([A-Za-z_][A-Za-z0-9_-]*)(\s*=)/, '$1<span class="toml-key">$2</span>$3')
+          .replace(/\b(true|false)\b/g, '<span class="toml-literal">$1</span>')
+          .replace(/\b(\d+)\b/g, '<span class="toml-number">$1</span>');
+        strings.forEach((value, index) => {
+          safeLine = safeLine.replaceAll(String.fromCharCode(0xe000 + index), `<span class="toml-string">${value}</span>`);
         });
         return safeLine;
       }).join("\n");

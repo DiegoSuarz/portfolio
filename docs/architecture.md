@@ -184,7 +184,7 @@ The Explorer derives its hierarchy from slash-delimited virtual file paths. Fold
 
 ### about-viewer.js
 
-Owns the recruiter-oriented About preview. It receives profile content and derived portfolio counts from the application layer, creates all content through text-safe DOM APIs and exposes only predefined navigation actions. Project and credential metrics are calculated from their source collections rather than maintained as duplicated profile claims. The paired Code view delegates that same model to `json-viewer.js`, allowing the preview content and derived counts to be inspected without maintaining a second representation.
+Owns the recruiter-oriented About preview. It receives profile content and derived portfolio counts from the application layer, creates all content through text-safe DOM APIs and exposes only predefined navigation actions. Project and credential metrics are calculated from their source collections rather than maintained as duplicated profile claims. The paired `about.toml` Code view is generated from that same model and displayed with TOML syntax highlighting.
 
 ### adventureworks-viewer.js
 

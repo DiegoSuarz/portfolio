@@ -134,7 +134,7 @@ open <path>          Open a virtual file
 projects             Open the project showcase
 contact              Open professional contact details
 cv                   Download the public CV
-about.json           Open a virtual file directly by name
+about.toml           Open a virtual file directly by name
 projects/overview.json  Open a virtual file directly by path
 clear                Clear terminal output
 ```
@@ -201,7 +201,7 @@ The Recruiter Visual Experience milestone improves information hierarchy and rea
 
 Its VS Code-inspired workspace now includes a searchable Command Palette (`Ctrl+Shift+P`), a centered Command Center, active-file breadcrumbs, descriptive Activity Bar tooltips, a richer status bar and keyboard-accessible panel resizing on desktop. These controls provide real navigation and layout behavior rather than decorative imitation.
 
-The About file opens as a recruiter-oriented professional overview with direct portfolio actions, concise focus areas, a prioritized core stack and evidence counts derived from the project and certification collections. Its `Code` view exposes the exact structured model behind that preview with the same folding, syntax, breadcrumbs and minimap behavior used by Skills.
+The virtual `about.toml` file opens as a recruiter-oriented professional overview with direct portfolio actions, concise focus areas, a prioritized core stack and evidence counts derived from the project and certification collections. Its Code view presents the same model through TOML profile, link, build-area and portfolio sections, while `data/profile.json` remains the source of truth.
 
 Experience follows the same `Preview | Code` contract through the virtual `experience.ipynb` notebook. Its default timeline orders roles by recency, calculates display periods and durations from structured dates, and separates factual contributions from transferable Data Engineering relevance. Code exposes a valid Jupyter notebook with descriptive Markdown and symbolic Python cells derived from `data/experience.json`; no cell is executed and no output is fabricated.
 
