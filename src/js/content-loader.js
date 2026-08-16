@@ -8,7 +8,7 @@ const CONTENT_PATHS = {
   cv: "data/cv.json"
 };
 
-const CONTENT_VERSION = "m5-project-overview-json-1";
+const CONTENT_VERSION = "m5-adventureworks-json-1";
 
 async function fetchJson(path) {
   const response = await fetch(`${path}?v=${CONTENT_VERSION}`, { cache: "no-store" });
@@ -115,6 +115,9 @@ export async function loadPortfolioFiles() {
     inProgressCount: content.projects.projects.filter(project => project.status === "in-progress").length,
     projects: [...content.projects.projects].sort((first, second) => Number(second.featured) - Number(first.featured))
   };
+  const adventureWorksModel = {
+    project: content.projects.projects.find(project => project.id === "adventureworks-edw")
+  };
 
   return {
     "about.json": {
@@ -132,7 +135,12 @@ export async function loadPortfolioFiles() {
       content: JSON.stringify(projectOverviewModel, null, 2),
       preview: projectOverviewModel
     },
-    ...Object.fromEntries(content.projects.projects.map(project => [
+    "projects/adventureworks-edw.json": {
+      type: "json",
+      content: JSON.stringify(adventureWorksModel, null, 2),
+      preview: adventureWorksModel
+    },
+    ...Object.fromEntries(content.projects.projects.filter(project => project.id !== "adventureworks-edw").map(project => [
       `projects/${project.id}.md`,
       {
         type: "markdown",

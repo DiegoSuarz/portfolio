@@ -146,6 +146,7 @@ portfolio/
 |   `-- js/
 |       |-- app.js
 |       |-- about-viewer.js
+|       |-- adventureworks-viewer.js
 |       |-- command-palette.js
 |       |-- commands.js
 |       |-- content-loader.js
@@ -179,6 +180,10 @@ The Explorer derives its hierarchy from slash-delimited virtual file paths. Fold
 ### about-viewer.js
 
 Owns the recruiter-oriented About preview. It receives profile content and derived portfolio counts from the application layer, creates all content through text-safe DOM APIs and exposes only predefined navigation actions. Project and credential metrics are calculated from their source collections rather than maintained as duplicated profile claims. The paired Code view delegates that same model to `json-viewer.js`, allowing the preview content and derived counts to be inspected without maintaining a second representation.
+
+### adventureworks-viewer.js
+
+Owns the flagship AdventureWorks case-study preview. It presents only the current architecture, technologies, highlights and links already present in the project model. Stable presentation labels group the four documented highlights into dimensional modeling, ETL reliability, historical tracking and observability; they do not add capabilities beyond the source statements. Planned evolution is visually and semantically separated from implemented scope, and the paired Code view delegates the identical project object to `json-viewer.js`.
 
 ### experience-viewer.js
 

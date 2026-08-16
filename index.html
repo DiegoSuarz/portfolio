@@ -78,6 +78,17 @@
       </div>
     </div>
 
+    <div class="case-study-toolbar" id="case-study-toolbar" aria-label="AdventureWorks case study controls" hidden>
+      <div class="json-view-switch" role="group" aria-label="Case study display mode">
+        <button class="json-tool active" type="button" data-case-study-view="preview" aria-pressed="true">Preview</button>
+        <button class="json-tool" type="button" data-case-study-view="code" aria-pressed="false">Code</button>
+      </div>
+      <div class="json-view-options" id="case-study-code-options" hidden>
+        <button class="json-tool active" id="case-study-wrap-toggle" type="button" aria-pressed="true">Word Wrap</button>
+        <button class="json-tool active" id="case-study-minimap-toggle" type="button" aria-pressed="true">Minimap</button>
+      </div>
+    </div>
+
     <div class="json-toolbar" id="json-toolbar" aria-label="JSON view controls" hidden>
       <div class="json-view-switch" role="group" aria-label="JSON display mode">
         <button class="json-tool" type="button" data-json-view="code" aria-pressed="false">Code</button>
@@ -137,6 +148,6 @@
   <div class="status-group status-group--right"><span>UTF-8</span><span>LF</span><span>{ }</span><span id="lang">Plain Text</span><span aria-label="Notifications">◯</span></div>
 </footer>
 
-<script type="module" src="src/js/app.js?v=22"></script>
+<script type="module" src="src/js/app.js?v=23"></script>
 </body>
 </html>

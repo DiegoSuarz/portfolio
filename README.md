@@ -203,7 +203,9 @@ The About file opens as a recruiter-oriented professional overview with direct p
 
 Experience follows the same `Preview | Code` contract through `experience.json`. Its default timeline orders roles by recency, calculates display periods and durations from structured dates, and separates factual contributions from transferable Data Engineering relevance.
 
-The project catalogue is exposed as `projects/overview.json`. Preview derives project and status counts, emphasizes implemented evidence and current architecture, and keeps planned evolution visually distinct. Code exposes the identical overview model, while the individual Markdown files remain the detailed case studies.
+The project catalogue is exposed as `projects/overview.json`. Preview derives project and status counts, emphasizes implemented evidence and current architecture, and keeps planned evolution visually distinct. Code exposes the identical overview model, while project-specific files remain the detailed case studies.
+
+The flagship AdventureWorks case study is exposed as `projects/adventureworks-edw.json`. Its preview organizes the current architecture and documented implementation into dimensional modeling, ETL reliability, historical tracking and observability, while planned work remains explicitly separated. Code exposes the same project object without adding unverified technical claims.
 
 JSON portfolio files open by default in a responsive `Preview` that presents the factual data as readable cards and tags, including `skills.json`. The technical `Code` view remains available with type-aware syntax colors, indentation guides, foldable objects and arrays, structural breadcrumbs, word wrapping and a minimap.
 
