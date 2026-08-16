@@ -219,6 +219,8 @@ Certifications use an explicit relevance priority in `certifications.json`. Prev
 
 `contact.txt` opens with a recruiter-oriented Preview that provides direct email, GitHub, LinkedIn and CV actions using the Profile and CV source models. A Text view retains the concise terminal-friendly contact record, while the preview explicitly limits itself to intentionally public professional information.
 
+The downloadable Spanish CV is synchronized with the portfolio's curated profile, reverse-chronological experience, current project scope, prioritized skills, formal education and five verified credentials. Its ATS-friendly structure avoids layout tables, exposes clickable professional links and omits unprioritized technologies and exam-preparation courses.
+
 ## Engineering Principles
 
 - Separation of concerns
