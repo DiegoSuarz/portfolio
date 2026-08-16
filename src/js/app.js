@@ -1047,14 +1047,17 @@ document.addEventListener("DOMContentLoaded", async () => {
         const strings = [];
         let safeLine = line.replace(/"(?:\\.|[^"\\])*"/g, value => {
           strings.push(escapeHtml(value));
-          return `\u0000${strings.length - 1}\u0000`;
+          return String.fromCharCode(0xe000 + strings.length - 1);
         });
         safeLine = escapeHtml(safeLine);
         safeLine = safeLine
           .replace(/\b(from|import|as|True|False|None)\b/g, '<span class="python-keyword">$1</span>')
           .replace(/^(\s*)([A-Z][A-Z0-9_]*)(\s*=)/, '$1<span class="python-constant">$2</span>$3')
           .replace(/\b(\d+)\b/g, '<span class="python-number">$1</span>');
-        return safeLine.replace(/\u0000(\d+)\u0000/g, (_, index) => `<span class="python-string">${strings[Number(index)]}</span>`);
+        strings.forEach((value, index) => {
+          safeLine = safeLine.replaceAll(String.fromCharCode(0xe000 + index), `<span class="python-string">${value}</span>`);
+        });
+        return safeLine;
       }).join("\n");
     }
 
