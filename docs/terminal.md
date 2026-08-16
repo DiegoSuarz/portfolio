@@ -35,7 +35,7 @@ Opens an existing virtual file through the same application function used by the
 
 ### `projects`
 
-Opens `projects/overview.md` as a discoverable shortcut.
+Opens `projects/overview.json` as a discoverable shortcut.
 
 ### `contact`
 

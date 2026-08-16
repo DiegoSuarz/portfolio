@@ -8,7 +8,7 @@ const CONTENT_PATHS = {
   cv: "data/cv.json"
 };
 
-const CONTENT_VERSION = "m5-experience-json-1";
+const CONTENT_VERSION = "m5-project-overview-json-1";
 
 async function fetchJson(path) {
   const response = await fetch(`${path}?v=${CONTENT_VERSION}`, { cache: "no-store" });
@@ -48,22 +48,6 @@ function formatContact(profile) {
     `GitHub: ${profile.links.github}`,
     `LinkedIn: ${profile.links.linkedin}`
   ].join("\n");
-}
-
-function formatProjectOverview(projects) {
-  return [
-    "# Project Showcase",
-    "",
-    "Selected Data Engineering projects presented from their current, verifiable scope.",
-    "",
-    ...projects.flatMap(project => [
-      `## ${project.name}`,
-      `Status: ${formatProjectStatus(project.status)}`,
-      project.summary,
-      `File: projects/${project.id}.md`,
-      ""
-    ])
-  ].join("\n").trimEnd();
 }
 
 function formatProjectStatus(status) {
@@ -126,6 +110,11 @@ export async function loadPortfolioFiles() {
   const experienceModel = {
     experience: [...content.experience.experience].sort((first, second) => second.startDate.localeCompare(first.startDate))
   };
+  const projectOverviewModel = {
+    projectCount: content.projects.projects.length,
+    inProgressCount: content.projects.projects.filter(project => project.status === "in-progress").length,
+    projects: [...content.projects.projects].sort((first, second) => Number(second.featured) - Number(first.featured))
+  };
 
   return {
     "about.json": {
@@ -138,9 +127,10 @@ export async function loadPortfolioFiles() {
       content: JSON.stringify(experienceModel, null, 2),
       preview: experienceModel
     },
-    "projects/overview.md": {
-      type: "markdown",
-      content: formatProjectOverview(content.projects.projects)
+    "projects/overview.json": {
+      type: "json",
+      content: JSON.stringify(projectOverviewModel, null, 2),
+      preview: projectOverviewModel
     },
     ...Object.fromEntries(content.projects.projects.map(project => [
       `projects/${project.id}.md`,

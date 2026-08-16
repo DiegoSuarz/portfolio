@@ -154,6 +154,7 @@ portfolio/
 |       |-- layout-resizer.js
 |       |-- menu-bar.js
 |       |-- panel-tabs.js
+|       |-- projects-overview-viewer.js
 |       `-- terminal.js
 |
 |-- docs/
@@ -182,6 +183,10 @@ Owns the recruiter-oriented About preview. It receives profile content and deriv
 ### experience-viewer.js
 
 Owns the recruiter-oriented experience timeline. It receives experience entries already ordered by the content layer, derives human-readable periods and durations from structured dates, and keeps factual contributions visually separate from `dataEngineeringRelevance`. Related-navigation controls receive predefined callbacks from `app.js`; the paired Code view delegates the identical model to `json-viewer.js`.
+
+### projects-overview-viewer.js
+
+Owns the recruiter-oriented project catalogue. It renders derived portfolio counts, featured project cards, current architecture flows, planned evolution, implemented evidence, safe external navigation and a responsive comparison table. Current and planned scope remain visually distinct, and individual case-study navigation is delegated to predefined application callbacks. Its paired Code view delegates the identical overview model to `json-viewer.js`.
 
 ### content-loader.js
 

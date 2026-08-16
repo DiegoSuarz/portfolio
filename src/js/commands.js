@@ -67,7 +67,7 @@ export function createCommandDispatcher({ getFiles, openFile, clearTerminal }) {
       case "open":
         return argument ? openKnownFile(argument) : "Usage: open <path>";
       case "projects":
-        return openKnownFile("projects/overview.md");
+        return openKnownFile("projects/overview.json");
       case "contact":
         return openKnownFile("contact.txt");
       case "cv":
