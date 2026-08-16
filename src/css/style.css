@@ -25,6 +25,14 @@ body {
   user-select: none;
 }
 
+.title-bar-logo {
+  flex: 0 0 auto;
+  width: 20px;
+  height: 20px;
+  margin-left: 5px;
+  object-fit: contain;
+}
+
 .command-center {
   position: absolute;
   left: 50%;
@@ -57,7 +65,7 @@ body {
   display: flex;
   align-items: stretch;
   height: 100%;
-  padding-left: 6px;
+  padding-left: 3px;
 }
 
 .app-menu {
