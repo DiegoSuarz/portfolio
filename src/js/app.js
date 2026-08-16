@@ -1,4 +1,4 @@
-import { loadPortfolioFiles } from "./content-loader.js?v=4";
+import { loadPortfolioFiles } from "./content-loader.js?v=5";
 import { createCommandDispatcher } from "./commands.js";
 import { createTerminal } from "./terminal.js?v=3";
 import { createMenuBar } from "./menu-bar.js?v=2";
@@ -7,8 +7,10 @@ import { createLayoutResizers } from "./layout-resizer.js";
 import { createCommandPalette } from "./command-palette.js";
 import { createJsonViewer } from "./json-viewer.js";
 import { createAboutViewer } from "./about-viewer.js?v=3";
+import { createExperienceViewer } from "./experience-viewer.js?v=1";
 
 const ABOUT_FILE = "about.json";
+const EXPERIENCE_FILE = "experience.json";
 
 document.addEventListener("DOMContentLoaded", async () => {
   let files = {};
@@ -18,6 +20,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   let jsonWrap = true;
   let jsonMinimap = true;
   let aboutViewMode = "preview";
+  let experienceViewMode = "preview";
 
   const editor = document.getElementById("editor");
   const explorer = document.getElementById("portfolio-explorer");
@@ -27,6 +30,8 @@ document.addEventListener("DOMContentLoaded", async () => {
   const jsonToolbar = document.getElementById("json-toolbar");
   const aboutToolbar = document.getElementById("about-toolbar");
   const aboutCodeOptions = document.getElementById("about-code-options");
+  const experienceToolbar = document.getElementById("experience-toolbar");
+  const experienceCodeOptions = document.getElementById("experience-code-options");
   const jsonViewer = createJsonViewer({
     editor,
     minimap: document.getElementById("json-minimap"),
@@ -40,6 +45,14 @@ document.addEventListener("DOMContentLoaded", async () => {
       openLinkedin: url => window.open(url, "_blank", "noopener,noreferrer"),
       openContact: () => openFile("contact.txt"),
       openCertifications: () => openFile("certifications.json")
+    }
+  });
+  const experienceViewer = createExperienceViewer({
+    editor,
+    actions: {
+      openSkills: () => openFile("skills.json"),
+      openProjects: () => openFile("projects/overview.md"),
+      openContact: () => openFile("contact.txt")
     }
   });
   let terminalController;
@@ -68,7 +81,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const paletteCommands = [
     { label: "Files: Open Professional Profile", action: () => openFile(ABOUT_FILE) },
     { label: "Files: Open Project Overview", action: () => openFile("projects/overview.md") },
-    { label: "Files: Open Experience", action: () => openFile("experience.md") },
+    { label: "Files: Open Experience", action: () => openFile(EXPERIENCE_FILE) },
     { label: "Files: Open Skills", action: () => openFile("skills.json") },
     { label: "Files: Open Education", action: () => openFile("education.md") },
     { label: "Files: Open Contact", action: () => openFile("contact.txt") },
@@ -91,15 +104,18 @@ document.addEventListener("DOMContentLoaded", async () => {
   aboutToolbar.querySelectorAll("[data-about-view]").forEach(button => {
     button.addEventListener("click", () => setAboutView(button.dataset.aboutView));
   });
-  [document.getElementById("json-wrap-toggle"), document.getElementById("about-wrap-toggle")].forEach(button => button.addEventListener("click", () => {
+  experienceToolbar.querySelectorAll("[data-experience-view]").forEach(button => {
+    button.addEventListener("click", () => setExperienceView(button.dataset.experienceView));
+  });
+  [document.getElementById("json-wrap-toggle"), document.getElementById("about-wrap-toggle"), document.getElementById("experience-wrap-toggle")].forEach(button => button.addEventListener("click", () => {
     jsonWrap = !jsonWrap;
     syncStructuredPreferences();
     jsonViewer.setWrap(jsonWrap);
   }));
-  [document.getElementById("json-minimap-toggle"), document.getElementById("about-minimap-toggle")].forEach(button => button.addEventListener("click", () => {
+  [document.getElementById("json-minimap-toggle"), document.getElementById("about-minimap-toggle"), document.getElementById("experience-minimap-toggle")].forEach(button => button.addEventListener("click", () => {
     jsonMinimap = !jsonMinimap;
     syncStructuredPreferences();
-    jsonViewer.setMinimap(jsonMinimap, activeFile === ABOUT_FILE ? aboutViewMode : jsonViewMode);
+    jsonViewer.setMinimap(jsonMinimap, activeStructuredMode());
   }));
 
   createMenuBar({
@@ -114,7 +130,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       toggleExplorer,
       toggleTerminal,
       openCommandPalette: commandPalette.open,
-      openExperience: () => openFile("experience.md"),
+      openExperience: () => openFile(EXPERIENCE_FILE),
       openSkills: () => openFile("skills.json"),
       openEducation: () => openFile("education.md"),
       openContact: () => openFile("contact.txt"),
@@ -346,8 +362,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     activeFile = name;
     editor.className = "code";
     editor.replaceChildren();
-    jsonToolbar.hidden = file.type !== "json" || name === ABOUT_FILE;
+    jsonToolbar.hidden = file.type !== "json" || name === ABOUT_FILE || name === EXPERIENCE_FILE;
     aboutToolbar.hidden = name !== ABOUT_FILE;
+    experienceToolbar.hidden = name !== EXPERIENCE_FILE;
     document.getElementById("lines").hidden = file.type === "json" || name === ABOUT_FILE;
     document.getElementById("json-minimap").hidden = true;
 
@@ -359,6 +376,11 @@ document.addEventListener("DOMContentLoaded", async () => {
       } else {
         jsonViewer.show(file.content, "code");
       }
+    } else if (name === EXPERIENCE_FILE) {
+      experienceViewMode = file.preview ? "preview" : "code";
+      syncExperienceToolbar();
+      if (file.preview) experienceViewer.show(file.preview);
+      else jsonViewer.show(file.content, "code");
     } else if (file.type === "json") {
       jsonViewMode = "preview";
       syncJsonToolbar();
@@ -416,12 +438,46 @@ document.addEventListener("DOMContentLoaded", async () => {
     syncStructuredPreferences();
   }
 
+  function setExperienceView(mode) {
+    if (activeFile !== EXPERIENCE_FILE) return;
+    if (mode === "preview" && !files[activeFile].preview) mode = "code";
+    experienceViewMode = mode;
+    syncExperienceToolbar();
+    editor.className = "code";
+    editor.replaceChildren();
+    document.getElementById("lines").hidden = true;
+    if (mode === "preview") {
+      document.getElementById("json-minimap").hidden = true;
+      experienceViewer.show(files[activeFile].preview);
+    } else {
+      jsonViewer.show(files[activeFile].content, "code");
+    }
+    document.getElementById("lang").textContent = "json";
+    updateBreadcrumbs(activeFile);
+  }
+
+  function syncExperienceToolbar() {
+    experienceToolbar.querySelectorAll("[data-experience-view]").forEach(button => {
+      const active = button.dataset.experienceView === experienceViewMode;
+      button.classList.toggle("active", active);
+      button.setAttribute("aria-pressed", String(active));
+    });
+    experienceCodeOptions.hidden = experienceViewMode !== "code";
+    syncStructuredPreferences();
+  }
+
+  function activeStructuredMode() {
+    if (activeFile === ABOUT_FILE) return aboutViewMode;
+    if (activeFile === EXPERIENCE_FILE) return experienceViewMode;
+    return jsonViewMode;
+  }
+
   function syncStructuredPreferences() {
-    [document.getElementById("json-wrap-toggle"), document.getElementById("about-wrap-toggle")].forEach(button => {
+    [document.getElementById("json-wrap-toggle"), document.getElementById("about-wrap-toggle"), document.getElementById("experience-wrap-toggle")].forEach(button => {
       button.classList.toggle("active", jsonWrap);
       button.setAttribute("aria-pressed", String(jsonWrap));
     });
-    [document.getElementById("json-minimap-toggle"), document.getElementById("about-minimap-toggle")].forEach(button => {
+    [document.getElementById("json-minimap-toggle"), document.getElementById("about-minimap-toggle"), document.getElementById("experience-minimap-toggle")].forEach(button => {
       button.classList.toggle("active", jsonMinimap);
       button.setAttribute("aria-pressed", String(jsonMinimap));
     });

@@ -8,7 +8,7 @@ const CONTENT_PATHS = {
   cv: "data/cv.json"
 };
 
-const CONTENT_VERSION = "m5-about-json-1";
+const CONTENT_VERSION = "m5-experience-json-1";
 
 async function fetchJson(path) {
   const response = await fetch(`${path}?v=${CONTENT_VERSION}`, { cache: "no-store" });
@@ -29,24 +29,6 @@ function formatDate(value) {
     year: "numeric",
     timeZone: "UTC"
   }).format(date);
-}
-
-function formatExperience(entries) {
-  const sections = entries.map(entry => {
-    const startDate = formatDate(entry.startDate);
-    const endDate = entry.current ? "Present" : formatDate(entry.endDate);
-    const period = `${startDate} - ${endDate}`;
-    return [
-      `## ${entry.role} | ${entry.company}`,
-      `${entry.location} | ${period}`,
-      "",
-      entry.summary,
-      "",
-      ...entry.highlights.map(highlight => `- ${highlight}`)
-    ].join("\n");
-  });
-
-  return ["# Professional Experience", "", ...sections].join("\n\n");
 }
 
 function formatEducation(entries) {
@@ -141,6 +123,9 @@ export async function loadPortfolioFiles() {
     projectCount: content.projects.projects.length,
     certificationCount: content.certifications.certifications.length
   };
+  const experienceModel = {
+    experience: [...content.experience.experience].sort((first, second) => second.startDate.localeCompare(first.startDate))
+  };
 
   return {
     "about.json": {
@@ -148,9 +133,10 @@ export async function loadPortfolioFiles() {
       content: JSON.stringify(aboutModel, null, 2),
       preview: aboutModel
     },
-    "experience.md": {
-      type: "markdown",
-      content: formatExperience(content.experience.experience)
+    "experience.json": {
+      type: "json",
+      content: JSON.stringify(experienceModel, null, 2),
+      preview: experienceModel
     },
     "projects/overview.md": {
       type: "markdown",

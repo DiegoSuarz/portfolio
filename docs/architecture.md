@@ -149,6 +149,7 @@ portfolio/
 |       |-- command-palette.js
 |       |-- commands.js
 |       |-- content-loader.js
+|       |-- experience-viewer.js
 |       |-- json-viewer.js
 |       |-- layout-resizer.js
 |       |-- menu-bar.js
@@ -177,6 +178,10 @@ The Explorer derives its hierarchy from slash-delimited virtual file paths. Fold
 ### about-viewer.js
 
 Owns the recruiter-oriented About preview. It receives profile content and derived portfolio counts from the application layer, creates all content through text-safe DOM APIs and exposes only predefined navigation actions. Project and credential metrics are calculated from their source collections rather than maintained as duplicated profile claims. The paired Code view delegates that same model to `json-viewer.js`, allowing the preview content and derived counts to be inspected without maintaining a second representation.
+
+### experience-viewer.js
+
+Owns the recruiter-oriented experience timeline. It receives experience entries already ordered by the content layer, derives human-readable periods and durations from structured dates, and keeps factual contributions visually separate from `dataEngineeringRelevance`. Related-navigation controls receive predefined callbacks from `app.js`; the paired Code view delegates the identical model to `json-viewer.js`.
 
 ### content-loader.js
 

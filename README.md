@@ -201,6 +201,8 @@ Its VS Code-inspired workspace now includes a searchable Command Palette (`Ctrl+
 
 The About file opens as a recruiter-oriented professional overview with direct portfolio actions, concise focus areas, a prioritized core stack and evidence counts derived from the project and certification collections. Its `Code` view exposes the exact structured model behind that preview with the same folding, syntax, breadcrumbs and minimap behavior used by Skills.
 
+Experience follows the same `Preview | Code` contract through `experience.json`. Its default timeline orders roles by recency, calculates display periods and durations from structured dates, and separates factual contributions from transferable Data Engineering relevance.
+
 JSON portfolio files open by default in a responsive `Preview` that presents the factual data as readable cards and tags, including `skills.json`. The technical `Code` view remains available with type-aware syntax colors, indentation guides, foldable objects and arrays, structural breadcrumbs, word wrapping and a minimap.
 
 ## Engineering Principles
