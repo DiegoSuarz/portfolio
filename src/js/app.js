@@ -4,7 +4,7 @@ import { createTerminal } from "./terminal.js?v=3";
 import { createMenuBar } from "./menu-bar.js?v=2";
 import { createPanelTabs } from "./panel-tabs.js";
 import { createLayoutResizers } from "./layout-resizer.js";
-import { createCommandPalette } from "./command-palette.js";
+import { createCommandPalette } from "./command-palette.js?v=2";
 import { createJsonViewer } from "./json-viewer.js";
 import { createAboutViewer } from "./about-viewer.js?v=3";
 import { createExperienceViewer } from "./experience-viewer.js?v=1";

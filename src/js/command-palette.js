@@ -48,11 +48,20 @@ export function createCommandPalette({ dialog, input, list, commands }) {
       label.textContent = command.label;
       option.appendChild(label);
       if (command.shortcut) { const shortcut = document.createElement("kbd"); shortcut.textContent = command.shortcut; option.appendChild(shortcut); }
-      option.addEventListener("mouseenter", () => { activeIndex = index; renderOptions(); });
+      option.addEventListener("mouseenter", () => {
+        if (activeIndex === index) return;
+        activeIndex = index;
+        syncActiveOption();
+      });
       option.addEventListener("click", () => run(command));
       list.appendChild(option);
     });
     if (!visibleCommands.length) { const empty = document.createElement("p"); empty.className = "command-empty"; empty.textContent = "No matching commands"; list.appendChild(empty); }
+  }
+  function syncActiveOption() {
+    list.querySelectorAll(".command-option").forEach((option, index) => {
+      option.setAttribute("aria-selected", String(index === activeIndex));
+    });
   }
   function run(command) { if (!command) return; close(); command.action(); }
   return { open, close };
