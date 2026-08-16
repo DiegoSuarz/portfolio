@@ -8,7 +8,7 @@ const CONTENT_PATHS = {
   cv: "data/cv.json"
 };
 
-const CONTENT_VERSION = "m5-certifications-preview-1";
+const CONTENT_VERSION = "m5-contact-preview-1";
 
 async function fetchJson(path) {
   const response = await fetch(`${path}?v=${CONTENT_VERSION}`, { cache: "no-store" });
@@ -159,7 +159,8 @@ export async function loadPortfolioFiles() {
     },
     "contact.txt": {
       type: "text",
-      content: formatContact(content.profile)
+      content: formatContact(content.profile),
+      preview: { profile: content.profile, cv: content.cv.cv }
     },
     "cv.docx": {
       type: "download",

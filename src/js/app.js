@@ -1,4 +1,4 @@
-import { loadPortfolioFiles } from "./content-loader.js?v=11";
+import { loadPortfolioFiles } from "./content-loader.js?v=12";
 import { createCommandDispatcher } from "./commands.js?v=2";
 import { createTerminal } from "./terminal.js?v=3";
 import { createMenuBar } from "./menu-bar.js?v=2";
@@ -13,6 +13,7 @@ import { createProjectCaseStudyViewer } from "./adventureworks-viewer.js?v=2";
 import { createSkillsViewer } from "./skills-viewer.js?v=1";
 import { createEducationViewer } from "./education-viewer.js?v=1";
 import { createCertificationsViewer } from "./certifications-viewer.js?v=1";
+import { createContactViewer } from "./contact-viewer.js?v=1";
 
 const ABOUT_FILE = "about.json";
 const EXPERIENCE_FILE = "experience.json";
@@ -23,6 +24,7 @@ const CASE_STUDY_FILES = new Set([ADVENTUREWORKS_FILE, ECOMMERCE_FILE]);
 const SKILLS_FILE = "skills.json";
 const EDUCATION_FILE = "education.json";
 const CERTIFICATIONS_FILE = "certifications.json";
+const CONTACT_FILE = "contact.txt";
 
 document.addEventListener("DOMContentLoaded", async () => {
   let files = {};
@@ -38,6 +40,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   let skillsViewMode = "preview";
   let educationViewMode = "preview";
   let certificationsViewMode = "preview";
+  let contactViewMode = "preview";
 
   const editor = document.getElementById("editor");
   const explorer = document.getElementById("portfolio-explorer");
@@ -59,6 +62,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const educationCodeOptions = document.getElementById("education-code-options");
   const certificationsToolbar = document.getElementById("certifications-toolbar");
   const certificationsCodeOptions = document.getElementById("certifications-code-options");
+  const contactToolbar = document.getElementById("contact-toolbar");
   const jsonViewer = createJsonViewer({
     editor,
     minimap: document.getElementById("json-minimap"),
@@ -131,7 +135,18 @@ document.addEventListener("DOMContentLoaded", async () => {
       openSkills: () => openFile(SKILLS_FILE),
       openProjects: () => openFile(PROJECTS_OVERVIEW_FILE),
       openEducation: () => openFile(EDUCATION_FILE),
-      openContact: () => openFile("contact.txt")
+      openContact: () => openFile(CONTACT_FILE)
+    }
+  });
+  const contactViewer = createContactViewer({
+    editor,
+    actions: {
+      openEmail: email => { window.location.href = `mailto:${email}`; },
+      openExternal: url => window.open(url, "_blank", "noopener,noreferrer"),
+      downloadCv: () => openFile("cv.docx"),
+      openProjects: () => openFile(PROJECTS_OVERVIEW_FILE),
+      openExperience: () => openFile(EXPERIENCE_FILE),
+      openSkills: () => openFile(SKILLS_FILE)
     }
   });
   let terminalController;
@@ -200,6 +215,9 @@ document.addEventListener("DOMContentLoaded", async () => {
   });
   certificationsToolbar.querySelectorAll("[data-certifications-view]").forEach(button => {
     button.addEventListener("click", () => setCertificationsView(button.dataset.certificationsView));
+  });
+  contactToolbar.querySelectorAll("[data-contact-view]").forEach(button => {
+    button.addEventListener("click", () => setContactView(button.dataset.contactView));
   });
   [document.getElementById("json-wrap-toggle"), document.getElementById("about-wrap-toggle"), document.getElementById("experience-wrap-toggle"), document.getElementById("projects-wrap-toggle"), document.getElementById("case-study-wrap-toggle"), document.getElementById("skills-wrap-toggle"), document.getElementById("education-wrap-toggle"), document.getElementById("certifications-wrap-toggle")].forEach(button => button.addEventListener("click", () => {
     jsonWrap = !jsonWrap;
@@ -464,7 +482,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     skillsToolbar.hidden = name !== SKILLS_FILE;
     educationToolbar.hidden = name !== EDUCATION_FILE;
     certificationsToolbar.hidden = name !== CERTIFICATIONS_FILE;
-    document.getElementById("lines").hidden = file.type === "json" || name === ABOUT_FILE;
+    contactToolbar.hidden = name !== CONTACT_FILE;
+    document.getElementById("lines").hidden = file.type === "json" || name === ABOUT_FILE || name === CONTACT_FILE;
     document.getElementById("json-minimap").hidden = true;
 
     if (name === ABOUT_FILE) {
@@ -505,6 +524,11 @@ document.addEventListener("DOMContentLoaded", async () => {
       syncCertificationsToolbar();
       if (file.preview) certificationsViewer.show(file.preview);
       else jsonViewer.show(file.content, "code");
+    } else if (name === CONTACT_FILE) {
+      contactViewMode = file.preview ? "preview" : "text";
+      syncContactToolbar();
+      if (file.preview) contactViewer.show(file.preview);
+      else editor.innerHTML = highlight(file.content, file.type);
     } else if (file.type === "json") {
       jsonViewMode = "preview";
       syncJsonToolbar();
@@ -728,6 +752,34 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
     certificationsCodeOptions.hidden = certificationsViewMode !== "code";
     syncStructuredPreferences();
+  }
+
+  function setContactView(mode) {
+    if (activeFile !== CONTACT_FILE) return;
+    if (mode === "preview" && !files[activeFile].preview) mode = "text";
+    contactViewMode = mode;
+    syncContactToolbar();
+    editor.className = "code";
+    editor.replaceChildren();
+    document.getElementById("json-minimap").hidden = true;
+    if (mode === "preview") {
+      document.getElementById("lines").hidden = true;
+      contactViewer.show(files[activeFile].preview);
+    } else {
+      document.getElementById("lines").hidden = false;
+      editor.innerHTML = highlight(files[activeFile].content, "text");
+      renderLines(files[activeFile].content);
+    }
+    document.getElementById("lang").textContent = "text";
+    updateBreadcrumbs(activeFile);
+  }
+
+  function syncContactToolbar() {
+    contactToolbar.querySelectorAll("[data-contact-view]").forEach(button => {
+      const active = button.dataset.contactView === contactViewMode;
+      button.classList.toggle("active", active);
+      button.setAttribute("aria-pressed", String(active));
+    });
   }
 
   function activeStructuredMode() {

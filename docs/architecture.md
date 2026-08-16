@@ -150,6 +150,7 @@ portfolio/
 |       |-- command-palette.js
 |       |-- commands.js
 |       |-- certifications-viewer.js
+|       |-- contact-viewer.js
 |       |-- content-loader.js
 |       |-- education-viewer.js
 |       |-- experience-viewer.js
@@ -199,6 +200,10 @@ Owns the formal education preview. It derives the display period and duration fr
 ### certifications-viewer.js
 
 Owns the recruiter-oriented credentials preview. It separates primary Data Engineering credentials from supporting technical breadth using the source `priority`, presents issuer and focus areas, and opens only the public verification URL supplied by the model. The transparency note avoids equating course credentials with vendor certification exams, and Code exposes the identical certification collection through `json-viewer.js`.
+
+### contact-viewer.js
+
+Owns the professional contact preview. It consumes public identity and contact fields from Profile plus reviewed CV metadata, then exposes predefined email, external-profile, CV-download and internal-navigation actions. It does not accept arbitrary HTML or publish private fields. The paired Text view preserves the compact plain-text contact representation used by terminal discovery.
 
 ### projects-overview-viewer.js
 

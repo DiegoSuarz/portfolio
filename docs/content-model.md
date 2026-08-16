@@ -53,6 +53,8 @@ The profile model stores identity and professional positioning information that 
 
 The profile model is also the single source of truth for public contact information. Contact views should reuse `email` and `links` instead of copying those values into a separate content file. Phone numbers and other personal details should not be published unless they are deliberately added to this contract.
 
+The virtual `contact.txt` file retains a plain-text representation of `email`, GitHub and LinkedIn. Its Preview combines those same Profile values with the public CV metadata to provide safe predefined actions; it must not introduce availability claims, telephone numbers or private contact details that are absent from the source models.
+
 ## 4. Skills Model
 
 File: `data/skills.json`

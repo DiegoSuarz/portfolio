@@ -217,6 +217,8 @@ Formal education is exposed as `education.json` with a recruiter-oriented timeli
 
 Certifications use an explicit relevance priority in `certifications.json`. Preview leads with the three credentials most directly aligned to Data Engineering, then presents complementary architecture and distributed-processing breadth. Every card preserves the published credential name, issuer, technical focus and public verification link; Code exposes the same collection.
 
+`contact.txt` opens with a recruiter-oriented Preview that provides direct email, GitHub, LinkedIn and CV actions using the Profile and CV source models. A Text view retains the concise terminal-friendly contact record, while the preview explicitly limits itself to intentionally public professional information.
+
 ## Engineering Principles
 
 - Separation of concerns
