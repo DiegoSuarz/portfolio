@@ -693,9 +693,10 @@ body {
 .json-preview-tags { display: flex; flex-wrap: wrap; gap: 5px; }
 .json-preview-tags span { border: 1px solid #3f566b; border-radius: 10px; padding: 2px 7px; background: #1f3345; color: #c8e6ff; font-size: 11px; }
 
-.code.about-preview { padding: clamp(20px, 4vw, 46px); white-space: normal; overflow: auto; }
+body .code.about-preview { padding: clamp(20px, 4vw, 46px); white-space: normal; overflow-x: hidden; overflow-y: auto; }
 .about-preview::after, .json-view--preview::after { display: none; }
-.about-hero { max-width: 880px; padding-bottom: 32px; border-bottom: 1px solid #343434; }
+.about-preview :where(h1, h2, h3, p, span, strong) { max-width: 100%; white-space: normal; overflow-wrap: anywhere; }
+.about-hero { width: 100%; max-width: 880px; padding-bottom: 32px; border-bottom: 1px solid #343434; box-sizing: border-box; }
 .about-eyebrow { margin: 0 0 5px; color: #4ec9b0; font-size: 13px; text-transform: uppercase; letter-spacing: .12em; }
 .about-name { margin: 0; color: #f0f0f0; font-size: clamp(30px, 4vw, 48px); line-height: 1.08; letter-spacing: -.035em; }
 .about-role { margin: 8px 0 0; color: #9cdcfe; font-size: clamp(18px, 2vw, 24px); }
@@ -708,7 +709,7 @@ body {
 .about-action--primary { border-color: #007acc; background: #0e639c; color: #ffffff; }
 .about-action--primary:hover { background: #1177bb; }
 .about-action:focus-visible, .about-metric:focus-visible { outline: 2px solid #007fd4; outline-offset: 2px; }
-.about-section { max-width: 980px; padding-top: 30px; }
+.about-section { width: 100%; max-width: 980px; padding-top: 30px; box-sizing: border-box; }
 .about-section h2 { margin: 0; color: #f0f0f0; font-size: 18px; }
 .about-section-intro { margin: 5px 0 16px; color: #9d9d9d; font-family: system-ui, sans-serif; font-size: 13px; }
 .about-build-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
