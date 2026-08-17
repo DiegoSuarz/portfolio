@@ -711,11 +711,11 @@ body {
 .about-section { max-width: 980px; padding-top: 30px; }
 .about-section h2 { margin: 0; color: #f0f0f0; font-size: 18px; }
 .about-section-intro { margin: 5px 0 16px; color: #9d9d9d; font-family: system-ui, sans-serif; font-size: 13px; }
-.about-build-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.about-build-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
 .about-build-card { position: relative; min-width: 0; border: 1px solid #3b3b3b; border-radius: 6px; padding: 16px; background: #252526; }
 .about-card-index { display: block; margin-bottom: 13px; color: #569cd6; font-size: 11px; }
-.about-build-card h3 { margin: 0 0 8px; color: #4ec9b0; font-size: 14px; }
-.about-build-card p { margin: 0; color: #c9c9c9; font-family: system-ui, sans-serif; font-size: 13px; line-height: 1.55; }
+.about-build-card h3 { margin: 0 0 8px; color: #4ec9b0; font-size: 14px; white-space: normal; overflow-wrap: anywhere; }
+.about-build-card p { margin: 0; color: #c9c9c9; font-family: system-ui, sans-serif; font-size: 13px; line-height: 1.55; white-space: normal; overflow-wrap: anywhere; }
 .about-stack { display: flex; flex-wrap: wrap; gap: 7px; }
 .about-stack-item { border: 1px solid #3f566b; border-radius: 12px; padding: 4px 9px; background: #1f3345; color: #c8e6ff; font-size: 12px; }
 .about-evidence-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 260px)); gap: 10px; }
