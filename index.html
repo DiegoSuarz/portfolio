@@ -4,55 +4,222 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Diego | VS Code Portfolio</title>
-  <link rel="stylesheet" href="src/css/style.css?v=2">
+  <link rel="icon" type="image/png" href="assets/vscode-icon.png">
+  <link rel="stylesheet" href="src/css/style.css?v=14">
 </head>
 <body>
+
+<header class="title-bar">
+  <img class="title-bar-logo" src="assets/vscode-icon.png" alt="Visual Studio Code">
+  <nav class="menu-bar" id="menu-bar" aria-label="Application menu"></nav>
+  <button class="command-center" id="command-center" type="button" aria-haspopup="dialog" aria-controls="command-palette">
+    <span class="command-center-search" aria-hidden="true"></span>
+    <span>Diego Suarez — Data Engineering Portfolio</span>
+  </button>
+</header>
 
 <div class="window">
 
   <!-- Activity Bar -->
   <nav class="activity-bar" aria-label="Portfolio sections">
-    <div class="activity active" aria-hidden="true">📁</div>
-    <div class="activity" aria-hidden="true">🔍</div>
-    <div class="activity" aria-hidden="true">🌿</div>
+    <button class="activity active" id="explorer-toggle" type="button" aria-label="Toggle Portfolio Explorer" aria-controls="portfolio-explorer" aria-expanded="true" data-tooltip="Explorer (Ctrl+Shift+E)">
+      <span class="activity-icon activity-icon--files" aria-hidden="true"></span>
+    </button>
+    <button class="activity" id="search-toggle" type="button" aria-label="Search portfolio content" aria-controls="portfolio-explorer" aria-expanded="false" data-tooltip="Search (Ctrl+Shift+F)">
+      <span class="activity-icon activity-icon--search"></span>
+    </button>
+    <button class="activity" id="source-control-toggle" type="button" aria-label="Show portfolio source control" aria-controls="portfolio-explorer" aria-expanded="false" data-tooltip="Source Control (Ctrl+Shift+G)">
+      <span class="activity-icon activity-icon--source"></span>
+    </button>
   </nav>
 
   <!-- Sidebar -->
-  <aside class="sidebar" aria-label="Portfolio Explorer">
-    <div class="sidebar-title">EXPLORER</div>
-    <ul id="file-tree" aria-label="Portfolio files"></ul>
+  <aside class="sidebar" id="portfolio-explorer" aria-label="Portfolio Explorer">
+    <div class="sidebar-title" id="sidebar-title">EXPLORER</div>
+    <section class="sidebar-view" id="explorer-view" aria-label="Portfolio files">
+      <ul id="file-tree" aria-label="Portfolio files"></ul>
+    </section>
+    <section class="sidebar-view search-view" id="search-view" aria-label="Search portfolio content" hidden>
+      <label class="sr-only" for="portfolio-search-input">Search portfolio content</label>
+      <input class="sidebar-search-input" id="portfolio-search-input" type="search" autocomplete="off" spellcheck="false" placeholder="Search portfolio">
+      <p class="sidebar-search-help" id="search-summary">Search skills, projects, experience and credentials.</p>
+      <div class="sidebar-search-results" id="search-results" aria-live="polite"></div>
+    </section>
+    <section class="sidebar-view source-control-view" id="source-control-view" aria-label="Portfolio source control" hidden>
+      <div class="source-section">
+        <p class="source-label">BRANCH</p>
+        <p class="source-branch"><span aria-hidden="true">⑂</span> feature/recruiter-visual-experience</p>
+      </div>
+      <div class="source-section">
+        <p class="source-label">PORTFOLIO EVOLUTION</p>
+        <ol class="source-milestones">
+          <li><span aria-hidden="true">✓</span><span><strong>M1</strong> Foundations</span></li>
+          <li><span aria-hidden="true">✓</span><span><strong>M2</strong> Professional Content</span></li>
+          <li><span aria-hidden="true">✓</span><span><strong>M3</strong> Project Showcase</span></li>
+          <li><span aria-hidden="true">✓</span><span><strong>M4</strong> Interactive Terminal</span></li>
+          <li><span aria-hidden="true">✓</span><span><strong>M5</strong> Recruiter Visual Experience</span></li>
+        </ol>
+      </div>
+      <div class="source-section source-release">
+        <p class="source-label">LATEST PUBLISHED RELEASE</p>
+        <p><strong>v0.3.0</strong><span>Project Showcase</span></p>
+      </div>
+      <div class="source-actions">
+        <a href="https://github.com/DiegoSuarz/portfolio" target="_blank" rel="noopener noreferrer">Open Repository</a>
+        <a href="https://github.com/DiegoSuarz/portfolio/releases" target="_blank" rel="noopener noreferrer">View Releases</a>
+      </div>
+      <p class="source-note">This view summarizes published repository history; it does not simulate uncommitted changes.</p>
+    </section>
   </aside>
+
+  <div class="resize-handle resize-handle--sidebar" id="sidebar-resizer" role="separator" aria-label="Resize Explorer" aria-orientation="vertical" aria-valuemin="180" aria-valuemax="420" aria-valuenow="240" tabindex="0"></div>
 
   <!-- Main -->
   <main class="main">
     <div class="tabs" id="tabs" role="tablist" aria-label="Open portfolio files"></div>
 
-    <div class="editor">
-      <div class="lines" id="lines"></div>
-      <pre class="code" id="editor" tabindex="0" aria-label="Portfolio file content" aria-live="polite"></pre>
+    <nav class="breadcrumbs" id="breadcrumbs" aria-label="Current file path"></nav>
+
+    <div class="about-toolbar" id="about-toolbar" aria-label="About view controls" hidden>
+      <div class="json-view-switch" role="group" aria-label="About display mode">
+        <button class="json-tool active" type="button" data-about-view="preview" aria-pressed="true">Preview</button>
+        <button class="json-tool" type="button" data-about-view="code" aria-pressed="false">Code</button>
+      </div>
     </div>
 
-    <div class="terminal">
-      <div class="terminal-header">TERMINAL</div>
-      <div class="terminal-body" id="terminal-output" role="log" aria-live="polite"></div>
-      <form class="terminal-form" id="terminal-form">
-        <span class="terminal-prompt" aria-hidden="true">$</span>
-        <label class="sr-only" for="terminal-input">Terminal command</label>
-        <input id="terminal-input" name="command" type="text" autocomplete="off" spellcheck="false" aria-describedby="terminal-hint">
-        <button class="terminal-submit" type="submit" aria-label="Run command">↵</button>
-        <span class="sr-only" id="terminal-hint">Enter a command. Use Arrow Up and Arrow Down to navigate command history.</span>
-      </form>
+    <div class="experience-toolbar" id="experience-toolbar" aria-label="Experience view controls" hidden>
+      <div class="json-view-switch" role="group" aria-label="Experience display mode">
+        <button class="json-tool active" type="button" data-experience-view="preview" aria-pressed="true">Preview</button>
+        <button class="json-tool" type="button" data-experience-view="code" aria-pressed="false">Code</button>
+      </div>
+      <div class="json-view-options" id="experience-code-options" hidden>
+        <button class="json-tool active" id="experience-wrap-toggle" type="button" aria-pressed="true">Word Wrap</button>
+        <button class="json-tool active" id="experience-minimap-toggle" type="button" aria-pressed="true">Minimap</button>
+      </div>
+    </div>
+
+    <div class="projects-toolbar" id="projects-toolbar" aria-label="Project overview controls" hidden>
+      <div class="json-view-switch" role="group" aria-label="Project overview display mode">
+        <button class="json-tool active" type="button" data-projects-view="preview" aria-pressed="true">Preview</button>
+        <button class="json-tool" type="button" data-projects-view="code" aria-pressed="false">Code</button>
+      </div>
+      <div class="json-view-options" id="projects-code-options" hidden>
+        <button class="json-tool active" id="projects-wrap-toggle" type="button" aria-pressed="true">Word Wrap</button>
+        <button class="json-tool active" id="projects-minimap-toggle" type="button" aria-pressed="true">Minimap</button>
+      </div>
+    </div>
+
+    <div class="case-study-toolbar" id="case-study-toolbar" aria-label="Project case study controls" hidden>
+      <div class="json-view-switch" role="group" aria-label="Case study display mode">
+        <button class="json-tool active" type="button" data-case-study-view="preview" aria-pressed="true">Preview</button>
+        <button class="json-tool" type="button" data-case-study-view="code" aria-pressed="false">Code</button>
+      </div>
+      <div class="json-view-options" id="case-study-code-options" hidden>
+        <button class="json-tool active" id="case-study-wrap-toggle" type="button" aria-pressed="true">Word Wrap</button>
+        <button class="json-tool active" id="case-study-minimap-toggle" type="button" aria-pressed="true">Minimap</button>
+      </div>
+    </div>
+
+    <div class="skills-toolbar" id="skills-toolbar" aria-label="Skills view controls" hidden>
+      <div class="json-view-switch" role="group" aria-label="Skills display mode">
+        <button class="json-tool active" type="button" data-skills-view="preview" aria-pressed="true">Preview</button>
+        <button class="json-tool" type="button" data-skills-view="code" aria-pressed="false">Code</button>
+      </div>
+    </div>
+
+    <div class="education-toolbar" id="education-toolbar" aria-label="Education view controls" hidden>
+      <div class="json-view-switch" role="group" aria-label="Education display mode">
+        <button class="json-tool active" type="button" data-education-view="preview" aria-pressed="true">Preview</button>
+        <button class="json-tool" type="button" data-education-view="code" aria-pressed="false">Code</button>
+      </div>
+    </div>
+
+    <div class="certifications-toolbar" id="certifications-toolbar" aria-label="Certifications view controls" hidden>
+      <div class="json-view-switch" role="group" aria-label="Certifications display mode">
+        <button class="json-tool active" type="button" data-certifications-view="preview" aria-pressed="true">Preview</button>
+        <button class="json-tool" type="button" data-certifications-view="code" aria-pressed="false">Code</button>
+      </div>
+    </div>
+
+    <div class="contact-toolbar" id="contact-toolbar" aria-label="Contact view controls" hidden>
+      <div class="json-view-switch" role="group" aria-label="Contact display mode">
+        <button class="json-tool active" type="button" data-contact-view="preview" aria-pressed="true">Preview</button>
+        <button class="json-tool" type="button" data-contact-view="code" aria-pressed="false">Code</button>
+      </div>
+    </div>
+
+    <div class="readme-toolbar" id="readme-toolbar" aria-label="README view controls" hidden>
+      <div class="json-view-switch" role="group" aria-label="README display mode">
+        <button class="json-tool active" type="button" data-readme-view="code" aria-pressed="true">Code</button>
+        <button class="json-tool" type="button" data-readme-view="preview" aria-pressed="false">Preview</button>
+      </div>
+    </div>
+
+    <div class="gitignore-toolbar" id="gitignore-toolbar" aria-label="Gitignore view controls" hidden>
+      <div class="json-view-switch" role="group" aria-label="Gitignore display mode">
+        <button class="json-tool active" type="button" aria-pressed="true">Code</button>
+      </div>
+    </div>
+
+    <div class="json-toolbar" id="json-toolbar" aria-label="JSON view controls" hidden>
+      <div class="json-view-switch" role="group" aria-label="JSON display mode">
+        <button class="json-tool" type="button" data-json-view="code" aria-pressed="false">Code</button>
+        <button class="json-tool active" type="button" data-json-view="preview" aria-pressed="true">Preview</button>
+      </div>
+      <div class="json-view-options">
+        <button class="json-tool active" id="json-wrap-toggle" type="button" aria-pressed="true">Word Wrap</button>
+        <button class="json-tool active" id="json-minimap-toggle" type="button" aria-pressed="true">Minimap</button>
+      </div>
+    </div>
+
+    <div class="editor">
+      <div class="lines" id="lines"></div>
+      <div class="code" id="editor" tabindex="0" aria-label="Portfolio file content" aria-live="polite"></div>
+      <aside class="json-minimap" id="json-minimap" aria-label="JSON minimap" hidden></aside>
+    </div>
+
+    <div class="resize-handle resize-handle--panel" id="panel-resizer" role="separator" aria-label="Resize bottom panel" aria-orientation="horizontal" aria-valuemin="120" aria-valuemax="420" aria-valuenow="160" tabindex="0"></div>
+
+    <div class="terminal" id="bottom-panel">
+      <div class="panel-tabs" role="tablist" aria-label="Bottom panel views">
+        <button class="panel-tab" id="problems-tab" type="button" role="tab" aria-controls="problems-panel" aria-selected="false" tabindex="-1" data-panel="problems">Problems</button>
+        <button class="panel-tab" id="output-tab" type="button" role="tab" aria-controls="output-panel" aria-selected="false" tabindex="-1" data-panel="output">Output</button>
+        <button class="panel-tab" id="debug-tab" type="button" role="tab" aria-controls="debug-panel" aria-selected="false" tabindex="-1" data-panel="debug">Debug Console</button>
+        <button class="panel-tab" id="terminal-tab" type="button" role="tab" aria-controls="terminal-panel" aria-selected="true" data-panel="terminal">Terminal</button>
+      </div>
+      <button class="panel-close" id="panel-close" type="button" aria-label="Close bottom panel">×</button>
+      <div class="panel-view panel-message" id="problems-panel" role="tabpanel" aria-labelledby="problems-tab" hidden>No problems detected.</div>
+      <div class="panel-view panel-message" id="output-panel" role="tabpanel" aria-labelledby="output-tab" hidden>Portfolio content loaded successfully.</div>
+      <div class="panel-view panel-message" id="debug-panel" role="tabpanel" aria-labelledby="debug-tab" hidden>No active debug session.</div>
+      <div class="panel-view terminal-view" id="terminal-panel" role="tabpanel" aria-labelledby="terminal-tab">
+        <div class="terminal-body" id="terminal-output" role="log" aria-live="polite"></div>
+        <form class="terminal-form" id="terminal-form">
+          <span class="terminal-prompt" aria-hidden="true"><span class="prompt-identity">DiegoSuarz@portfolio</span><span class="prompt-path">:~</span><span class="prompt-symbol">$</span></span>
+          <label class="sr-only" for="terminal-input">Terminal command</label>
+          <input id="terminal-input" name="command" type="text" autocomplete="off" spellcheck="false" aria-describedby="terminal-hint">
+          <button class="terminal-submit" type="submit" aria-label="Run command">↵</button>
+          <span class="sr-only" id="terminal-hint">Enter a command. Use Arrow Up and Arrow Down to navigate command history.</span>
+        </form>
+      </div>
     </div>
   </main>
 
 </div>
 
+<div class="command-palette-backdrop" id="command-palette" role="dialog" aria-modal="true" aria-labelledby="command-palette-title" hidden>
+  <section class="command-palette">
+    <h2 class="sr-only" id="command-palette-title">Command Palette</h2>
+    <label class="sr-only" for="command-palette-input">Search commands</label>
+    <input id="command-palette-input" type="text" autocomplete="off" spellcheck="false" placeholder="> Search portfolio commands">
+    <div class="command-list" id="command-list" role="listbox" aria-label="Available commands"></div>
+  </section>
+</div>
+
 <footer class="status-bar" aria-label="Editor status">
-  <span>Ln 1, Col 1</span>
-  <span>UTF-8</span>
-  <span id="lang">Plain Text</span>
+  <div class="status-group"><span class="status-branch" aria-label="Git branch">⑂ feature/recruiter-visual-experience</span><span id="status-position">Ln 1, Col 1</span></div>
+  <div class="status-group status-group--right"><span>UTF-8</span><span>LF</span><span>{ }</span><span id="lang">Plain Text</span><span aria-label="Notifications">◯</span></div>
 </footer>
 
-<script type="module" src="src/js/app.js?v=4"></script>
+<script type="module" src="src/js/app.js?v=41"></script>
 </body>
 </html>

@@ -14,7 +14,7 @@ https://diegosuarz.github.io/portfolio/
 
 The project is being rebuilt incrementally from an earlier prototype using a documented architecture, structured content models, short-lived branches, Pull Requests, and milestone-based releases.
 
-Current milestone: **Interactive Terminal**.
+Current milestone: **Recruiter Visual Experience**.
 
 ## Goals
 
@@ -85,8 +85,11 @@ portfolio/
 |       |-- app.js
 |       |-- commands.js
 |       |-- content-loader.js
+|       |-- menu-bar.js
+|       |-- panel-tabs.js
 |       `-- terminal.js
 |
+|-- .gitignore
 |-- CONTRIBUTING.md
 |-- index.html
 `-- README.md
@@ -132,6 +135,8 @@ open <path>          Open a virtual file
 projects             Open the project showcase
 contact              Open professional contact details
 cv                   Download the public CV
+about.toml           Open a virtual file directly by name
+projects/overview.json  Open a virtual file directly by path
 clear                Clear terminal output
 ```
 
@@ -186,11 +191,46 @@ v0.1.0  Portfolio Foundation
 v0.2.0  Professional Content
 v0.3.0  Project Showcase
 v0.4.0  Interactive Terminal
+v0.5.0  Recruiter Visual Experience
 v0.9.0  Production Readiness
 v1.0.0  Production Portfolio
 ```
 
 Version numbers are roadmap targets and are created as releases only after the corresponding milestone is completed and validated.
+
+The Recruiter Visual Experience milestone improves information hierarchy and readability through short visual iterations. On mobile, the Explorer behaves as an overlay controlled from the Activity Bar so professional content retains the available reading width.
+
+Its VS Code-inspired workspace now includes a searchable Command Palette (`Ctrl+Shift+P`), a centered Command Center, active-file breadcrumbs, descriptive Activity Bar tooltips, a richer status bar and keyboard-accessible panel resizing on desktop. These controls provide real navigation and layout behavior rather than decorative imitation.
+
+The Activity Bar now switches among three functional sidebar views. Explorer navigates virtual files, Search (`Ctrl+Shift+F`) performs case-insensitive full-content discovery across the loaded portfolio and opens matching files, and Source Control (`Ctrl+Shift+G`) summarizes the real milestone history, current feature branch and latest published release with direct repository links. It deliberately avoids fabricated working-tree changes or merge conflicts.
+
+Typography follows the native VS Code hierarchy: Segoe WPC/Segoe UI for application chrome and recruiter-facing previews, with Cascadia Code/Cascadia Mono/Consolas for source files and the terminal. Local system fallbacks keep the interface readable without loading third-party web fonts.
+
+The virtual `about.toml` file opens as a recruiter-oriented professional overview with direct portfolio actions, concise focus areas, a prioritized core stack and evidence counts derived from the project and certification collections. Its Code view presents the same model through TOML profile, link, build-area and portfolio sections, while `data/profile.json` remains the source of truth.
+
+Experience follows the same `Preview | Code` contract through the virtual `experience.ipynb` notebook. Its default timeline orders roles by recency, calculates display periods and durations from structured dates, and separates factual contributions from transferable Data Engineering relevance. Code exposes a valid Jupyter notebook with descriptive Markdown and symbolic Python cells derived from `data/experience.json`; no cell is executed and no output is fabricated.
+
+The project catalogue is exposed as `projects/overview.json`. Preview derives project and status counts, emphasizes implemented evidence and current architecture, and keeps planned evolution visually distinct. Code exposes the identical overview model, while project-specific files remain the detailed case studies.
+
+The flagship AdventureWorks case study is exposed as `projects/adventureworks-edw.json`. Its preview organizes the current architecture and documented implementation into dimensional modeling, ETL reliability, historical tracking and observability, while planned work remains explicitly separated. Code exposes the same project object without adding unverified technical claims.
+
+The E-Commerce case study follows the same contract through `projects/ecommerce-data-engineering-platform.json`. Its preview focuses on the implemented MySQL operational source, reproducible Docker environment, repeatable initialization and documented sample data. Future pipeline, warehouse, orchestration, analytics and processing modules remain explicitly labeled as planned evolution.
+
+Structured JSON portfolio files open by default in a responsive `Preview` that presents factual data as readable cards and tags. Their technical `Code` views remain available with type-aware syntax colors, folding, structural breadcrumbs, word wrapping and a minimap.
+
+The virtual `skills.py` file keeps the Skills preview as its default view. It prioritizes core Data Engineering capabilities before platforms and supporting tools, excludes subjective proficiency percentages, and links skill groups to existing project, experience and credential evidence. Its Code view expresses that same model as readable Python dictionaries, evidence objects and a symbolic render call. The displayed imports describe the portfolio presentation concept; they are not runtime dependencies.
+
+Formal education is exposed through the virtual `education.yaml` file with a recruiter-oriented timeline, explicit completion status and dates derived from `data/education.json`. Preview deliberately keeps the university degree separate from certifications and project evidence, while Code presents the same record as readable declarative YAML.
+
+Certifications use an explicit relevance priority from `data/certifications.json`. The virtual `certifications.sql` file keeps Preview as the default, leading with the three credentials most directly aligned to Data Engineering before complementary architecture and distributed-processing breadth. Code derives normalized `CREATE TABLE` and `INSERT INTO` statements from that same collection. The SQL is a presentation artifact and is not executed by the portfolio.
+
+The virtual `contact.sh` file opens with a recruiter-oriented Preview that provides direct email, GitHub, LinkedIn and CV actions using the Profile and CV source models. Code derives a readable Bash script with public variables and symbolic contact functions from the same restricted model. The script is not executed, and the preview explicitly limits itself to intentionally public professional information.
+
+The downloadable Spanish CV is synchronized with the portfolio's curated profile, reverse-chronological experience, current project scope, prioritized skills, formal education and five verified credentials. Its ATS-friendly structure avoids layout tables, exposes clickable professional links and omits unprioritized technologies and exam-preparation courses.
+
+The Explorer also exposes a concise virtual `README.md` generated from the repository's structured content. It opens in Markdown Code by default and offers a safe rendered Preview with headings, lists, code blocks and professional links.
+
+The repository `.gitignore` is also exposed in the Explorer with a Code-only view. It documents the local environment, dependency, build, cache, log, editor and operating-system artifacts that should remain outside version control, while preserving `.env.example` as a safe configuration template.
 
 ## Engineering Principles
 

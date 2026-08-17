@@ -1,8 +1,32 @@
 {
   "name": "Diego Suarez",
-  "headline": "Junior Data Engineer | SQL · Python · ETL/ELT · Data Warehousing · Azure",
+  "headline": "Junior Data Engineer",
+  "tagline": "Building reliable pipelines and analytics-ready data solutions",
   "location": "Lima, Peru",
-  "summary": "Junior Data Engineer focused on designing reliable data pipelines, dimensional data models and cloud-based data solutions. I build hands-on projects with SQL, Python, relational databases, Apache Airflow and Azure services, applying version control, documentation and incremental delivery practices.",
+  "summary": "Junior Data Engineer focused on building reliable data pipelines, dimensional models and analytics-ready data solutions. I develop hands-on projects using SQL, Python, relational databases, Apache Airflow and Azure, supported by documentation, version control and reproducible workflows.",
+  "buildAreas": [
+    {
+      "title": "Data Pipelines",
+      "description": "ETL/ELT workflows with validation, execution logging and clear technical documentation."
+    },
+    {
+      "title": "Data Warehousing",
+      "description": "Staging and dimensional models designed to transform operational data into analytics-ready structures."
+    },
+    {
+      "title": "Workflow Orchestration & Cloud",
+      "description": "Hands-on development with Apache Airflow and Azure data services for repeatable data workflows."
+    }
+  ],
+  "coreStack": [
+    "SQL",
+    "Python",
+    "SQL Server",
+    "Apache Airflow",
+    "Azure Data Factory",
+    "Docker",
+    "Git"
+  ],
   "focusAreas": [
     "Data pipelines and ETL/ELT",
     "Data warehousing and dimensional modeling",

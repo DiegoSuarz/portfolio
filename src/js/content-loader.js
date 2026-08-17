@@ -8,91 +8,292 @@ const CONTENT_PATHS = {
   cv: "data/cv.json"
 };
 
+const CONTENT_VERSION = "m5-readme-preview-1";
+
+const GITIGNORE_CONTENT = [
+  "# Environment and local configuration",
+  ".env",
+  ".env.*",
+  "!.env.example",
+  "",
+  "# Dependencies and virtual environments",
+  "node_modules/",
+  ".venv/",
+  "venv/",
+  "__pycache__/",
+  "*.py[cod]",
+  "",
+  "# Build, coverage and cache output",
+  "dist/",
+  "build/",
+  "coverage/",
+  ".cache/",
+  "",
+  "# Logs and temporary files",
+  "*.log",
+  "*.tmp",
+  "*.temp",
+  "",
+  "# Editor and operating-system files",
+  ".vscode/",
+  ".idea/",
+  ".DS_Store",
+  "Thumbs.db"
+].join("\n");
+
+function formatPythonList(items, indent = "        ") {
+  if (!items.length) return "[]";
+  return `[\n${items.map(item => `${indent}${JSON.stringify(item)},`).join("\n")}\n${indent.slice(0, -4)}]`;
+}
+
+function formatSkillsPython(model) {
+  const evidenceClass = {
+    Project: "ProjectEvidence",
+    Experience: "ExperienceEvidence",
+    Credentials: "CredentialEvidence"
+  };
+  const categories = model.categories.map(category => [
+    `    ${JSON.stringify(category.id)}: [`,
+    ...category.items.map(skill => `        ${JSON.stringify(skill.name)},`),
+    "    ],"
+  ].join("\n"));
+  const evidence = model.evidence.map(item => [
+    `    ${evidenceClass[item.type]}(`,
+    `        name=${JSON.stringify(item.name)},`,
+    `        file=${JSON.stringify(item.file)},`,
+    `        skills=${formatPythonList(item.skills, "            ")},`,
+    "    ),"
+  ].join("\n"));
+
+  return [
+    "from portfolio_ui import render_skill_groups",
+    "from portfolio_evidence import ProjectEvidence, ExperienceEvidence, CredentialEvidence",
+    "",
+    "",
+    "SKILLS = {",
+    ...categories,
+    "}",
+    "",
+    "EVIDENCE = [",
+    ...evidence,
+    "]",
+    "",
+    "render_skill_groups(SKILLS, evidence=EVIDENCE)"
+  ].join("\n");
+}
+
+function sqlString(value) {
+  return `'${String(value).replaceAll("'", "''")}'`;
+}
+
+function formatCertificationsSql(model) {
+  const certifications = model.certifications.map(certification =>
+    `    (${[
+      certification.id,
+      certification.name,
+      certification.issuer,
+      certification.priority,
+      certification.credentialUrl
+    ].map(sqlString).join(", ")})`
+  );
+  const focusAreas = model.certifications.flatMap(certification =>
+    certification.focusAreas.map((focusArea, index) =>
+      `    (${sqlString(certification.id)}, ${index + 1}, ${sqlString(focusArea)})`
+    )
+  );
+
+  return [
+    "CREATE TABLE certifications (",
+    "    certification_id VARCHAR(120) PRIMARY KEY,",
+    "    certification_name VARCHAR(200) NOT NULL,",
+    "    issuer VARCHAR(100) NOT NULL,",
+    "    relevance_priority VARCHAR(20) NOT NULL,",
+    "    credential_url VARCHAR(500) NOT NULL",
+    ");",
+    "",
+    "CREATE TABLE certification_focus_areas (",
+    "    certification_id VARCHAR(120) NOT NULL,",
+    "    display_order INTEGER NOT NULL,",
+    "    focus_area VARCHAR(160) NOT NULL,",
+    "    PRIMARY KEY (certification_id, display_order),",
+    "    FOREIGN KEY (certification_id) REFERENCES certifications(certification_id)",
+    ");",
+    "",
+    "INSERT INTO certifications (",
+    "    certification_id, certification_name, issuer, relevance_priority, credential_url",
+    ") VALUES",
+    `${certifications.join(",\n")};`,
+    "",
+    "INSERT INTO certification_focus_areas (",
+    "    certification_id, display_order, focus_area",
+    ") VALUES",
+    `${focusAreas.join(",\n")};`
+  ].join("\n");
+}
+
+function formatExperiencePython(model) {
+  const roles = model.experience.map(role => [
+    "    {",
+    `        "company": ${JSON.stringify(role.company)},`,
+    `        "role": ${JSON.stringify(role.role)},`,
+    `        "location": ${JSON.stringify(role.location)},`,
+    `        "period": (${JSON.stringify(role.startDate)}, ${role.endDate ? JSON.stringify(role.endDate) : "None"}),`,
+    "        \"highlights\": [",
+    ...role.highlights.map(highlight => `            ${JSON.stringify(highlight)},`),
+    "        ],",
+    "        \"data_engineering_relevance\": [",
+    ...role.dataEngineeringRelevance.map(item => `            ${JSON.stringify(item)},`),
+    "        ],",
+    "    },"
+  ].join("\n"));
+
+  return [
+    "EXPERIENCE = [",
+    ...roles,
+    "]",
+    "",
+    "for position in EXPERIENCE:",
+    "    print(f\"{position['role']} | {position['company']}\")"
+  ].join("\n");
+}
+
+function notebookSource(content) {
+  return content.split("\n").map((line, index, lines) => `${line}${index < lines.length - 1 ? "\n" : ""}`);
+}
+
+function formatExperienceNotebook(model) {
+  return {
+    cells: [
+      {
+        cell_type: "markdown",
+        metadata: {},
+        source: notebookSource([
+          "# Professional Experience",
+          "",
+          "A factual, reverse-chronological representation of professional roles and transferable Data Engineering capabilities."
+        ].join("\n"))
+      },
+      {
+        cell_type: "code",
+        execution_count: null,
+        metadata: {},
+        outputs: [],
+        source: notebookSource(formatExperiencePython(model))
+      }
+    ],
+    metadata: {
+      kernelspec: {
+        display_name: "Python 3",
+        language: "python",
+        name: "python3"
+      },
+      language_info: {
+        name: "python",
+        version: "3"
+      }
+    },
+    nbformat: 4,
+    nbformat_minor: 5
+  };
+}
+
+function shellString(value) {
+  return `"${String(value)
+    .replaceAll("\\", "\\\\")
+    .replaceAll('"', '\\"')
+    .replaceAll("$", "\\$")
+    .replaceAll("`", "\\`")}"`;
+}
+
+function formatContactShell(model) {
+  return [
+    "#!/usr/bin/env bash",
+    "set -euo pipefail",
+    "",
+    `NAME=${shellString(model.profile.name)}`,
+    `HEADLINE=${shellString(model.profile.headline)}`,
+    `LOCATION=${shellString(model.profile.location)}`,
+    `EMAIL=${shellString(model.profile.email)}`,
+    `GITHUB_URL=${shellString(model.profile.links.github)}`,
+    `LINKEDIN_URL=${shellString(model.profile.links.linkedin)}`,
+    `CV_PATH=${shellString(model.cv.downloadPath)}`,
+    "",
+    "show_contact() {",
+    "  printf '%s\\n' \"$NAME\" \"$HEADLINE\" \"$LOCATION\" \"$EMAIL\"",
+    "}",
+    "",
+    "open_email() { printf 'mailto:%s\\n' \"$EMAIL\"; }",
+    "open_github() { printf '%s\\n' \"$GITHUB_URL\"; }",
+    "open_linkedin() { printf '%s\\n' \"$LINKEDIN_URL\"; }",
+    "download_cv() { printf '%s\\n' \"$CV_PATH\"; }",
+    "",
+    "case \"${1:-show}\" in",
+    "  show) show_contact ;;",
+    "  email) open_email ;;",
+    "  github) open_github ;;",
+    "  linkedin) open_linkedin ;;",
+    "  cv) download_cv ;;",
+    "  *) printf 'Usage: %s {show|email|github|linkedin|cv}\\n' \"$0\" ;;",
+    "esac"
+  ].join("\n");
+}
+
+function formatEducationYaml(model) {
+  const entries = model.education.flatMap(entry => [
+    `  - id: ${JSON.stringify(entry.id)}`,
+    `    institution: ${JSON.stringify(entry.institution)}`,
+    `    degree: ${JSON.stringify(entry.degree)}`,
+    "    period:",
+    `      start: ${JSON.stringify(entry.startDate)}`,
+    `      end: ${entry.endDate ? JSON.stringify(entry.endDate) : "null"}`,
+    `    completed: ${String(entry.completed)}`
+  ]);
+
+  return ["education:", ...entries].join("\n");
+}
+
+function formatTomlArray(items) {
+  return `[\n${items.map(item => `  ${JSON.stringify(item)},`).join("\n")}\n]`;
+}
+
+function formatAboutToml(model) {
+  const profile = model.profile;
+  const buildAreas = profile.buildAreas.flatMap(area => [
+    "[[build_areas]]",
+    `title = ${JSON.stringify(area.title)}`,
+    `description = ${JSON.stringify(area.description)}`,
+    ""
+  ]);
+
+  return [
+    "[profile]",
+    `name = ${JSON.stringify(profile.name)}`,
+    `headline = ${JSON.stringify(profile.headline)}`,
+    `tagline = ${JSON.stringify(profile.tagline)}`,
+    `location = ${JSON.stringify(profile.location)}`,
+    `summary = ${JSON.stringify(profile.summary)}`,
+    `core_stack = ${formatTomlArray(profile.coreStack)}`,
+    `focus_areas = ${formatTomlArray(profile.focusAreas)}`,
+    "",
+    "[profile.links]",
+    `github = ${JSON.stringify(profile.links.github)}`,
+    `linkedin = ${JSON.stringify(profile.links.linkedin)}`,
+    "",
+    ...buildAreas,
+    "[portfolio]",
+    `project_count = ${model.projectCount}`,
+    `certification_count = ${model.certificationCount}`
+  ].join("\n");
+}
+
 async function fetchJson(path) {
-  const response = await fetch(path);
+  const response = await fetch(`${path}?v=${CONTENT_VERSION}`, { cache: "no-store" });
 
   if (!response.ok) {
     throw new Error(`Unable to load ${path} (${response.status})`);
   }
 
   return response.json();
-}
-
-function formatDate(value) {
-  const [year, month] = value.split("-").map(Number);
-  const date = new Date(Date.UTC(year, month - 1, 1));
-
-  return new Intl.DateTimeFormat("en-US", {
-    month: "short",
-    year: "numeric",
-    timeZone: "UTC"
-  }).format(date);
-}
-
-function formatProfile(profile) {
-  return [
-    `# ${profile.name}`,
-    "",
-    profile.headline,
-    "",
-    profile.summary,
-    "",
-    "## Focus Areas",
-    ...profile.focusAreas.map(area => `- ${area}`)
-  ].join("\n");
-}
-
-function formatExperience(entries) {
-  const sections = entries.map(entry => {
-    const startDate = formatDate(entry.startDate);
-    const endDate = entry.current ? "Present" : formatDate(entry.endDate);
-    const period = `${startDate} - ${endDate}`;
-    return [
-      `## ${entry.role} | ${entry.company}`,
-      `${entry.location} | ${period}`,
-      "",
-      entry.summary,
-      "",
-      ...entry.highlights.map(highlight => `- ${highlight}`)
-    ].join("\n");
-  });
-
-  return ["# Professional Experience", "", ...sections].join("\n\n");
-}
-
-function formatEducation(entries) {
-  const sections = entries.map(entry => [
-    `## ${entry.degree}`,
-    entry.institution,
-    `${formatDate(entry.startDate)} - ${formatDate(entry.endDate)}`,
-    entry.completed ? "Completed" : "In progress"
-  ].join("\n"));
-
-  return ["# Education", "", ...sections].join("\n\n");
-}
-
-function formatContact(profile) {
-  return [
-    `Email: ${profile.email}`,
-    `GitHub: ${profile.links.github}`,
-    `LinkedIn: ${profile.links.linkedin}`
-  ].join("\n");
-}
-
-function formatProjectOverview(projects) {
-  return [
-    "# Project Showcase",
-    "",
-    "Selected Data Engineering projects presented from their current, verifiable scope.",
-    "",
-    ...projects.flatMap(project => [
-      `## ${project.name}`,
-      `Status: ${formatProjectStatus(project.status)}`,
-      project.summary,
-      `File: projects/${project.id}.md`,
-      ""
-    ])
-  ].join("\n").trimEnd();
 }
 
 function formatProjectStatus(status) {
@@ -143,46 +344,149 @@ function formatProjectCaseStudy(project) {
   ].join("\n");
 }
 
+function formatRepositoryReadme(content) {
+  const projectNames = content.projects.projects.map(project => `- ${project.name}`).join("\n");
+  return [
+    `# ${content.profile.name} — Data Engineering Portfolio`,
+    "",
+    `Portfolio profesional de **${content.profile.headline}** diseñado como un workspace inspirado en Visual Studio Code.`,
+    "",
+    "## Acerca del repositorio",
+    "",
+    "Este repositorio presenta experiencia, proyectos, habilidades, educación y credenciales mediante contenido estructurado y una interfaz estática desplegable en GitHub Pages.",
+    "",
+    "## Contenido principal",
+    "",
+    "- Perfil y experiencia profesional",
+    "- Casos de estudio de Data Engineering",
+    "- Skills priorizadas con evidencia",
+    "- Educación y credenciales verificables",
+    "- Contacto profesional y CV público",
+    "",
+    "## Proyectos destacados",
+    "",
+    projectNames,
+    "",
+    "## Explorar",
+    "",
+    "Usa el Explorer, el buscador o la terminal interactiva. Por ejemplo:",
+    "",
+    "```text",
+    "projects/overview.json",
+    "skills.py",
+    "contact.sh",
+    "```",
+    "",
+    `Repositorio mantenido por [DiegoSuarz](${content.profile.links.github}).`
+  ].join("\n");
+}
+
 export async function loadPortfolioFiles() {
   const keys = Object.keys(CONTENT_PATHS);
   const values = await Promise.all(keys.map(key => fetchJson(CONTENT_PATHS[key])));
   const content = Object.fromEntries(keys.map((key, index) => [key, values[index]]));
+  const aboutModel = {
+    profile: content.profile,
+    projectCount: content.projects.projects.length,
+    certificationCount: content.certifications.certifications.length
+  };
+  const experienceModel = {
+    experience: [...content.experience.experience].sort((first, second) => second.startDate.localeCompare(first.startDate))
+  };
+  const projectOverviewModel = {
+    projectCount: content.projects.projects.length,
+    inProgressCount: content.projects.projects.filter(project => project.status === "in-progress").length,
+    projects: [...content.projects.projects].sort((first, second) => Number(second.featured) - Number(first.featured))
+  };
+  const adventureWorksModel = {
+    project: content.projects.projects.find(project => project.id === "adventureworks-edw")
+  };
+  const ecommerceModel = {
+    project: content.projects.projects.find(project => project.id === "ecommerce-data-engineering-platform")
+  };
+  const skillsModel = {
+    categories: content.skills.categories,
+    evidence: [
+      { type: "Project", name: "AdventureWorks Enterprise Data Warehouse", file: "projects/adventureworks-edw.json", skills: ["SQL", "ETL / ELT", "Data Warehousing", "Dimensional Modeling", "SQL Server", "T-SQL"] },
+      { type: "Project", name: "E-Commerce Data Engineering Platform", file: "projects/ecommerce-data-engineering-platform.json", skills: ["MySQL", "Docker"] },
+      { type: "Experience", name: "Universidad Tecnológica del Perú", file: "experience.ipynb", skills: ["Python"] },
+      { type: "Credentials", name: "Professional Certifications", file: "certifications.sql", skills: ["SQL", "ETL / ELT", "Data Warehousing", "SQL Server", "T-SQL", "Apache Airflow"] }
+    ]
+  };
+  const contactModel = {
+    profile: {
+      name: content.profile.name,
+      headline: content.profile.headline,
+      location: content.profile.location,
+      email: content.profile.email,
+      links: content.profile.links
+    },
+    cv: content.cv.cv
+  };
+  const repositoryReadme = formatRepositoryReadme(content);
 
   return {
-    "about.md": {
-      type: "markdown",
-      content: formatProfile(content.profile)
+    ".gitignore": {
+      type: "gitignore",
+      content: GITIGNORE_CONTENT,
+      defaultView: "code"
     },
-    "experience.md": {
+    "README.md": {
       type: "markdown",
-      content: formatExperience(content.experience.experience)
+      content: repositoryReadme,
+      defaultView: "code"
     },
-    "projects/overview.md": {
-      type: "markdown",
-      content: formatProjectOverview(content.projects.projects)
+    "about.toml": {
+      type: "toml",
+      content: formatAboutToml(aboutModel),
+      preview: aboutModel
     },
-    ...Object.fromEntries(content.projects.projects.map(project => [
+    "experience.ipynb": {
+      type: "notebook",
+      content: JSON.stringify(formatExperienceNotebook(experienceModel), null, 2),
+      preview: experienceModel
+    },
+    "projects/overview.json": {
+      type: "json",
+      content: JSON.stringify(projectOverviewModel, null, 2),
+      preview: projectOverviewModel
+    },
+    "projects/adventureworks-edw.json": {
+      type: "json",
+      content: JSON.stringify(adventureWorksModel, null, 2),
+      preview: adventureWorksModel
+    },
+    "projects/ecommerce-data-engineering-platform.json": {
+      type: "json",
+      content: JSON.stringify(ecommerceModel, null, 2),
+      preview: ecommerceModel
+    },
+    ...Object.fromEntries(content.projects.projects.filter(project => !["adventureworks-edw", "ecommerce-data-engineering-platform"].includes(project.id)).map(project => [
       `projects/${project.id}.md`,
       {
         type: "markdown",
         content: formatProjectCaseStudy(project)
       }
     ])),
-    "skills.json": {
-      type: "json",
-      content: JSON.stringify(content.skills, null, 2)
+    "skills.py": {
+      type: "python",
+      content: formatSkillsPython(skillsModel),
+      preview: skillsModel
     },
-    "education.md": {
-      type: "markdown",
-      content: formatEducation(content.education.education)
+    "education.yaml": {
+      type: "yaml",
+      content: formatEducationYaml(content.education),
+      preview: content.education
     },
-    "certifications.json": {
-      type: "json",
-      content: JSON.stringify(content.certifications, null, 2)
+    "certifications.sql": {
+      type: "sql",
+      content: formatCertificationsSql(content.certifications),
+      preview: content.certifications
     },
-    "contact.txt": {
-      type: "text",
-      content: formatContact(content.profile)
+    "contact.sh": {
+      type: "shell",
+      content: formatContactShell(contactModel),
+      preview: contactModel
     },
     "cv.docx": {
       type: "download",

@@ -3,6 +3,7 @@ const HELP_TEXT = [
   "  help                 List supported commands",
   "  ls [path]            List virtual files",
   "  open <path>          Open a virtual file",
+  "  <file>               Open a file directly by name or path",
   "  projects             Open the project showcase",
   "  contact              Open professional contact details",
   "  cv                   Download the public CV",
@@ -36,7 +37,15 @@ function listDirectory(files, requestedPath) {
 export function createCommandDispatcher({ getFiles, openFile, clearTerminal }) {
   function resolveFile(requestedPath) {
     const normalized = normalizePath(requestedPath).toLowerCase();
-    return Object.keys(getFiles()).find(path => path.toLowerCase() === normalized);
+    const paths = Object.keys(getFiles());
+    const exactMatch = paths.find(path => path.toLowerCase() === normalized);
+
+    if (exactMatch) {
+      return exactMatch;
+    }
+
+    const fileNameMatches = paths.filter(path => path.split("/").pop().toLowerCase() === normalized);
+    return fileNameMatches.length === 1 ? fileNameMatches[0] : null;
   }
 
   function openKnownFile(path) {
@@ -67,16 +76,21 @@ export function createCommandDispatcher({ getFiles, openFile, clearTerminal }) {
       case "open":
         return argument ? openKnownFile(argument) : "Usage: open <path>";
       case "projects":
-        return openKnownFile("projects/overview.md");
+        return openKnownFile("projects/overview.json");
       case "contact":
-        return openKnownFile("contact.txt");
+        return openKnownFile("contact.sh");
       case "cv":
         return openKnownFile("cv.docx");
       case "clear":
         clearTerminal();
         return null;
-      default:
+      default: {
+        const directFile = resolveFile(rawCommand);
+        if (directFile) {
+          return openKnownFile(directFile);
+        }
         return `Command not found: ${name}. Run help to list available commands.`;
+      }
     }
   };
 }

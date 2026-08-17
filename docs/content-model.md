@@ -24,8 +24,16 @@ File: `data/profile.json`
 {
   "name": "string",
   "headline": "string",
+  "tagline": "string",
   "location": "string",
   "summary": "string",
+  "buildAreas": [
+    {
+      "title": "string",
+      "description": "string"
+    }
+  ],
+  "coreStack": ["string"],
   "focusAreas": ["string"],
   "email": "string",
   "links": {
@@ -41,7 +49,13 @@ The profile model stores identity and professional positioning information that 
 
 `focusAreas` contains concise professional domains that reinforce positioning without duplicating the detailed technology inventory owned by `skills.json`.
 
+`tagline` provides a short outcome-oriented introduction for the About preview. `buildAreas` explains a small number of supported Data Engineering focus areas, while `coreStack` exposes only the most relevant tools for quick recruiter scanning. The complete prioritized capability inventory remains owned by `skills.json`.
+
 The profile model is also the single source of truth for public contact information. Contact views should reuse `email` and `links` instead of copying those values into a separate content file. Phone numbers and other personal details should not be published unless they are deliberately added to this contract.
+
+The application exposes the professional overview as the virtual `about.toml` file. Preview combines the Profile model with project and certification counts derived from their respective collections. Code derives TOML sections for profile identity, links, build areas and portfolio metrics from that identical model. `data/profile.json` remains the source of truth, and the generated TOML must not introduce additional claims.
+
+The virtual `contact.sh` file contains a deliberately restricted Profile projection (`name`, `headline`, `location`, `email` and professional `links`) plus the public CV metadata. Preview consumes this model directly, while Code derives Bash variables and symbolic functions for displaying contact information and exposing the existing email, professional-profile and CV destinations. The script is not executed. It must not introduce availability claims, telephone numbers or private contact details that are absent from the source models.
 
 ## 4. Skills Model
 
@@ -80,6 +94,10 @@ Skills should be concise, factual, and verifiable. Closely related tools may be 
 
 Self-assessed proficiency levels are intentionally excluded. A skill should be added only when it is supported by experience, an active project, or another portfolio artifact; brief exposure alone is not enough.
 
+The virtual `skills.py` file enriches this source model with a derived `evidence` collection. Each entry contains a source `type`, display `name`, virtual `file` and the subset of `skills` supported by that artifact. Evidence mappings are assembled by the content layer from existing portfolio projects, experience and credentials; they do not introduce proficiency scores or new technical claims into `data/skills.json`.
+
+Preview remains the default recruiter-facing representation. Code derives Python dictionaries, typed evidence objects and a `render_skill_groups` call from the same model. The displayed `portfolio_ui` and `portfolio_evidence` imports are intentionally symbolic and are not executable application dependencies or separate sources of professional data.
+
 ## 5. Experience Model
 
 File: `data/experience.json`
@@ -112,6 +130,8 @@ The experience model stores factual employment history while making transferable
 `dataEngineeringRelevance` summarizes transferable capabilities such as programming, validation, documentation, information management, troubleshooting, and process standardization. It should not be used to imply a job title or responsibility that was not actually held.
 
 Dates are stored in machine-friendly form so the presentation layer can format them consistently.
+
+The application exposes this model as the virtual `experience.ipynb` file. Preview consumes the ordered experience collection directly. Code derives a valid Jupyter Notebook document with one explanatory Markdown cell and one unexecuted Python cell containing the same roles, dates, highlights and Data Engineering relevance. Notebook outputs remain empty, and the generated notebook is a presentation artifact rather than a second source of employment data.
 
 ## 6. Projects Model
 
@@ -191,6 +211,8 @@ File: `data/education.json`
 
 The education model stores formal academic education. Dates use the same machine-friendly format as professional experience, and `completed` must reflect the actual program status.
 
+The application exposes this model as the virtual `education.yaml` file. Preview derives only display values such as the formatted period and duration; Code derives a declarative YAML representation containing the same institution, degree, period and completion status. `data/education.json` remains the source of truth. Certifications and project evidence remain separate domains and must not be presented as part of the degree.
+
 ## 8. Certifications Model
 
 File: `data/certifications.json`
@@ -202,6 +224,7 @@ File: `data/certifications.json`
       "id": "string",
       "name": "string",
       "issuer": "string",
+      "priority": "primary|supporting",
       "credentialUrl": "string",
       "focusAreas": ["string"]
     }
@@ -213,7 +236,11 @@ The certifications model stores a curated selection of completed credentials tha
 
 `credentialUrl` must point to a public or shareable credential. `focusAreas` summarizes the credential scope using concise, verifiable concepts rather than promotional descriptions or self-assessed proficiency.
 
+`priority` communicates relevance to the target role rather than credential difficulty or skill level. `primary` is reserved for credentials directly focused on Data Engineering, relational databases, pipelines or data warehousing; `supporting` covers complementary architecture and distributed-processing breadth. Source order remains the display order within each priority group.
+
 Exam preparation programs must not be presented as official vendor certifications. Overlapping introductory credentials may be omitted when a broader professional certificate already provides stronger evidence of the same capabilities.
+
+The application exposes this source as the virtual `certifications.sql` file. Preview consumes the original certification collection. Code derives a normalized `certifications` table, a related `certification_focus_areas` table and their `INSERT INTO` statements from that identical model. This SQL is symbolic portfolio presentation: it is not executed and does not become a second source of credential data.
 
 ## 9. CV Model
 
@@ -238,6 +265,8 @@ Only a reviewed and intentionally public copy should be referenced. The public a
 ## 10. Future Domains
 
 Additional domains should be introduced only when their corresponding features are implemented.
+
+The virtual `README.md` is a derived repository overview rather than a new professional data domain. The content layer assembles its title, role, project names and GitHub link from existing sources; the Markdown Code and Preview modes consume the same generated string.
 
 This avoids speculative schema design and unnecessary files.
 
